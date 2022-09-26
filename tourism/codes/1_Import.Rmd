@@ -1,0 +1,36 @@
+---
+title: "import"
+output: html_document
+date: "2022-09-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## load Packages
+```{r}
+library(data.table)
+library(tidyverse)
+```
+
+# Import data
+
+## Indicators
+```{r}
+datapath = "../data"
+ind_path = paste0(datapath, "/indicators")
+list.files(ind_path)
+t_in = fread(paste0(ind_path,"/tour_occ_nim_linear.csv"))
+
+df_t1 = t_in %>% as_tibble()
+```
+
+Nun müssen wir in einem ersten Schritt die verschiedenen Indikatoren ermitteln:
+```{r}
+test1 = df_t1[,3:7] %>%
+  filter(geo == 'EU27_2020') %>%
+  distinct()
+print(test1,  n=nrow(test1))
+
+```
