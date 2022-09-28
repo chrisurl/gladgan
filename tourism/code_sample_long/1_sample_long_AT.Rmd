@@ -1,0 +1,269 @@
+---
+title: "Code Sample Long"
+output: html_document
+date: "2022-09-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message=FALSE)
+```
+
+## load Packages
+```{r}
+library(data.table)
+library(tidyverse)
+library(lubridate)
+library(rai)
+library(caret)
+```
+
+# Import data
+## Thoughts
+Do we need a lag? Meaning: are google trends coming into account later (for sure, but whats the timespan)? Can we measure this? If so, how?
+
+## Assignment
+Number of nights spent at tourist accommodation establishments (Eurobase code: TOUR_OCC_NIM, UNIT:NR, NACE R2: I551-I553, INDIC TO: B006)
+
+In case there is no available reference to INDIC TO: B006 in the data, use the following setting: TOUR_OCC_NIM, UNIT:NR, NACE R2:I1551-I1553, TOTAL.
+
+The published figures are available here - and the task of each team is to nowcast the values of this monthly indicator for September 2022 until April 2023.
+
+In this phase, each team submits nowcasts (according to the approaches that they have developed) for the number of tourism nights spent at tourist accommodation establishments (tourism) indicator. The team can make up to 5 different entries, using different approaches. For each entry, nowcasts (in the form of point estimates) must be submitted for *at least 5 countries* (chosen by the team) for a given month. (For example, if the current reference period is September 2022, the teams will have to provide the point estimates for 5 or more countries to have a valid entry for September 2022.) For an entry to be considered in the evaluation phase, there must be *at least 6 consecutive monthly submissions* for each of at least 5 countries. Each monthly submission of an entry needs to be accompanied by a brief description of the approach used.
+
+## Indicators
+```{r}
+datapath = "../data/"
+ind_path = paste0(datapath, "indicators/")
+list.files(ind_path)
+ind_in = fread(paste0(ind_path,"tour_occ_nim_custom.csv"))
+
+ind_t1 = ind_in[,-c(1:3)] %>% 
+  as_tibble() %>%
+  mutate(month_end = as_date(paste0(TIME_PERIOD,"-01")),.before=1)
+
+ind_t1 %>% select(nace_r2) %>% distinct()
+
+## Scale
+scale2 <- function(x, na.rm = FALSE) (x - mean(x, na.rm = na.rm)) / sd(x, na.rm)
+
+ind_de= ind_t1 %>% 
+  filter(geo == "AT" & nace_r2 == "I551-I553" & unit=="NR" & c_resid=="TOTAL") %>%
+  mutate(obs_value_std = scale2(OBS_VALUE),
+         obs_value_norm = (OBS_VALUE-mean(OBS_VALUE))/max(abs(OBS_VALUE-mean(OBS_VALUE))),
+         obs_value_max = OBS_VALUE/max(OBS_VALUE)
+         )
+
+ind_stats = ind_de %>%
+  summarise(mean=mean(OBS_VALUE), 
+            sd=sd(OBS_VALUE), 
+            max=max(OBS_VALUE), 
+            norm=max(abs(OBS_VALUE-mean(OBS_VALUE)))
+            )
+```
+
+Therefore, the stats are:
+```{r}
+ind_stats
+```
+
+
+## Google Trends Short Term
+
+Idea: Use short term data as test and validation set, also to veryfy the concept.
+
+```{r}
+goo_path = paste0(datapath, "googleTrends/")
+list.files(goo_path)
+series = c("Belgium1.csv", "Bulgaria1.csv", "Czech1.csv", "Denmark1.csv", "Germany1.csv")
+input = paste0(goo_path, series)
+in_list_week =input %>% map(~fread(., skip=2))
+in_list_week = map(in_list_week, as_tibble)
+# 
+# df_week = reduce(.x = in_list_week, .f = full_join)
+# div_100 = function(x) (x/100)
+# df_week = df_week %>% mutate(across(.cols = 2:6, scale2))
+# 
+# df_week_cl = df_week %>% 
+#    rename(eur_world=`europa: (Weltweit)`,
+#           eur_de=`europa: (Deutschland)`,
+#           de_de=`deutschland: (Deutschland)`, 
+#           de_world=`deutschland: (Weltweit)`, 
+#           tourism_de=`tourism: (Deutschland)`
+#           ) %>%
+#   mutate(week_end = Woche + 7, .before=2) %>%
+#   mutate(month_end = floor_date(week_end, unit="month"), .before=3)
+# 
+# month_cnt = df_week_cl %>% select(month_end) %>% group_by(month_end) %>% summarise(n=n())
+# ggplot(data=month_cnt, aes(x=month_end, y=n)) + 
+#   geom_col()
+```
+
+
+```{r}
+# df_cl_month = df_week_cl %>% 
+#   select(!week_end) %>%
+#   group_by(month_end) %>%
+#   summarise(across(.cols = 2:6, mean))
+#             
+# df_cl_month %>%
+#   gather(key=series, value=value,-month_end) %>%
+#   ggplot(aes(x=month_end, y=value, color=series)) + 
+#   geom_line()
+```
+
+## Google Trends Longterm
+
+Two options: Use data starting in 2004 or 2011.
+
+```{r}
+series = "Germany1_full.csv"
+input = paste0(goo_path, series)
+# in_list =input %>% map(~fread(., skip=2))
+# in_list = map(in_list, as_tibble)
+# df = reduce(.x = in_list, .f = full_join)
+
+df_mon = fread(input, skip = 2) %>% as_tibble()
+
+div_100 = function(x) (x/100)
+df_mon = df_mon %>% mutate(across(.cols = 2:6, scale2))
+
+df_mon_cl = df_mon %>% 
+   rename(tour_de=`Tourismus: (Deutschland)`,
+          nights_de=`Übernachtungen: (Deutschland)`,
+          lastm_de=`last minute: (Deutschland)`, 
+          allincl_de=`All inclusive: (Deutschland)`, 
+          goofl_de=`Google Flüge: (Deutschland)`
+          ) %>%
+  mutate(month_end = as_date(paste0(Monat,"-01")),.before=1) %>%
+  select(!Monat)
+```
+
+
+# Combine data
+
+```{r}
+df_de = ind_de[,-c(2:6,8)] %>%
+  full_join(df_mon_cl, by="month_end") %>%
+  filter(!is.na(tour_de))
+
+theResponse=df_de %>%
+  filter(!is.na(obs_value_std)) %>%
+  .$obs_value_std
+
+theData = df_de %>%
+  filter(!is.na(obs_value_std)) %>%
+  .[6:10]
+```
+
+# Test
+
+## LM
+```{r}
+mod_lm =caret::train(x=theData, y=theResponse, method="lm")
+summary(mod_lm)
+```
+
+We do need more data! Seems that google trends monthly data should be sufficient!
+
+## RAI
+```{r}
+rai_out = rai(theData, theResponse)
+summary(rai_out$model)
+```
+
+## Bayesian reg NN
+```{r brnn, cache=T, message=F, warning=F}
+
+theData = as.data.frame(theData)
+fitControl <- caret::trainControl(method = "repeatedcv",
+                            number = 5, ## 5-fold CV...
+                            repeats = 5)  ## repeated 5 times
+mod_brnn =caret::train(x=theData, y=theResponse, method="brnn", trControl = fitControl, verbose=F)
+```
+
+```{r}
+mod_brnn
+#predict(mod_brnn, df_de[c(59:60),6:9])
+```
+
+## Deep Autoencoder (not working)
+Something is wrong; all the RMSE metric values are missing:
+```{r,  eval=F}
+fitControl <- caret::trainControl(method = "repeatedcv",
+                            number = 5, ## 5-fold CV...
+                            repeats = 5)  ## repeated 5 times
+mod_nn =caret::train(x=theData, y=theResponse, method="dnn", trControl = fitControl, verbose=F)
+```
+
+```{r, eval=F}
+mod_nn
+predict(mod_nn, df_de[c(59:60),6:9])
+```
+
+## GBM
+
+```{r gbm1, cache=T, message=F, warning=F}
+gbmGrid <-  expand.grid(interaction.depth = c(1:4), 
+                        n.trees = (1:50), 
+                        shrinkage = 0.1,
+                        n.minobsinnode = 5)
+
+fitControl <- caret::trainControl(method = "repeatedcv",
+                            number = 5, ## 5-fold CV...
+                            repeats = 10)  ## repeated 5 times
+mod_gbm =caret::train(x=theData, y=theResponse, method="gbm", trControl = fitControl, tuneGrid=gbmGrid, verbose=F)
+```
+
+```{r}
+#mod_gbm
+mod_gbm$bestTune
+mod_gbm$results %>% filter(n.trees==33 & interaction.depth==1 & shrinkage == 0.1 & n.minobsinnode==5)
+summary(mod_gbm)
+# predict(mod_gbm, df_de[c(59:60),6:9])
+```
+
+## SVN
+
+http://topepo.github.io/caret/train-models-by-tag.html#support-vector-machines
+
+Die sehen sehr vielversprechend aus! Das sollte man weiter verfolgen.
+
+```{r svn, cache=T, message=F, warning=F}
+fitControl <- caret::trainControl(method = "repeatedcv",
+                            number = 5, ## 5-fold CV...
+                            repeats = 5)  ## repeated 5 times
+mod_svn =caret::train(x=theData, y=theResponse, method="svmRadialSigma", trControl = fitControl, verbose=F)
+```
+
+```{r}
+mod_svn
+summary(mod_svn)
+# predict(mod_svn, df_de[c(59:60),6:9])
+```
+
+# Compare results:
+```{r}
+# res_tab = tibble(
+#   lm = predict(mod_lm,df_de[c(59:60),6:9]),
+#   brnn = predict(mod_brnn, df_de[c(59:60),6:9]),
+#   gbm = predict(mod_gbm, df_de[c(59:60),6:9]),
+#   svn = predict(mod_svn, df_de[c(59:60),6:9])
+# )
+
+res_stats = as_tibble(getTrainPerf(mod_lm)) %>%
+  add_row(getTrainPerf(mod_brnn)) %>%
+  add_row(getTrainPerf(mod_gbm)) %>%
+  add_row(getTrainPerf(mod_svn))
+
+# res_tab
+res_stats
+summary(rai_out$model)
+```
+
+Last but not least: Variable importance:
+```{r}
+varImp(mod_svn)
+```
+
+Für AT kann man das also lassen!!!!

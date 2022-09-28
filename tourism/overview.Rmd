@@ -1,0 +1,39 @@
+---
+title: "Ideas"
+output: html_document
+date: "2022-09-26"
+---
+
+# Data sources
+
+  * Google Trends (as in https://trends.google.com/trends/explore?cat=67&date=all&geo=DK&q=%2Fg%2F120yrv6h,%2Fg%2F121djqm1,%2Fg%2F121765tx,%2Fm%2F0441mq,%2Fm%2F0h62wct)
+  * Economic Indicators
+  * Twitter(?)
+  * ...
+
+# Technologies
+
+Have to predict at least 5 countries for 6 consistent periods.
+
+Models:
+
+  * Neuronal Network
+  * RAI
+  * Time Series 
+  * SVM (as in https://mpra.ub.uni-muenchen.de/60945/1/MPRA_paper_60945.pdf)
+  * Robust Regression
+  * Forest
+  * NN
+  
+# Prediction
+
+  * Model building / learning period using either monthly aggregated or monthly data.
+  * Nowcasting period: Use weekly data, aggregate with means
+  
+# To do
+
+  * Compare long and short data results! Maybe some econometric models necessary? More google search data using the terms, those from the short term models and also some county specific! Meaning: For Spain we should also search for (term) + Spain. 
+  * Calculate percentage of domnestic tourism, include these calcs into model and search (e.g. Italy, many inhabitants are going on domnestic holiday).
+  * Use search terms from short period data in long periods, may be good add. predictors
+  * Test!! Test with real data and calculate error statistics (RMSE etc.)
+  

@@ -12,7 +12,7 @@
 
 <meta name="date" content="2022-09-26" />
 
-<title>Ideas</title>
+<title>Code Sample Long</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -355,42 +355,738 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Ideas</h1>
+<h1 class="title toc-ignore">Code Sample Long</h1>
 <h4 class="date">2022-09-26</h4>
 
 </div>
 
 
-<div id="data-sources" class="section level1">
-<h1>Data sources</h1>
-<ul>
-<li>Google Trends (as in <a href="https://trends.google.com/trends/explore?cat=67&amp;date=all&amp;geo=DK&amp;q=%2Fg%2F120yrv6h,%2Fg%2F121djqm1,%2Fg%2F121765tx,%2Fm%2F0441mq,%2Fm%2F0h62wct" class="uri">https://trends.google.com/trends/explore?cat=67&amp;date=all&amp;geo=DK&amp;q=%2Fg%2F120yrv6h,%2Fg%2F121djqm1,%2Fg%2F121765tx,%2Fm%2F0441mq,%2Fm%2F0h62wct</a>)</li>
-<li>Economic Indicators</li>
-<li>Twitter(?)</li>
-<li>…</li>
-</ul>
+<div id="load-packages" class="section level2">
+<h2>load Packages</h2>
+<pre class="r"><code>library(data.table)
+library(tidyverse)
+library(lubridate)
+library(rai)
+library(caret)</code></pre>
 </div>
-<div id="technologies" class="section level1">
-<h1>Technologies</h1>
-<p>Two ways, both can work in parallel:</p>
-<ul>
-<li>Model each country</li>
-<li>Use aggregates over all countries</li>
-</ul>
-<p>Models:</p>
-<ul>
-<li>Neuronal Network</li>
-<li>Korys Research?</li>
-<li>Time Series</li>
-<li>SVM (as in <a href="https://mpra.ub.uni-muenchen.de/60945/1/MPRA_paper_60945.pdf" class="uri">https://mpra.ub.uni-muenchen.de/60945/1/MPRA_paper_60945.pdf</a>)</li>
-</ul>
+<div id="import-data" class="section level1">
+<h1>Import data</h1>
+<div id="thoughts" class="section level2">
+<h2>Thoughts</h2>
+<p>Do we need a lag? Meaning: are google trends coming into account
+later (for sure, but whats the timespan)? Can we measure this? If so,
+how?</p>
 </div>
-<div id="limitations" class="section level1">
-<h1>Limitations</h1>
-<ul>
-<li>Frequencies in google data: Depending on the period loaded they are
-either monthly or weekly data</li>
-</ul>
+<div id="assignment" class="section level2">
+<h2>Assignment</h2>
+<p>Number of nights spent at tourist accommodation establishments
+(Eurobase code: TOUR_OCC_NIM, UNIT:NR, NACE R2: I551-I553, INDIC TO:
+B006)</p>
+<p>In case there is no available reference to INDIC TO: B006 in the
+data, use the following setting: TOUR_OCC_NIM, UNIT:NR, NACE
+R2:I1551-I1553, TOTAL.</p>
+<p>The published figures are available here - and the task of each team
+is to nowcast the values of this monthly indicator for September 2022
+until April 2023.</p>
+<p>In this phase, each team submits nowcasts (according to the
+approaches that they have developed) for the number of tourism nights
+spent at tourist accommodation establishments (tourism) indicator. The
+team can make up to 5 different entries, using different approaches. For
+each entry, nowcasts (in the form of point estimates) must be submitted
+for <em>at least 5 countries</em> (chosen by the team) for a given
+month. (For example, if the current reference period is September 2022,
+the teams will have to provide the point estimates for 5 or more
+countries to have a valid entry for September 2022.) For an entry to be
+considered in the evaluation phase, there must be <em>at least 6
+consecutive monthly submissions</em> for each of at least 5 countries.
+Each monthly submission of an entry needs to be accompanied by a brief
+description of the approach used.</p>
+</div>
+<div id="indicators" class="section level2">
+<h2>Indicators</h2>
+<pre class="r"><code>datapath = &quot;../data/&quot;
+ind_path = paste0(datapath, &quot;indicators/&quot;)
+list.files(ind_path)</code></pre>
+<pre><code>## [1] &quot;tour_occ_nim_custom.csv&quot;     &quot;tour_occ_nim_linear_all.csv&quot;</code></pre>
+<pre class="r"><code>ind_in = fread(paste0(ind_path,&quot;tour_occ_nim_custom.csv&quot;))
+
+ind_t1 = ind_in[,-c(1:3)] %&gt;% 
+  as_tibble() %&gt;%
+  mutate(month_end = as_date(paste0(TIME_PERIOD,&quot;-01&quot;)),.before=1)
+
+ind_t1 %&gt;% select(nace_r2) %&gt;% distinct()</code></pre>
+<pre><code>## # A tibble: 2 × 1
+##   nace_r2  
+##   &lt;chr&gt;    
+## 1 I551-I553
+## 2 I552_I553</code></pre>
+<pre class="r"><code>## Scale
+scale2 &lt;- function(x, na.rm = FALSE) (x - mean(x, na.rm = na.rm)) / sd(x, na.rm)
+
+ind_de= ind_t1 %&gt;% 
+  filter(geo == &quot;DE&quot; &amp; nace_r2 == &quot;I551-I553&quot; &amp; unit==&quot;NR&quot; &amp; c_resid==&quot;TOTAL&quot;) %&gt;%
+  mutate(obs_value_std = scale2(OBS_VALUE),
+         obs_value_norm = (OBS_VALUE-mean(OBS_VALUE))/max(abs(OBS_VALUE-mean(OBS_VALUE))),
+         obs_value_max = OBS_VALUE/max(OBS_VALUE)
+         )
+
+ind_stats = ind_de %&gt;%
+  summarise(mean=mean(OBS_VALUE), 
+            sd=sd(OBS_VALUE), 
+            max=max(OBS_VALUE), 
+            norm=max(abs(OBS_VALUE-mean(OBS_VALUE)))
+            )</code></pre>
+<p>Therefore, the stats are:</p>
+<pre class="r"><code>ind_stats</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##        mean        sd      max      norm
+##       &lt;dbl&gt;     &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1 26941107. 10327635. 53511362 26570255.</code></pre>
+</div>
+<div id="google-trends-short-term" class="section level2">
+<h2>Google Trends Short Term</h2>
+<p>Idea: Use short term data as test and validation set, also to veryfy
+the concept.</p>
+<pre class="r"><code>goo_path = paste0(datapath, &quot;googleTrends/&quot;)
+list.files(goo_path)</code></pre>
+<pre><code>##  [1] &quot;Belgium1.csv&quot;                 &quot;Bulgaria1.csv&quot;               
+##  [3] &quot;Czech1.csv&quot;                   &quot;Denmark1.csv&quot;                
+##  [5] &quot;europa_de_week.csv&quot;           &quot;europa_world_week.csv&quot;       
+##  [7] &quot;Germany_germany_weekly.csv&quot;   &quot;Germany_worldwide_weekly.csv&quot;
+##  [9] &quot;Germany1.csv&quot;                 &quot;Germany1_full.csv&quot;           
+## [11] &quot;Germany1_full.csv.bak&quot;        &quot;Germany1_month.csv&quot;          
+## [13] &quot;Germany1_month.csv.bak&quot;       &quot;Germany1_weekly.csv&quot;         
+## [15] &quot;SearchGermany1.csv&quot;</code></pre>
+<pre class="r"><code>series = c(&quot;Belgium1.csv&quot;, &quot;Bulgaria1.csv&quot;, &quot;Czech1.csv&quot;, &quot;Denmark1.csv&quot;, &quot;Germany1.csv&quot;)
+input = paste0(goo_path, series)
+in_list_week =input %&gt;% map(~fread(., skip=2))
+in_list_week = map(in_list_week, as_tibble)
+# 
+# df_week = reduce(.x = in_list_week, .f = full_join)
+# div_100 = function(x) (x/100)
+# df_week = df_week %&gt;% mutate(across(.cols = 2:6, scale2))
+# 
+# df_week_cl = df_week %&gt;% 
+#    rename(eur_world=`europa: (Weltweit)`,
+#           eur_de=`europa: (Deutschland)`,
+#           de_de=`deutschland: (Deutschland)`, 
+#           de_world=`deutschland: (Weltweit)`, 
+#           tourism_de=`tourism: (Deutschland)`
+#           ) %&gt;%
+#   mutate(week_end = Woche + 7, .before=2) %&gt;%
+#   mutate(month_end = floor_date(week_end, unit=&quot;month&quot;), .before=3)
+# 
+# month_cnt = df_week_cl %&gt;% select(month_end) %&gt;% group_by(month_end) %&gt;% summarise(n=n())
+# ggplot(data=month_cnt, aes(x=month_end, y=n)) + 
+#   geom_col()</code></pre>
+<pre class="r"><code># df_cl_month = df_week_cl %&gt;% 
+#   select(!week_end) %&gt;%
+#   group_by(month_end) %&gt;%
+#   summarise(across(.cols = 2:6, mean))
+#             
+# df_cl_month %&gt;%
+#   gather(key=series, value=value,-month_end) %&gt;%
+#   ggplot(aes(x=month_end, y=value, color=series)) + 
+#   geom_line()</code></pre>
+</div>
+<div id="google-trends-longterm" class="section level2">
+<h2>Google Trends Longterm</h2>
+<p>Two options: Use data starting in 2004 or 2011.</p>
+<pre class="r"><code>series = &quot;Germany1_full.csv&quot;
+input = paste0(goo_path, series)
+# in_list =input %&gt;% map(~fread(., skip=2))
+# in_list = map(in_list, as_tibble)
+# df = reduce(.x = in_list, .f = full_join)
+
+df_mon = fread(input, skip = 2) %&gt;% as_tibble()
+
+div_100 = function(x) (x/100)
+df_mon = df_mon %&gt;% mutate(across(.cols = 2:6, scale2))
+
+df_mon_cl = df_mon %&gt;% 
+   rename(tour_de=`Tourismus: (Deutschland)`,
+          nights_de=`Übernachtungen: (Deutschland)`,
+          lastm_de=`last minute: (Deutschland)`, 
+          allincl_de=`All inclusive: (Deutschland)`, 
+          goofl_de=`Google Flüge: (Deutschland)`
+          ) %&gt;%
+  mutate(month_end = as_date(paste0(Monat,&quot;-01&quot;)),.before=1) %&gt;%
+  select(!Monat)</code></pre>
+</div>
+</div>
+<div id="combine-data" class="section level1">
+<h1>Combine data</h1>
+<pre class="r"><code>df_de = ind_de[,-c(2:6,8)] %&gt;%
+  full_join(df_mon_cl, by=&quot;month_end&quot;) %&gt;%
+  filter(!is.na(tour_de))
+
+theResponse=df_de %&gt;%
+  filter(!is.na(obs_value_std)) %&gt;%
+  .$obs_value_std
+
+theData = df_de %&gt;%
+  filter(!is.na(obs_value_std)) %&gt;%
+  .[6:10]</code></pre>
+</div>
+<div id="test" class="section level1">
+<h1>Test</h1>
+<div id="lm" class="section level2">
+<h2>LM</h2>
+<pre class="r"><code>mod_lm =caret::train(x=theData, y=theResponse, method=&quot;lm&quot;)</code></pre>
+<pre><code>## Warning: Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.
+## Setting row names on a tibble is deprecated.</code></pre>
+<pre class="r"><code>summary(mod_lm)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = .outcome ~ ., data = dat)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.62615 -0.42994 -0.05059  0.52083  1.87234 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.23995    0.04863   4.935  1.6e-06 ***
+## tour_de     -0.25993    0.07073  -3.675   0.0003 ***
+## nights_de   -0.05282    0.07395  -0.714   0.4758    
+## lastm_de     0.84162    0.07547  11.152  &lt; 2e-16 ***
+## allincl_de   0.12360    0.08283   1.492   0.1371    
+## goofl_de    -0.11134    0.07343  -1.516   0.1309    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7259 on 217 degrees of freedom
+## Multiple R-squared:  0.5385, Adjusted R-squared:  0.5278 
+## F-statistic: 50.64 on 5 and 217 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>We do need more data! Seems that google trends monthly data should be
+sufficient!</p>
+</div>
+<div id="rai" class="section level2">
+<h2>RAI</h2>
+<pre class="r"><code>rai_out = rai(theData, theResponse)
+summary(rai_out$model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = aucOut$formula, data = data.frame(y = theResponse, 
+##     aucOut$subData))
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.29951 -0.39089 -0.01366  0.37290  1.58738 
+## 
+## Coefficients:
+##                                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                     0.84159    0.06332  13.292  &lt; 2e-16 ***
+## I(lastm_de)                     1.21914    0.06018  20.260  &lt; 2e-16 ***
+## I(lastm_de * lastm_de)         -0.23961    0.02820  -8.495 3.22e-15 ***
+## I(tour_de)                     -0.23239    0.05972  -3.891 0.000133 ***
+## I(tour_de * tour_de)           -0.64866    0.07706  -8.417 5.32e-15 ***
+## I(tour_de * tour_de * tour_de)  0.16081    0.02354   6.831 8.45e-11 ***
+## I(lastm_de * tour_de)           0.15340    0.04304   3.564 0.000449 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.5543 on 216 degrees of freedom
+## Multiple R-squared:  0.7321, Adjusted R-squared:  0.7247 
+## F-statistic:  98.4 on 6 and 216 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div id="bayesian-reg-nn" class="section level2">
+<h2>Bayesian reg NN</h2>
+<pre class="r"><code>theData = as.data.frame(theData)
+fitControl &lt;- caret::trainControl(method = &quot;repeatedcv&quot;,
+                            number = 5, ## 5-fold CV...
+                            repeats = 5)  ## repeated 5 times
+mod_brnn =caret::train(x=theData, y=theResponse, method=&quot;brnn&quot;, trControl = fitControl, verbose=F)</code></pre>
+<pre><code>## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7919     alpha= 0.2898   beta= 7.6114 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027466 
+## gamma= 12.9247    alpha= 0.2728   beta= 9.5733 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043583 
+## gamma= 18.7644    alpha= 0.2501   beta= 11.3348 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7439     alpha= 0.3586   beta= 6.7814 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.2654    alpha= 0.4188   beta= 8.0964 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 19.1746    alpha= 0.1797   beta= 11.8389 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.772      alpha= 0.1862   beta= 6.9091 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027312 
+## gamma= 12.3102    alpha= 0.4263   beta= 7.0551 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043337 
+## gamma= 18.8263    alpha= 0.1744   beta= 11.8894 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7673     alpha= 0.276    beta= 7.3708 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.415     alpha= 0.3981   beta= 8.8559 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 18.2781    alpha= 0.334    beta= 10.4958 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7563     alpha= 0.5278   beta= 7.7141 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.0358    alpha= 0.5269   beta= 8.6333 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 18.9152    alpha= 0.1614   beta= 11.9623 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7549     alpha= 0.2482   beta= 7.2818 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027312 
+## gamma= 11.873     alpha= 0.1499   beta= 7.6296 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043337 
+## gamma= 17.8012    alpha= 0.193    beta= 11.0831 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7512     alpha= 0.2386   beta= 6.7736 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.3906    alpha= 0.3354   beta= 8.5837 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 18.8176    alpha= 0.3725   beta= 10.9034 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7961     alpha= 0.232    beta= 7.2825 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027312 
+## gamma= 12.4853    alpha= 0.351    beta= 8.7919 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043337 
+## gamma= 18.82      alpha= 0.3854   beta= 10.3499 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7529     alpha= 0.526    beta= 7.9019 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027312 
+## gamma= 12.2913    alpha= 0.4835   beta= 9.3352 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043337 
+## gamma= 18.385     alpha= 0.4253   beta= 10.7395 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7816     alpha= 0.3463   beta= 7.2906 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.22      alpha= 0.4843   beta= 8.363 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 17.1373    alpha= 0.3785   beta= 9.5079 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.776      alpha= 0.3061   beta= 7.1501 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027312 
+## gamma= 12.4822    alpha= 0.3978   beta= 8.7624 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043337 
+## gamma= 19.0046    alpha= 0.3632   beta= 10.8529 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7267     alpha= 0.2896   beta= 7.0023 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027312 
+## gamma= 11.8312    alpha= 0.6298   beta= 6.9937 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043337 
+## gamma= 18.6961    alpha= 0.2889   beta= 10.8349 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7841     alpha= 0.2339   beta= 7.4297 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.4637    alpha= 0.3984   beta= 8.8615 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 18.6651    alpha= 0.2894   beta= 11.1729 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7964     alpha= 0.2122   beta= 7.7985 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.3707    alpha= 0.3922   beta= 8.9747 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 18.1561    alpha= 0.4175   beta= 10.1393 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7311     alpha= 0.6455   beta= 7.0495 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027312 
+## gamma= 12.6304    alpha= 0.3464   beta= 9.0222 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043337 
+## gamma= 18.3388    alpha= 0.387    beta= 10.5257 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7402     alpha= 0.4927   beta= 7.4771 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.1716    alpha= 0.5432   beta= 8.8266 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 18.6878    alpha= 0.4517   beta= 10.6818 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7639     alpha= 0.2706   beta= 7.5057 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027623 
+## gamma= 12.4811    alpha= 0.3931   beta= 9.0135 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043831 
+## gamma= 18.6314    alpha= 0.2802   beta= 10.7921 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7815     alpha= 0.2781   beta= 7.5618 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.4116    alpha= 0.3705   beta= 9.0178 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 16.9654    alpha= 0.4066   beta= 10.0052 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7712     alpha= 0.307    beta= 7.4831 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.2683    alpha= 0.4076   beta= 8.6319 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 18.5553    alpha= 0.3117   beta= 10.4685 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.762      alpha= 0.2781   beta= 6.4451 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.4469    alpha= 0.3275   beta= 8.1095 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 18.8817    alpha= 0.3021   beta= 10.5317 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7754     alpha= 0.2724   beta= 7.0952 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027312 
+## gamma= 12.2324    alpha= 0.4357   beta= 8.1682 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043337 
+## gamma= 18.4375    alpha= 0.4707   beta= 9.8339 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7461     alpha= 0.2484   beta= 6.4235 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.507     alpha= 0.3004   beta= 7.9137 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 19.1335    alpha= 0.2108   beta= 10.8132 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7268     alpha= 0.637    beta= 6.7482 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027312 
+## gamma= 12.5686    alpha= 0.3897   beta= 8.5974 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043337 
+## gamma= 18.5198    alpha= 0.3498   beta= 10.5867 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7947     alpha= 0.3116   beta= 8.5815 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027159 
+## gamma= 12.1374    alpha= 0.539    beta= 9.7101 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043095 
+## gamma= 18.7256    alpha= 0.2705   beta= 12.9317 
+## Number of parameters (weights and biases) to estimate: 7 
+## Nguyen-Widrow method
+## Scaling factor= 0.7 
+## gamma= 6.7789     alpha= 0.2212   beta= 7.5015 
+## Number of parameters (weights and biases) to estimate: 14 
+## Nguyen-Widrow method
+## Scaling factor= 0.7027312 
+## gamma= 12.368     alpha= 0.3723   beta= 9.0562 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7043337 
+## gamma= 18.5887    alpha= 0.3956   beta= 10.5035 
+## Number of parameters (weights and biases) to estimate: 21 
+## Nguyen-Widrow method
+## Scaling factor= 0.7034571 
+## gamma= 18.895     alpha= 0.2829   beta= 11.044</code></pre>
+<pre class="r"><code>mod_brnn</code></pre>
+<pre><code>## Bayesian Regularized Neural Networks 
+## 
+## 223 samples
+##   5 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (5 fold, repeated 5 times) 
+## Summary of sample sizes: 177, 179, 178, 179, 179, 178, ... 
+## Resampling results across tuning parameters:
+## 
+##   neurons  RMSE       Rsquared   MAE      
+##   1        0.6483282  0.6293484  0.5153080
+##   2        0.6124618  0.6720422  0.4906025
+##   3        0.5912917  0.6946928  0.4765657
+## 
+## RMSE was used to select the optimal model using the smallest value.
+## The final value used for the model was neurons = 3.</code></pre>
+<pre class="r"><code>#predict(mod_brnn, df_de[c(59:60),6:9])</code></pre>
+</div>
+<div id="deep-autoencoder-not-working" class="section level2">
+<h2>Deep Autoencoder (not working)</h2>
+<p>Something is wrong; all the RMSE metric values are missing:</p>
+<pre class="r"><code>fitControl &lt;- caret::trainControl(method = &quot;repeatedcv&quot;,
+                            number = 5, ## 5-fold CV...
+                            repeats = 5)  ## repeated 5 times
+mod_nn =caret::train(x=theData, y=theResponse, method=&quot;dnn&quot;, trControl = fitControl, verbose=F)</code></pre>
+<pre class="r"><code>mod_nn
+predict(mod_nn, df_de[c(59:60),6:9])</code></pre>
+</div>
+<div id="gbm" class="section level2">
+<h2>GBM</h2>
+<pre class="r"><code>gbmGrid &lt;-  expand.grid(interaction.depth = c(1:4), 
+                        n.trees = (1:50), 
+                        shrinkage = 0.1,
+                        n.minobsinnode = 5)
+
+fitControl &lt;- caret::trainControl(method = &quot;repeatedcv&quot;,
+                            number = 5, ## 5-fold CV...
+                            repeats = 10)  ## repeated 5 times
+mod_gbm =caret::train(x=theData, y=theResponse, method=&quot;gbm&quot;, trControl = fitControl, tuneGrid=gbmGrid, verbose=F)</code></pre>
+<pre class="r"><code>#mod_gbm
+mod_gbm$bestTune</code></pre>
+<pre><code>##     n.trees interaction.depth shrinkage n.minobsinnode
+## 200      50                 4       0.1              5</code></pre>
+<pre class="r"><code>mod_gbm$results %&gt;% filter(n.trees==33 &amp; interaction.depth==1 &amp; shrinkage == 0.1 &amp; n.minobsinnode==5)</code></pre>
+<pre><code>##   shrinkage interaction.depth n.minobsinnode n.trees      RMSE  Rsquared
+## 1       0.1                 1              5      33 0.6704109 0.6246701
+##         MAE     RMSESD RsquaredSD      MAESD
+## 1 0.5544569 0.05553085 0.08626931 0.05039385</code></pre>
+<pre class="r"><code>summary(mod_gbm)</code></pre>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABUAAAAPACAMAAADDuCPrAAAA4VBMVEUAAAAAADoAAGYAAP8AOjoAOmYAOpAAQP8AZrYAgP8Av/8A//86AAA6OgA6Ojo6OmY6ZmY6ZpA6ZrY6kLY6kNtmAABmADpmOgBmOjpmZjpmZmZmZpBmkLZmkNtmtrZmtttmtv+QOgCQOjqQZgCQZjqQZmaQkDqQkGaQkJCQkLaQtraQttuQ2/+2ZgC2Zjq2kDq2kGa2tma2tpC2tra2ttu225C229u22/+2///bkDrbkGbbtmbbtpDbtrbb25Db27bb29vb2//b/7bb////tmb/25D/27b/29v//7b//9v////uZp4xAAAACXBIWXMAAB2HAAAdhwGP5fFlAAAgAElEQVR4nO3dfWMTd7bY8XEKlLYOXLLmkiX0QnpJd28SJ2lMyXoJN1DMg/z+X1A1erIkmwk+0mjOEZ/PH4ntmPGJYL5oNDM/NecAhDRDDwBQlYACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShA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AulUSYWAAulUSYWAAun0/6Zya4KXhAookE7/i4lccu+3wIYEFEhngICGFrgTUCCd3g/hf26Lee/7k5PvDscfPPr16fhft67/znICCqSzi/dE+susl6eTG5Har1x/gSYBBdLZwXJ2F2/pcdw0R+fnZ5F3+RBQIJ3+F1ReesXz7WF79D795zUJKJDOTt/SY/pZ6G0+BBRIR0AFFAjawdsaX5wxOmtmh/ACCuyBHZxEWtSyPf9+tHZe6VMJKJDOLi5jOng8+fDF4SSm7b+Orr0dAQXS6T0VZ4eTu4/uTO9BejIpamBZegEF0uk/FW8fLO7hvPnb5CmpWzmBvbCLVPzx9MtxPW/ce95+MvruP65/I6eAAglVSYWAAulUSYWAAulUSYWAAun0+b7ws6WXvC88sJ/qBHSntvtYAPupv4B+fefuP9p/rroroMC+kAqAIAEFCBJQgCABBQjaQUBffvfwwjeR+zgBMuo9oG8PV05vRy9jAkin74Cu9VNAgf2xgxXpm7vfv1p43fPPA9iZHbwn0vXfvwOggv7flTOyfDJAATt9W2OAfdL/IbyAAntqByeRnvz5dwEUtIO3NfYUFNhPu7iQ/uDRq75/CsDu9X8SyYX0wJ4SUICgvgO6rRXpd7Qm/Tb/34F9VyUZO8mngALXUSUZTfPf+yegwHVUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaAAulUSYaA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" width="672" /></p>
+<pre><code>##                   var   rel.inf
+## lastm_de     lastm_de 65.039834
+## tour_de       tour_de 17.117455
+## nights_de   nights_de  6.497848
+## allincl_de allincl_de  6.034734
+## goofl_de     goofl_de  5.310130</code></pre>
+<pre class="r"><code># predict(mod_gbm, df_de[c(59:60),6:9])</code></pre>
+</div>
+<div id="svn" class="section level2">
+<h2>SVN</h2>
+<p><a href="http://topepo.github.io/caret/train-models-by-tag.html#support-vector-machines" class="uri">http://topepo.github.io/caret/train-models-by-tag.html#support-vector-machines</a></p>
+<p>Die sehen sehr vielversprechend aus! Das sollte man weiter
+verfolgen.</p>
+<pre class="r"><code>fitControl &lt;- caret::trainControl(method = &quot;repeatedcv&quot;,
+                            number = 5, ## 5-fold CV...
+                            repeats = 5)  ## repeated 5 times
+mod_svn =caret::train(x=theData, y=theResponse, method=&quot;svmRadialSigma&quot;, trControl = fitControl, verbose=F)</code></pre>
+<pre class="r"><code>mod_svn</code></pre>
+<pre><code>## Support Vector Machines with Radial Basis Function Kernel 
+## 
+## 223 samples
+##   5 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (5 fold, repeated 5 times) 
+## Summary of sample sizes: 177, 179, 179, 178, 179, 179, ... 
+## Resampling results across tuning parameters:
+## 
+##   sigma       C     RMSE       Rsquared   MAE      
+##   0.03959293  0.25  0.7211569  0.5639444  0.5906386
+##   0.03959293  0.50  0.6772990  0.6088845  0.5476741
+##   0.03959293  1.00  0.6408297  0.6447303  0.5146518
+##   0.44658910  0.25  0.6682588  0.6469702  0.5343639
+##   0.44658910  0.50  0.5990453  0.7004783  0.4787047
+##   0.44658910  1.00  0.5460506  0.7362580  0.4328014
+##   0.85358527  0.25  0.7091295  0.6041266  0.5654016
+##   0.85358527  0.50  0.6278458  0.6724817  0.4996342
+##   0.85358527  1.00  0.5758073  0.7099713  0.4515438
+## 
+## RMSE was used to select the optimal model using the smallest value.
+## The final values used for the model were sigma = 0.4465891 and C = 1.</code></pre>
+<pre class="r"><code>summary(mod_svn)</code></pre>
+<pre><code>## Length  Class   Mode 
+##      1   ksvm     S4</code></pre>
+<pre class="r"><code># predict(mod_svn, df_de[c(59:60),6:9])</code></pre>
+</div>
+</div>
+<div id="compare-results" class="section level1">
+<h1>Compare results:</h1>
+<pre class="r"><code># res_tab = tibble(
+#   lm = predict(mod_lm,df_de[c(59:60),6:9]),
+#   brnn = predict(mod_brnn, df_de[c(59:60),6:9]),
+#   gbm = predict(mod_gbm, df_de[c(59:60),6:9]),
+#   svn = predict(mod_svn, df_de[c(59:60),6:9])
+# )
+
+res_stats = as_tibble(getTrainPerf(mod_lm)) %&gt;%
+  add_row(getTrainPerf(mod_brnn)) %&gt;%
+  add_row(getTrainPerf(mod_gbm)) %&gt;%
+  add_row(getTrainPerf(mod_svn))
+
+# res_tab
+res_stats</code></pre>
+<pre><code>## # A tibble: 4 × 4
+##   TrainRMSE TrainRsquared TrainMAE method        
+##       &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
+## 1     0.748         0.536    0.586 lm            
+## 2     0.591         0.695    0.477 brnn          
+## 3     0.530         0.750    0.412 gbm           
+## 4     0.546         0.736    0.433 svmRadialSigma</code></pre>
+<pre class="r"><code>summary(rai_out$model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = aucOut$formula, data = data.frame(y = theResponse, 
+##     aucOut$subData))
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.29951 -0.39089 -0.01366  0.37290  1.58738 
+## 
+## Coefficients:
+##                                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                     0.84159    0.06332  13.292  &lt; 2e-16 ***
+## I(lastm_de)                     1.21914    0.06018  20.260  &lt; 2e-16 ***
+## I(lastm_de * lastm_de)         -0.23961    0.02820  -8.495 3.22e-15 ***
+## I(tour_de)                     -0.23239    0.05972  -3.891 0.000133 ***
+## I(tour_de * tour_de)           -0.64866    0.07706  -8.417 5.32e-15 ***
+## I(tour_de * tour_de * tour_de)  0.16081    0.02354   6.831 8.45e-11 ***
+## I(lastm_de * tour_de)           0.15340    0.04304   3.564 0.000449 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.5543 on 216 degrees of freedom
+## Multiple R-squared:  0.7321, Adjusted R-squared:  0.7247 
+## F-statistic:  98.4 on 6 and 216 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Last but not least: Variable importance:</p>
+<pre class="r"><code>varImp(mod_svn)</code></pre>
+<pre><code>## loess r-squared variable importance
+## 
+##            Overall
+## lastm_de    100.00
+## tour_de      35.67
+## allincl_de   27.26
+## nights_de    18.27
+## goofl_de      0.00</code></pre>
+<p>Da ja bereits bekannt ist, dass Deutschland nur bedingt ein guter
+Prädiktor für Deutschland ist, sollten wir hier wohl weitere Abfragen
+(weltweit und Europa) einfließen lassen. Im grunde funktioniert es aber
+und wenn man die Short Term Daten reinarbeitet wird es auch super
+funktionieren.</p>
 </div>
 
 

@@ -1,2 +1,0 @@
-# gladgan
-Gladstone Gander Repository
