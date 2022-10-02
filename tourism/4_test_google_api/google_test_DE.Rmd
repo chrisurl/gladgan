@@ -1,0 +1,359 @@
+---
+title: "Google trends data"
+author: Christian Url
+date: 'Last Compiled `r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    
+    code_folding: show
+    highlight: tango
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+               collapse = FALSE,
+               comment = "",
+               strip.white = TRUE,
+               warning = FALSE,
+               message = FALSE,
+               cache = TRUE,
+               out.width = "70%",
+               fig.align = "center")
+
+```
+
+
+## load Packages
+```{r}
+library(data.table)
+library(tidyverse)
+library(lubridate)
+library(gtrendsR)
+```
+
+## Selectors
+
+```{r}
+country_code = "DE"
+country = "Germany"
+```
+
+
+# Download data
+
+Set the data path:
+```{r}
+datapath = "../data/"
+trends_path = paste0(datapath, "googleTrendsAuto/")
+```
+
+Using the Package *gtrendsR*. First, find interesting categories:
+
+```{r categories}
+data("categories")
+cat1 = categories %>%  
+  mutate(cat = str_to_lower(name)) %>% 
+  filter(str_detect(cat, "travel|holiday|hotel|camping|appartment|booking|rental|hike")) %>%
+  distinct() %>%
+  filter(str_detect(cat, "dvd|holidays|entertainment|luggage|party",  negate = T))
+
+cat1
+```
+
+Categories regarding restaurants etc.:
+```{r}
+cat2 = categories %>%  
+  mutate(cat = str_to_lower(name)) %>% 
+  filter(str_detect(cat, "restaurant|bar|gastro|food|hostility")) %>%
+  distinct()
+cat2
+```
+
+
+# Country-level {.tabset .tabset-fade}
+
+## `r country` {-}
+
+Either more than 1 keyword and only 1 geo or vice versa.
+```{r it1}
+test1 = gtrends(keyword = country, 
+        geo=c("DE", "GB", country_code),
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 67,
+        onlyInterest = F
+        )
+
+test1$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits, group = keyword)) +  
+  geom_line() + 
+  facet_grid(~keyword)
+head(test1$related_queries)
+```
+
+## Cities in Italy {-}
+
+```{r it2}
+
+test1_int = gtrends(keyword = c("Rome", "Italy", "Milano", "Sicily"), 
+        geo=c("DE"),
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 67,
+        onlyInterest = T
+        )
+
+test1_int$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits, group = keyword)) +  
+  geom_line() + 
+  facet_grid(~keyword)
+test1_int$related_queries
+```
+
+## `r country` in Travel world {-}
+
+```{r it3}
+test2 = gtrends(keyword = country, 
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 67,
+        onlyInterest = F
+        )
+
+test2$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits, group = keyword)) +  
+  geom_line(size=1) + 
+  facet_grid(~keyword)
+test2$related_queries
+```
+
+## Hotels {-}
+
+```{r it4}
+test3 = gtrends(keyword = country, 
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 179,
+        onlyInterest = F
+        )
+
+test3$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits, group = keyword)) +  
+  geom_line(size=1) + 
+  facet_grid(~keyword)
+test3$related_queries
+```
+
+## Car rental {-}
+
+```{r it5}
+test4 = gtrends(keyword = country, 
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 205,
+        onlyInterest = F
+        )
+
+test4$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits, group = keyword)) +  
+  geom_line(size=1) + 
+  facet_grid(~keyword)
+
+test4$related_queries
+```
+
+## Apartment {-}
+```{r it6}
+test5 = gtrends(keyword = country, 
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 378,
+        onlyInterest = F
+        )
+
+test5$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits, group = keyword)) +  
+  geom_line(size=1) + 
+  facet_grid(~keyword)
+
+test5$related_queries
+```
+
+## Hiking {-}
+
+```{r it7}
+test6 = gtrends(keyword = country, 
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 542,
+        onlyInterest = F
+        )
+
+test6$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits, group = keyword)) +  
+  geom_line(size=1) + 
+  facet_grid(~keyword)
+
+test6$related_queries
+```
+
+## Travel Guides {-}
+
+```{r it8}
+test7 = gtrends(keyword = country, 
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 1011,
+        onlyInterest = F
+        )
+
+test7$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits, group = keyword)) +  
+  geom_line(size=1) + 
+  facet_grid(~keyword)
+
+test7$related_queries
+```
+
+# Food {.tabset .tabset-fade}
+Maybe include some searches like restaurants, hikes, beaches for real-time estimation. But this can also bear non-results.
+
+## Search for keywords {-}
+```{r keywords1}
+
+rest1 = gtrends(keyword = c("Restaurant","Bar","Beach", "Club", "Pizzeria"), 
+        geo = country_code,
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 0,
+        onlyInterest = F
+        )
+
+rest1$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(hits = case_when(hits == "<1" ~ 0.5,
+                          TRUE ~ as.numeric(hits)),
+         hits = as.numeric(hits),
+    date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits, group = keyword)) +  
+  geom_line(size=1) + 
+  facet_grid(~keyword)
+
+head(rest1$related_queries)
+```
+
+## Category Food&Drink {-}
+
+```{r fandd}
+rest2 = gtrends(keyword = , 
+        geo = country_code,
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 71, #food & drink
+        onlyInterest = F
+        )
+
+rest2$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(hits = case_when(hits == "<1" ~ 0.5,
+                          TRUE ~ as.numeric(hits)),
+         hits = as.numeric(hits),
+    date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits)) +  
+  geom_line(size=1) 
+rest2$related_queries
+```
+
+## Category Restaurants {-}
+
+```{r rest}
+rest3 = gtrends(keyword = , 
+        geo = country_code,
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 276, #restaurants
+        onlyInterest = F
+        )
+
+rest3$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(hits = case_when(hits == "<1" ~ 0.5,
+                          TRUE ~ as.numeric(hits)),
+         hits = as.numeric(hits),
+    date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits)) +  
+  geom_line(size=1) 
+
+rest3$related_queries
+```
+
+
+## Category Groceries {-}
+
+```{r groc1}
+rest4 = gtrends(keyword = , 
+        geo = country_code,
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 121, #groceries
+        onlyInterest = F
+        )
+
+rest4$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(hits = case_when(hits == "<1" ~ 0.5,
+                          TRUE ~ as.numeric(hits)),
+         hits = as.numeric(hits),
+    date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits)) +  
+  geom_line(size=1) 
+
+rest4$related_queries
+```
+
+## Category fast food {-}
+
+```{r ffod}
+rest5 = gtrends(keyword = , 
+        geo = country_code,
+        time="today+5-y",
+        gprop = c("web", "news", "images", "froogle", "youtube"),
+        category = 918, #fast  food
+        onlyInterest = F
+        )
+
+rest5$interest_over_time %>% 
+  as_tibble() %>%
+  mutate(hits = case_when(hits == "<1" ~ 0.5,
+                          TRUE ~ as.numeric(hits)),
+         hits = as.numeric(hits),
+    date = as_date(date)) %>%
+  ggplot(mapping=aes(x = date, y = hits)) +  
+  geom_line(size=1) 
+
+rest5$related_queries
+```
+
+
+
