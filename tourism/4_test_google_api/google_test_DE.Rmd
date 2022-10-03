@@ -82,7 +82,7 @@ cat2
 Either more than 1 keyword and only 1 geo or vice versa.
 ```{r it1}
 test1 = gtrends(keyword = country, 
-        geo=c("DE", "GB", country_code),
+        geo=country_code,
         time="today+5-y",
         gprop = c("web", "news", "images", "froogle", "youtube"),
         category = 67,
@@ -103,7 +103,7 @@ head(test1$related_queries)
 ```{r it2}
 
 test1_int = gtrends(keyword = c("Rome", "Italy", "Milano", "Sicily"), 
-        geo=c("DE"),
+        geo=country_code,
         time="today+5-y",
         gprop = c("web", "news", "images", "froogle", "youtube"),
         category = 67,
@@ -122,7 +122,7 @@ test1_int$related_queries
 ## `r country` in Travel world {-}
 
 ```{r it3}
-test2 = gtrends(keyword = country, 
+test2 = gtrends(keyword = country,
         time="today+5-y",
         gprop = c("web", "news", "images", "froogle", "youtube"),
         category = 67,
