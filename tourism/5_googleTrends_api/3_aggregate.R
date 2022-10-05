@@ -19,7 +19,7 @@ path_2 = paste0(trends_path,"part2/")
 
 filelist1 = paste0(path_1, list.files(path_1))
 
-in1 = map(filelist1, read_csv)
+in1 = map(filelist1, ~read_csv(.,show_col_types = F))
 
 df1 = do.call(bind_rows, in1)
 write_csv(df1, file = paste0(trends_path, "trends_part1.csv"))
@@ -27,11 +27,13 @@ write_csv(df1, file = paste0(trends_path, "trends_part1.csv"))
 # read in part 2 ####
 filelist2 = paste0(path_2, list.files(path_2))
 
-in2 = map(filelist2, read_csv)
+in2 = map(filelist2, ~read_csv(.,show_col_types = F))
 
 df2 = do.call(bind_rows, in2)
 write_csv(df2, file = paste0(trends_path, "trends_part2.csv"))
 
+df_full = full_join(df1,df2)
+write_csv(df_full, file = paste0(trends_path, "trends_full.csv"))
 
 ### data path trendecon ####
 datapath = "../data/"
@@ -43,7 +45,7 @@ path_2 = paste0(trends_path,"part2_trendecon/")
 
 filelist1 = paste0(path_1, list.files(path_1))
 
-in1 = map(filelist1, read_csv)
+in1 = map(filelist1,  ~read_csv(.,show_col_types = F))
 
 df1 = do.call(bind_rows, in1)
 write_csv(df1, file = paste0(trends_path, "trends_part1_trendecon.csv"))
@@ -51,7 +53,10 @@ write_csv(df1, file = paste0(trends_path, "trends_part1_trendecon.csv"))
 # read in part 2 ####
 filelist2 = paste0(path_2, list.files(path_2))
 
-in2 = map(filelist2, read_csv)
+in2 = map(filelist2,  ~read_csv(.,show_col_types = F))
 
 df2 = do.call(bind_rows, in2)
 write_csv(df2, file = paste0(trends_path, "trends_part2_trendecon.csv"))
+
+df_full = full_join(df1,df2)
+write_csv(df_full, file = paste0(trends_path, "trends_full_trendecon.csv"))

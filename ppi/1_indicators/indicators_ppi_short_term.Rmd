@@ -1,0 +1,209 @@
+---
+title: "PPI indicator data"
+author: Christian Url
+date: 'Last Compiled `r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    
+    code_folding: show
+    highlight: tango
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+               collapse = FALSE,
+               comment = "",
+               strip.white = TRUE,
+               warning = FALSE,
+               message = FALSE,
+               cache = TRUE,
+               out.width = "70%",
+               fig.align = "center")
+
+```
+
+
+## load Packages
+```{r}
+library(data.table)
+library(lubridate)
+library(rai)
+library(caret)
+library(forecast)
+library(parallel)
+library(doParallel)
+library(tidyverse)
+```
+
+## Set paths
+```{r}
+datapath = "../data/"
+ind_path = paste0(datapath, "indicators/")
+```
+
+## Functions
+```{r}
+scale2 <- function(x, na.rm = TRUE) (x - mean(x, na.rm = na.rm)) / sd(x, na.rm)
+```
+
+
+# Load Data
+
+## Volatility Index
+```{r}
+vol_ind = read_delim(paste0(datapath,"country_volatility_index.csv")) %>%
+  mutate(geo = str_split(Countries, " ", simplify = T)[,1], .before = 1)
+```
+
+## Indicators
+
+Read indicator data and filter for valid countries. Countries are valid if they appear in the country volatility index.
+
+```{r}
+list.files(ind_path)
+ind_in = fread(paste0(ind_path,"ppi.csv"))
+ind_in[,1:7] %>% distinct()
+ind_t1 = ind_in[,-c(1:7)] %>% 
+  as_tibble() %>%
+  mutate(date = as_date(paste0(TIME_PERIOD,"-01")),.before=1) %>%
+  filter(geo %in% vol_ind$geo)
+```
+
+# Data cleansing
+
+Build dataset:
+```{r}
+df_ind = ind_t1 %>%
+  .[,c(1,2,4)] %>%
+  filter(date >= as_date("2021-01-01")) %>%
+  group_by(geo) %>%
+  mutate(obs_value_std = scale2(OBS_VALUE), 
+         mean=mean(OBS_VALUE), 
+         sd = sd(OBS_VALUE),
+         year = year(date),
+         month = month(date)) %>%
+  ungroup()
+
+ind_stats  = df_ind %>%
+  select(geo, mean, sd) %>%
+  distinct()
+
+geo_minmax = df_ind %>%
+  group_by(geo) %>%
+  summarise(min_year = year(min(date)), 
+            max_year = year(max(date)),
+            min_month = month(min(date)),
+            max_month = month(max(date)))
+
+print(geo_minmax, n=nrow(geo_minmax))
+```
+
+Plot of 5 years for all countries:
+```{r plt_share, cache = T}
+df_ind %>%
+  filter(year >= 2016) %>%
+  ggplot(aes(x = month, y=obs_value_std,group = interaction(factor(year),geo), color = factor(year))) + 
+  geom_line() + 
+  facet_wrap(~geo)
+```
+
+# Time series modeling 
+
+Using arima for predicting September 2022
+
+```{r multicore}
+cl = detectCores()-1
+registerDoParallel(cl)
+
+geo_filter = geo_minmax %>%
+  filter(max_year == 2022) %>% 
+  .$geo 
+
+res_list = foreach(i = 1:length(geo_filter), .packages=c("tidyverse","forecast"), .multicombine = T, .combine = rbind) %dopar% {
+  ind_stats_act = ind_stats %>%
+    filter(geo == geo_filter[i])
+  
+  ts_def = geo_minmax %>%
+    filter(geo == geo_filter[i])
+
+  ind_ts = df_ind %>%
+    filter(geo == geo_filter[i]) %>%
+    select(obs_value_std) %>%
+    ts(frequency = 12, start = c(ts_def$min_year, ts_def$min_month))
+
+  mod = auto.arima(ind_ts, max.d = 4, max.D = 4, max.order = 24, max.p = 12, max.q = 12)
+  pred = forecast(mod, h = 4)
+
+  yhat = pred$mean * ind_stats_act$sd + ind_stats_act$mean
+  coefs = as.data.frame(coef(mod)) %>% 
+    rownames_to_column(var = "coef") %>%
+    rename(val = `coef(mod)`) %>%
+    pivot_wider(names_from = coef, values_from = val) %>%
+    add_column(geo = geo_filter[i], .before = 1) %>%
+    add_column(sigma = mod$sigma2)
+  
+  arima_order = as.data.frame(arimaorder(mod)) %>% 
+    rownames_to_column(var = "coef") %>%
+    rename(val = `arimaorder(mod)`) %>%
+    pivot_wider(names_from = coef, values_from = val) %>%
+    add_column(geo = geo_filter[i], .before = 1)
+    
+  
+  yhat_list = list(tibble(date = zoo::as.Date(pred$mean),geo=geo_filter[i], yhat = yhat, bic = mod$bic, 
+                   rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7]),
+                   coefs,
+                   arima_order)
+}
+res_df = do.call(bind_rows, res_list[,1])
+coefs_df = do.call(bind_rows, res_list[,2])
+arima_order_df = do.call(bind_rows, res_list[,3])
+
+stopImplicitCluster()
+
+res_df
+
+write_csv(res_df, file="arima_forecasts_short.csv")
+write_csv(coefs_df, file="arima_forecasts_coefs_short.csv")
+write_csv(arima_order_df, file="arima_forecasts_order_short.csv")
+```
+
+overview over last forecast date:
+
+```{r}
+overview = res_df %>%
+  group_by(geo) %>%
+  summarise(min_date = min(date), max_date = max(date), bic = min(bic), rmse = min(rmse), mae = min(mae), acf = min(acf))
+
+print(overview, n = nrow(overview))
+
+print(filter(overview, min_date >= as_date("2022-07-01")), n = nrow(filter(overview, min_date >= as_date("2022-07-01"))))
+print(arima_order_df, n = nrow(arima_order_df))
+coefs_df
+```
+
+coefficients: 
+```{r, results='asis'}
+print(xtable::xtable(coefs_df), type="html")
+```
+
+*September forecasts:* 
+```{r, results='asis'}
+sept = res_df %>%
+  filter(date == as_date("2022-09-01"))
+
+print(xtable::xtable(sept), type="html")
+```
+
+
+*October forecasts:* 
+```{r, results='asis'}
+sept = res_df %>%
+  filter(date == as_date("2022-10-01"))
+
+print(xtable::xtable(sept), type="html")
+```

@@ -1,3 +1,4 @@
+### Depriciated!!!! 
 ### Background script for automatic download of GoogleTrends time series
 # packages ####
 library(data.table)
