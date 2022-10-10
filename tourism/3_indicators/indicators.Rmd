@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = TRUE,
 
 
 ## load Packages
-```{r}
+```{r,  cache=FALSE}
 library(data.table)
 library(tidyverse)
 library(lubridate)
@@ -107,7 +107,8 @@ ind_wide = ind_t1 %>%
          ) %>%
   select(!resid_NAT) %>%
   ungroup() %>%
-  arrange(geo,month_end)
+  arrange(geo,month_end) %>%
+  zoo::na.locf()
 
 ind_wide %>%
   filter(is.na(resid_DOM)) %>%
@@ -187,12 +188,13 @@ res_list = foreach(i = 1:length(geo_filter), .packages=c("tidyverse","forecast")
   
   ts_def = ind_wide %>%
     filter(geo == geo_filter[i]) %>%
-    summarise(mon = min(month), year = min(year))
+    summarise(min_month = lubridate::month(min(month_end)), 
+              min_year = lubridate::year(min(month_end)))
 
   ind_ts = ind_wide %>%
     filter(geo == geo_filter[i]) %>%
     select(resid_TOTAL_STD) %>%
-    ts(frequency = 12, start = c(ts_def$year, ts_def$mon))
+    ts(frequency = 12, start = c(ts_def$min_year, ts_def$min_month))
 
   mod = auto.arima(ind_ts, max.d = 4, max.D = 4, max.order = 24, max.p = 12, max.q = 12)
   pred = forecast(mod, h = 4)

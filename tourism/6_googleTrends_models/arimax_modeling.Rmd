@@ -1,0 +1,539 @@
+---
+title: "Google trends ARIMAX models"
+author: Christian Url
+date: 'Last Compiled `r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    
+    code_folding: show
+    highlight: tango
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+               collapse = FALSE,
+               comment = "",
+               strip.white = TRUE,
+               warning = FALSE,
+               message = FALSE,
+               cache = TRUE,
+               out.width = "100%",
+               fig.align = "center")
+
+```
+
+## load Packages
+```{r, cache=FALSE}
+library(data.table)
+library(lubridate)
+library(caret)
+library(rai)
+library(forecast)
+library(parallel)
+library(doParallel)
+library(tidyverse)
+#library(fable) #also  has a forecast and accuracy method!!
+```
+
+## Paths
+```{r}
+datapath = "../data/"
+trends_path = paste0(datapath, "googleTrendsAuto/")
+ind_path = paste0(datapath, "indicators/")
+```
+
+## Functions
+```{r}
+scale2 <- function(x, na.rm = TRUE) (x - mean(x, na.rm = na.rm)) / sd(x, na.rm)
+```
+
+
+# Read data {.tabset .tabset-fade}
+## Volatility Index {-}
+```{r vol_ind}
+vol_ind = read_delim(paste0(datapath,"country_volatility_index.csv")) %>%
+  mutate(geo = str_split(Countries, " ", simplify = T)[,1], .before = 1,
+         country = str_remove(Countries, ".*\\("), 
+         country = str_extract(country, ".*(?=\\))"))
+
+country_code_list = unlist(vol_ind$geo)
+country_list = unlist(vol_ind$country)
+country_code_list[country_list=="Greece"] <- "GR"
+```
+
+## Trends (containing indicator) {-}
+
+```{r trends, cache = FALSE}
+trends_100 = read_csv(paste0(datapath,"trends_100.csv"))
+trends_norm = read_csv(paste0(datapath,"trends_norm.csv"))
+
+ind_stats = read_csv(paste0(datapath,"indicator_stats.csv"))
+ind_wide = read_csv(paste0(datapath,"indicator_wide.csv"))
+```
+
+# Data Issues
+Some contries lack a lot of data. Hence, investigating this leads to the following:
+```{r}
+s1 = ind_wide %>%
+  group_by(geo) %>%
+  summarise(min_date = min(month_end),
+            max_date = max(month_end), 
+            na_sum = sum(is.na(resid_TOTAL)),
+            n = n()) %>%
+  mutate(mon = max_date - min_date,
+         y = mon/30)
+
+print(s1, n=nrow(s1))
+```
+
+```{r}
+a = ind_wide  %>%
+  group_by(geo, year) %>%
+  summarise(cnt = sum(!is.na(resid_TOTAL))) %>%
+  filter(cnt != 12 & year != 2022) %>%
+  ungroup()
+
+print(a, n=nrow(a))
+```
+
+
+Issues:
+
+  * CY: Consistent data since 2000
+  * FR: Consistent data since 2010 (before: only reported 5 months)
+  * MT: Consistent data since 2007
+  * DK: 1991
+  
+# ARIMAX Modeling Intro
+
+Idea: Test variables in a stepwise procedure s.t. only the relevant terms are included in final model
+Also use the hints discussed here: https://math.unm.edu/~lil/Stat581/10-dynamic-regression.pdf and https://www.r-bloggers.com/2021/10/dynamic-regression-with-arima-errors-the-students-on-the-streets/
+
+Main Ideas: 
+
+  * Try Fourier part with $K \in 1,2,...,6,12$
+  * Trend, Drift, Season in extra terms or are they already included?
+  * The *fable* package (https://fable.tidyverts.org/) should be an easy way to tidy up the estimation process 
+  * Should we use the RAI Package to identify the regression part?
+
+
+Readings: 
+
+  * ARIMA Chapter: https://otexts.com/fpp2/arima.html
+  * Dynamic regression: https://otexts.com/fpp2/dynamic.html
+  * Neural network models: https://otexts.com/fpp2/nnetar.html
+
+# Fourier transforms {.tabset .tabset-fade}
+Cannot use standardised series, use log instead. The calculation of Fourier series requires a log-transform of the data, which is not possible for standardised data.
+
+## Example 1 {-}
+
+Set up data:
+```{r ex1_1}
+i = 1
+trends = trends_norm
+
+c_code = country_code_list[i]
+ctry = country_list[i]
+
+ts_set = ind_wide %>%
+  filter(geo == c_code) %>%
+  zoo::na.locf() %>%
+  summarise(year_min = year(min(ind_wide$month_end)), month_min = month(min(ind_wide$month_end)))
+
+ind_ts = ind_wide %>%
+  filter(geo == c_code) %>%
+  zoo::na.locf() %>%
+  select(resid_TOTAL) %>%
+  mutate(resid_TOTAL = log(resid_TOTAL)) %>%
+  ts(start=c(ts_set$year_min, ts_set$month_min), frequency=12)
+
+```
+
+Benchmark:
+```{r ex1_2}
+ind_ts2 = ind_wide %>%
+  filter(geo == c_code) %>%
+  zoo::na.locf() %>%
+  select(resid_TOTAL_STD) %>%
+  ts(start=c(year(min(ind_wide$month_end)),month(min(ind_wide$month_end))), frequency=12)
+
+
+mod = auto.arima(ind_ts)
+forecast::accuracy(mod)
+mod
+
+mod2 = auto.arima(ind_ts2)
+forecast::accuracy(mod2)
+mod2
+```
+
+Calculate a few models:
+
+```{r ex1_3}
+plots <- list()
+mod_out = list()
+stats_list = list()
+
+for (j in seq(6)) {
+  mod_out[[j]] <- auto.arima(ind_ts, xreg = fourier(ind_ts, K = j),
+    seasonal = FALSE, lambda = 0)
+  plots[[j]] <- autoplot(forecast(mod_out[[j]],
+      xreg=fourier(ind_ts, K=j, h=12))) +
+    xlab(paste("K=",j,"   AICC=",round(mod_out[[j]][["aicc"]],2))) +
+    ylab("")
+  stats_list[[j]] = tibble(bic=mod_out[[j]]$bic, aicc=mod_out[[j]]$aicc, sigma2=mod_out[[j]]$sigma2, loglik=mod_out[[j]]$loglik)
+}
+gridExtra::grid.arrange(
+  plots[[1]],plots[[2]],plots[[3]],
+  plots[[4]],plots[[5]],plots[[6]], ncol=2)
+do.call(rbind, stats_list)
+do.call(rbind, map(mod_out, forecast::accuracy))
+```
+
+## Country-wise ARIMAX with Fourier {-}
+```{r multicore_af1}
+cl = detectCores()-1
+registerDoParallel(cl)
+
+res_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","forecast", "lubridate"), .multicombine = T, .combine = rbind) %dopar% {
+  
+  # Data
+  
+  c_code = country_code_list[i]
+  ctry = country_list[i]
+  
+  ts_set = ind_wide %>%
+    filter(geo == c_code) %>%
+    zoo::na.locf() %>%
+    summarise(year_min = year(min(month_end)), month_min = month(min(month_end)))
+  
+  if (c_code == "FR"){ts_set = tibble(year_min = 2010, month_min = 1)}
+  if (c_code == "CY"){ts_set = tibble(year_min = 2000, month_min = 1)}
+  if (c_code == "DK"){ts_set = tibble(year_min = 2007, month_min = 1)}
+  if (c_code == "MT"){ts_set = tibble(year_min = 2010, month_min = 1)}
+  
+  ind_ts = ind_wide %>%
+    filter(geo == c_code & year >= ts_set$year_min) %>%
+    zoo::na.locf() %>%
+    select(resid_TOTAL) %>%
+    mutate(resid_TOTAL = log(resid_TOTAL)) %>%
+    ts(start=c(ts_set$year_min, ts_set$month_min), frequency=12)
+    
+  # Fourier models
+  
+  for (j in seq(6)) {
+    mod_out[[j]] <- auto.arima(ind_ts, xreg = fourier(ind_ts, K = j), seasonal = FALSE, lambda = 0)
+    
+    stats_list[[j]] = tibble(bic=mod_out[[j]]$bic, aicc=mod_out[[j]]$aicc, sigma2=mod_out[[j]]$sigma2, loglik=mod_out[[j]]$loglik)
+    
+  }
+  stats = do.call(rbind, stats_list)
+  acc = do.call(rbind, map(mod_out, forecast::accuracy))
+  
+  # Determine best Fourier mod
+  f_ord = which(stats$aicc == min(stats$aicc))
+  mod = mod_out[[f_ord]]
+  pred = forecast(mod_out[[f_ord]], xreg=fourier(ind_ts, K=f_ord, h=4))
+  
+  # Predictions
+  yhat = exp(pred$mean)
+  coefs = as.data.frame(coef(mod)) %>% 
+    rownames_to_column(var = "coef") %>%
+    rename(val = `coef(mod)`) %>%
+    pivot_wider(names_from = coef, values_from = val) %>%
+    add_column(geo = c_code, .before = 1) %>%
+    add_column(sigma = mod$sigma2)
+  
+  arima_order = as.data.frame(arimaorder(mod)) %>% 
+    rownames_to_column(var = "coef") %>%
+    rename(val = `arimaorder(mod)`) %>%
+    pivot_wider(names_from = coef, values_from = val) %>%
+    add_column(geo = c_code, .before = 1)
+    
+  # Final export
+  yhat_list = list(tibble(month_end = zoo::as.Date(pred$mean),geo=c_code, yhat = yhat, fourier_order=f_ord,
+                          bic = mod$bic, aicc = mod$aicc, sigma2 = mod$sigma2, loglik  = mod$loglik,
+                          rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7]),
+                          coefs,
+                          arima_order)
+}
+
+res_df = do.call(bind_rows, res_list[,1])
+coefs_df = do.call(bind_rows, res_list[,2])
+arima_order_df = do.call(bind_rows, res_list[,3])
+
+stopImplicitCluster()
+
+res_df
+```
+
+Export:
+```{r, cache=FALSE}
+write_csv(res_df, file=paste0(datapath,"results/arimax_fourier_forecasts.csv"))
+write_csv(coefs_df, file=paste0(datapath,"results/arimax_fourier_forecasts_coefs.csv"))
+write_csv(arima_order_df, file=paste0(datapath,"results/arimax_fourier_forecasts_order.csv"))
+```
+
+## Results {-}
+```{r, cache=FALSE}
+overview = res_df %>%
+  group_by(geo) %>%
+  summarise(min_date = min(month_end), max_date = max(month_end), bic = min(bic), rmse = min(rmse), mae = min(mae), acf = min(acf))
+
+print(overview, n = nrow(overview))
+```
+
+
+coefficients: 
+```{r, results='asis'}
+print(xtable::xtable(coefs_df), type="html")
+```
+
+
+# Arimax models with google data
+
+** NO CACHE FOR NEW PARTS **
+```{r}
+knitr::opts_chunk$set(cache = FALSE)
+```
+
+
+Plan:
+
+  * Add lags of variables
+  * Try all combinations of vars and lags
+
+
+
+# Arimax models using formula from RAI
+Idea: Instead of excessively searching a parameter space without a testing procedure, try to use all combinations in a rai model and then use the formula in an auto.arima model.
+
+## Example 1 (AT)
+```{r ra1, cache=TRUE}
+# Set up lagged predictors
+lags = c(0:11)
+i = 1
+
+c_code = country_code_list[i]
+ctry = country_list[i]
+
+trends = trends_100 %>%
+  select(!resid_TOTAL_STD) %>%
+  filter(country_code == c_code) %>%
+  zoo::na.locf()
+
+indicator = ind_wide %>%
+  filter(geo == c_code) %>%
+  rename(country_code = geo, date=month_end) %>%
+  zoo::na.locf() %>%
+  select(date, country_code, resid_TOTAL)
+
+ts_set = trends %>%
+  summarise(year_min = year(min(date)), month_min = month(min(date)), max_date = max(date))
+
+trends2 = indicator %>%
+  mutate(resid_TOTAL = log(resid_TOTAL)) %>%
+  inner_join(trends, by=c("date", "country_code")) %>%
+  select(-c(date, country_code)) %>%
+  ts(start=c(ts_set$year_min, ts_set$month_min), frequency=12)
+
+
+lag_trends_ts = function(lags, input_ts, col_pos){
+  stopifnot(is.ts(input_ts))
+  
+  out = list()
+  lags_neg = -1*lags
+  
+  for(i in seq_along(col_pos)){
+    col_sel = col_pos[i]
+    t_out = list()
+    for(j in seq_along(lags)){
+      t_out[[j]] = stats::lag(input_ts[,col_sel],lags_neg[j])
+    }
+    out[[i]] = do.call(cbind,t_out)
+    if(ncol(out[[i]]) > 1){
+      colnames(out[[i]]) = paste0(colnames(input_ts)[col_sel], "_lag", lags) 
+    }
+    out[[i]] = fable::as_tsibble(out[[i]]) #need this for binding the data accurately
+  }
+  res = as.ts(do.call(bind_rows,out))
+  return(res)
+}
+
+trends_ts_lag = lag_trends_ts(lags=c(0:11),input_ts=trends2,col_pos = c(2:12))
+theData = trends_ts_lag[13:221,]
+theResponse = trends2[13:221,1]
+
+rai_out = rai(theData = theData, theResponse = theResponse)
+summary(rai_out$model)
+f_rai = formula(rai_out$formula)
+
+auto.arima(y=theResponse, xreg = rai_out$X[,-1])
+
+Y = ts(theResponse, start=c(ts_set$year_min+1, ts_set$month_min), frequency = 12)
+X_reg = ts(rai_out$X[,-1], start=c(ts_set$year_min+1, ts_set$month_min), frequency = 12)
+X_full = ts(theData, start=c(ts_set$year_min+1, ts_set$month_min), frequency = 12)
+auto.arima(y=Y, xreg = X_reg)
+
+```
+
+We can see that the RAI model has a good training fit. Thus, we'll need to cross validate this result.
+
+# Neuronal nets from forecasting book {.tabset .tabset-fade}
+Testing only for Austria.
+
+## Without external regressors {-}
+
+```{r}
+i=1
+#cl = detectCores()-1
+#registerDoParallel(cl)
+# 
+# res_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","forecast", "lubridate"), .multicombine = T, .combine = rbind) %dopar% {
+#   
+  # Data
+  
+  c_code = country_code_list[i]
+  ctry = country_list[i]
+  
+  ts_set = ind_wide %>%
+    filter(geo == c_code) %>%
+    zoo::na.locf() %>%
+    summarise(year_min = year(min(month_end)), month_min = month(min(month_end)))
+  
+  if (c_code == "FR"){ts_set = tibble(year_min = 2010, month_min = 1)}
+  if (c_code == "CY"){ts_set = tibble(year_min = 2000, month_min = 1)}
+  if (c_code == "DK"){ts_set = tibble(year_min = 2007, month_min = 1)}
+  if (c_code == "MT"){ts_set = tibble(year_min = 2010, month_min = 1)}
+  
+  ind_ts = ind_wide %>%
+    filter(geo == c_code & year >= ts_set$year_min) %>%
+    zoo::na.locf() %>%
+    select(resid_TOTAL) %>%
+    mutate(resid_TOTAL = sqrt(resid_TOTAL)) %>%
+    ts(start=c(ts_set$year_min, ts_set$month_min), frequency=12)
+    
+  # NNETAR models
+  mod = nnetar(ind_ts, repeats = 50)
+  pred = forecast(mod, h=4)
+  
+  # Predictions
+  yhat = pred$mean^2
+    
+  # Final export
+  yhat_list = tibble(month_end = zoo::as.Date(pred$mean),geo=c_code, yhat = yhat,
+                          bic = mod$bic, aicc = mod$aicc, sigma2 = mod$sigma2, loglik  = mod$loglik,
+                          rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7])
+  yhat_list
+#}
+
+#res_df = do.call(bind_rows, res_list)
+
+#stopImplicitCluster()
+
+#res_df
+```
+
+## Using external regressors from RAI {-}
+
+No Preds here. need to calculate X_reg matrix for the months ahead fist. Then, use these as input to NN. Maybe try this in python!
+```{r}
+i = 1
+goo = read_csv(paste0(trends_path, "trends_full.csv"))
+trends_100 = goo %>%
+  mutate(across(3:13, ~.x/100))
+
+ts_set = indicator %>%
+  summarise(max_date = max(date))
+
+#cl = detectCores()-1
+#registerDoParallel(cl)
+
+#res_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","forecast", "lubridate"), .multicombine = T, .combine = rbind) %dopar% {
+  
+  # Data
+  
+    
+  # NNETAR models
+  mod = nnetar(Y, repeats = 20, xreg = X_reg)
+ # pred = forecast(mod, h=4)
+  # Predictions
+  #yhat = pred$mean^2
+    
+  # Final export
+  yhat_list = tibble(month_end = zoo::as.Date(pred$mean),geo=c_code,# yhat = yhat,
+                          bic = mod$bic, aicc = mod$aicc, sigma2 = mod$sigma2, loglik  = mod$loglik,
+                          rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7])
+  yhat_list
+#}
+
+#res_df = do.call(bind_rows, res_list)
+# 
+# stopImplicitCluster()
+# 
+# res_df
+```
+
+
+## Using external regressors from RAI no TS {-}
+```{r}
+i = 1
+#cl = detectCores()-1
+#registerDoParallel(cl)
+
+#res_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","forecast", "lubridate"), .multicombine = T, .combine = rbind) %dopar% {
+  
+  # Data
+  
+  c_code = country_code_list[i]
+  ctry = country_list[i]
+  
+  ts_set = ind_wide %>%
+    filter(geo == c_code) %>%
+    zoo::na.locf() %>%
+    summarise(year_min = year(min(month_end)), month_min = month(min(month_end)))
+  
+  if (c_code == "FR"){ts_set = tibble(year_min = 2010, month_min = 1)}
+  if (c_code == "CY"){ts_set = tibble(year_min = 2000, month_min = 1)}
+  if (c_code == "DK"){ts_set = tibble(year_min = 2007, month_min = 1)}
+  if (c_code == "MT"){ts_set = tibble(year_min = 2010, month_min = 1)}
+  
+  ind_ts = ind_wide %>%
+    filter(geo == c_code & year >= ts_set$year_min) %>%
+    zoo::na.locf() %>%
+    select(resid_TOTAL) %>%
+    mutate(resid_TOTAL = sqrt(resid_TOTAL)) %>%
+    ts(start=c(ts_set$year_min, ts_set$month_min), frequency=12)
+    
+  # NNETAR models
+  mod = nnetar(theResponse, repeats = 20, xreg = rai_out$X[,-1])
+  #pred = forecast(mod, h=4)
+  
+  # Predictions
+  #yhat = pred$mean^2
+    
+  # Final export
+  yhat_list = tibble(month_end = zoo::as.Date(pred$mean),geo=c_code, #yhat = yhat,
+                          bic = mod$bic, aicc = mod$aicc, sigma2 = mod$sigma2, loglik  = mod$loglik,
+                          rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7])
+  yhat_list
+#}
+
+#res_df = do.call(bind_rows, res_list)
+# 
+# stopImplicitCluster()
+# 
+# res_df
+```
+
+# Check model quality using rolling window out-of-sample predictions
+```{r}
+
+```
+

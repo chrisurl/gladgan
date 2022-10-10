@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE,
                warning = FALSE,
                message = FALSE,
                cache = TRUE,
-               out.width = "70%",
+               out.width = "100%",
                fig.align = "center")
 
 ```
@@ -37,6 +37,7 @@ library(forecast)
 library(parallel)
 library(doParallel)
 library(tidyverse)
+library(gridExtra)
 ```
 
 ## Paths
@@ -141,11 +142,59 @@ trends = ind_wide %>%
   inner_join(trends_100, by=c("date", "country_code"))
 ```
 
-# Modelling country_wise {.tabset .tabset-fade}
+# Plots {.tabset .tabset-fade}
+```{r}
+colnames(trends)
+```
+
+## country_trav {-}
+```{r plot1}
+trends %>%
+  ggplot(mapping=aes(x=date, y=country_trav, group=country_code)) + 
+  geom_line() + 
+  facet_wrap(~country_code, ncol=3)
+```
+
+
+## country_cc_trav {-}
+```{r plot2}
+trends %>%
+  ggplot(mapping=aes(x=date, y=country_cc_trav, group=country_code)) + 
+  geom_line() + 
+  facet_wrap(~country_code, ncol=3)
+```
+
+## country_hotels {-}
+```{r plot3}
+trends %>%
+  ggplot(mapping=aes(x=date, y=country_hotels, group=country_code)) + 
+  geom_line() + 
+  facet_wrap(~country_code, ncol=3)
+```
+
+## cc_restaurant {-}
+```{r plot4}
+trends %>%
+  ggplot(mapping=aes(x=date, y=cc_restaurant, group=country_code)) + 
+  geom_line() + 
+  facet_wrap(~country_code, ncol=3)
+```
+
+## cc_fooddrink {-}
+```{r plot5}
+trends %>%
+  ggplot(mapping=aes(x=date, y=cc_fooddrink, group=country_code)) + 
+  geom_line() + 
+  facet_wrap(~country_code, ncol=3)
+```
+
+# Modelling country_wise Italy {.tabset .tabset-fade}
 ## Set up data {-}
 ```{r model data}
-c_code = country_code_list[13]
-ctry = country_list[13]
+i=13
+
+c_code = country_code_list[i]
+ctry = country_list[i]
 
 trends_cty = trends %>%
   filter(country_code == c_code)
@@ -156,12 +205,29 @@ trends_ts = trends_cty %>%
 
 theData = trends_cty[,-c(1:3)]
 theResponse = trends_cty$resid_TOTAL_STD
+
+stats_list = list()
 ```
 
-## RAI
+Enable Parallel  processing:
 ```{r}
+cl = detectCores()-1
+registerDoParallel(cl)
+```
+
+
+## RAI {-}
+```{r  rai}
 mod_rai = rai(theData = theData, theResponse = theResponse)
-summary(mod_rai$model)
+(rai_sum = summary(mod_rai$model))
+
+sig_sq = (rai_sum$sigma)^2
+
+stats_list[[1]] = data.frame(country = country_list[i],
+                  TrainRMSE = RMSE(predict(mod_rai, theData),theResponse),
+                  TrainRsquared  = rai_sum$r.squared,
+                  TrainMAE = MAE(predict(mod_rai, theData),theResponse),
+                  method = "RAI")
 ```
 
 
@@ -169,36 +235,69 @@ summary(mod_rai$model)
 ```{r arimax}
 X = as.matrix(theData)
 mod1 = auto.arima(y = theResponse, max.order = 12, xreg = X,  max.D = 2)
-mod1
+(ar_sum  = summary(mod1))
+
+stats_list[[2]] = data.frame(country = country_list[i],
+                  TrainRMSE = RMSE(ar_sum$fitted, ar_sum$x),
+                  TrainRsquared  = NA,
+                  TrainMAE = MAE(ar_sum$fitted, ar_sum$x),
+                  method = "ARIMAX")
 ```
 
 ## SVM {-}
-```{r}
+```{r svm}
 fitControl <- caret::trainControl(method = "repeatedcv",
-                            number = 5, ## 5-fold CV...
-                            repeats = 5)  ## repeated 5 times
+                            number = 15, ## 5-fold CV...
+                            repeats = 15)  ## repeated 5 times
 mod_svn =caret::train(x=theData, y=theResponse, method="svmRadialSigma", trControl = fitControl, verbose=F)
 mod_svn
+stats_list[[3]] = getTrainPerf(mod_svn) %>% 
+  add_column(country = country_list[i], .before = 1)
 ```
 
 ## GBM {-}
-```{r}
+```{r gbm}
 gbmGrid <-  expand.grid(interaction.depth = c(1:4), 
-                        n.trees = c(50, 100, 150), 
+                        n.trees = c(50,75,100, 150, 200), 
                         shrinkage = 0.1,
                         n.minobsinnode = 5)
 mod_gbm =caret::train(x=theData, y=theResponse, method="gbm", trControl = fitControl, tuneGrid=gbmGrid, verbose=F)
 mod_gbm
+
+stats_list[[4]] = getTrainPerf(mod_gbm) %>% 
+  add_column(country = country_list[i], .before = 1)
 ```
 
 ## RF {-}
-```{r}
+```{r rf}
 mod_rf =caret::train(x=theData, y=theResponse, method="rf", trControl = fitControl, verbose=F)
 mod_rf
+
+
+stats_list[[5]] = getTrainPerf(mod_rf) %>% 
+  add_column(country = country_list[i], .before = 1)
 ```
 
-## NN? {-}
+## Bayesian Regression NN {-}
 ```{r}
-
+theData = as.data.frame(theData)
+fitControl <- caret::trainControl(method = "repeatedcv",
+                            number = 15, ## 5-fold CV...
+                            repeats = 15)  ## repeated 5 times
+mod_brnn =caret::train(x=theData, y=theResponse, method="brnn", trControl = fitControl, verbose=F)
+stats_list[[6]] = getTrainPerf(mod_rf) %>% 
+  add_column(country = country_list[i], .before = 1)
 ```
+
+
+
+# Results
+
+```{r}
+stopImplicitCluster()
+res_df = do.call(rbind, stats_list)
+res_df
+```
+
+
 
