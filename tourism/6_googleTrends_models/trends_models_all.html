@@ -537,7 +537,7 @@ display: none;
 
 <h1 class="title toc-ignore">Google trends models</h1>
 <h4 class="author">Christian Url</h4>
-<h4 class="date">Last Compiled Oktober 09, 2022</h4>
+<h4 class="date">Last Compiled Oktober 11, 2022</h4>
 
 </div>
 
@@ -564,7 +564,7 @@ Trends</a></li>
 <li><a href="#cc_fooddrink" id="toc-cc_fooddrink">cc_fooddrink</a></li>
 </ul></li>
 <li><a href="#modelling-for-all-countries" id="toc-modelling-for-all-countries"><span class="toc-section-number">3</span> Modelling for all countries</a></li>
-<li><a href="#results" id="toc-results"><span class="toc-section-number">4</span> Results</a>
+<li><a href="#results-for-div100-regressors" id="toc-results-for-div100-regressors"><span class="toc-section-number">4</span> Results for div100 regressors</a>
 <ul>
 <li><a href="#overview" id="toc-overview">Overview</a></li>
 <li><a href="#best-fits-rmse" id="toc-best-fits-rmse">Best fits
@@ -573,7 +573,42 @@ RMSE</a></li>
 <li><a href="#best-fits-mae" id="toc-best-fits-mae">Best fits
 MAE</a></li>
 </ul></li>
-<li><a href="#arimax-modelling" id="toc-arimax-modelling"><span class="toc-section-number">5</span> ARIMAX Modelling</a></li>
+<li><a href="#results-for-normalised-regressors" id="toc-results-for-normalised-regressors"><span class="toc-section-number">5</span> Results for normalised
+regressors</a>
+<ul>
+<li><a href="#overview-1" id="toc-overview-1">Overview</a></li>
+<li><a href="#best-fits-rmse-1" id="toc-best-fits-rmse-1">Best fits
+RMSE</a></li>
+<li><a href="#best-fits-r2-1" id="toc-best-fits-r2-1">Best fits
+R2</a></li>
+<li><a href="#best-fits-mae-1" id="toc-best-fits-mae-1">Best fits
+MAE</a></li>
+</ul></li>
+<li><a href="#results-for-lagged-div100-regressors" id="toc-results-for-lagged-div100-regressors"><span class="toc-section-number">6</span> Results for lagged div100
+regressors</a>
+<ul>
+<li><a href="#overview-2" id="toc-overview-2">Overview</a></li>
+<li><a href="#rai" id="toc-rai">RAI</a></li>
+<li><a href="#best-fits-rmse-2" id="toc-best-fits-rmse-2">Best fits
+RMSE</a></li>
+<li><a href="#best-fits-r2-2" id="toc-best-fits-r2-2">Best fits
+R2</a></li>
+<li><a href="#best-fits-mae-2" id="toc-best-fits-mae-2">Best fits
+MAE</a></li>
+</ul></li>
+<li><a href="#results-for-lagged-normalised-regressors" id="toc-results-for-lagged-normalised-regressors"><span class="toc-section-number">7</span> Results for lagged normalised
+regressors</a>
+<ul>
+<li><a href="#overview-3" id="toc-overview-3">Overview</a></li>
+<li><a href="#rai-1" id="toc-rai-1">RAI</a></li>
+<li><a href="#best-fits-rmse-3" id="toc-best-fits-rmse-3">Best fits
+RMSE</a></li>
+<li><a href="#best-fits-r2-3" id="toc-best-fits-r2-3">Best fits
+R2</a></li>
+<li><a href="#best-fits-mae-3" id="toc-best-fits-mae-3">Best fits
+MAE</a></li>
+</ul></li>
+<li><a href="#arimax-modelling" id="toc-arimax-modelling"><span class="toc-section-number">8</span> ARIMAX Modelling</a></li>
 </ul>
 </div>
 
@@ -774,446 +809,1470 @@ valid if they appear in the country volatility index.</p>
 <span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    .[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)]</span>
 <span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>  theResponse <span class="ot">=</span> trends_cty <span class="sc">%&gt;%</span> </span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>    .<span class="sc">$</span>resid_TOTAL_STD</span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>  stats_list <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>  mod_rai <span class="ot">=</span> <span class="fu">rai</span>(<span class="at">theData =</span> theData, <span class="at">theResponse =</span> theResponse)</span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>  (<span class="at">rai_sum =</span> <span class="fu">summary</span>(mod_rai<span class="sc">$</span>model))</span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>  sig_sq <span class="ot">=</span> (rai_sum<span class="sc">$</span>sigma)<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">1</span>]] <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">country =</span> country_list[i],</span>
-<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainRMSE =</span> <span class="fu">RMSE</span>(<span class="fu">predict</span>(mod_rai, theData),theResponse),</span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainRsquared  =</span> rai_sum<span class="sc">$</span>r.squared,</span>
-<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainMAE =</span> <span class="fu">MAE</span>(<span class="fu">predict</span>(mod_rai, theData),theResponse),</span>
-<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>                               <span class="at">method =</span> <span class="st">&quot;RAI&quot;</span>)</span>
-<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">=</span> <span class="fu">as.matrix</span>(theData)</span>
-<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>  mod1 <span class="ot">=</span> <span class="fu">auto.arima</span>(<span class="at">y =</span> theResponse, <span class="at">max.order =</span> <span class="dv">12</span>, <span class="at">xreg =</span> X,  <span class="at">max.D =</span> <span class="dv">2</span>)</span>
-<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>  ar_sum <span class="ot">=</span> <span class="fu">summary</span>(mod1)</span>
-<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">2</span>]] <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">country =</span> country_list[i],</span>
-<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainRMSE =</span> <span class="fu">RMSE</span>(ar_sum<span class="sc">$</span>fitted, ar_sum<span class="sc">$</span>x),</span>
-<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainRsquared  =</span> <span class="cn">NA</span>,</span>
-<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainMAE =</span> <span class="fu">MAE</span>(ar_sum<span class="sc">$</span>fitted, ar_sum<span class="sc">$</span>x),</span>
-<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>                               <span class="at">method =</span> <span class="st">&quot;ARIMAX&quot;</span>)</span>
-<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>  fitControl <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>,</span>
-<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">number =</span> <span class="dv">15</span>, <span class="do">## 5-fold CV...</span></span>
-<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">repeats =</span> <span class="dv">15</span>)  <span class="do">## repeated 5 times</span></span>
-<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a>  mod_svn <span class="ot">=</span>caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse, <span class="at">method=</span><span class="st">&quot;svmRadialSigma&quot;</span>, <span class="at">trControl =</span> fitControl, <span class="at">verbose=</span>F)</span>
-<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">3</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(mod_svn) <span class="sc">%&gt;%</span> </span>
-<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">country =</span> country_list[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>    .<span class="sc">$</span>resid_TOTAL_STD</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>  stats_list <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>  mod_rai <span class="ot">=</span> <span class="fu">rai</span>(<span class="at">theData =</span> theData, <span class="at">theResponse =</span> theResponse)</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>  (<span class="at">rai_sum =</span> <span class="fu">summary</span>(mod_rai<span class="sc">$</span>model))</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>  sig_sq <span class="ot">=</span> (rai_sum<span class="sc">$</span>sigma)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">1</span>]] <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">country =</span> country_list[i],</span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainRMSE =</span> <span class="fu">RMSE</span>(<span class="fu">predict</span>(mod_rai, theData),theResponse),</span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainRsquared  =</span> rai_sum<span class="sc">$</span>r.squared,</span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainMAE =</span> <span class="fu">MAE</span>(<span class="fu">predict</span>(mod_rai, theData),theResponse),</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>                               <span class="at">method =</span> <span class="st">&quot;RAI&quot;</span>)</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">=</span> <span class="fu">as.matrix</span>(theData)</span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>  mod1 <span class="ot">=</span> <span class="fu">auto.arima</span>(<span class="at">y =</span> theResponse, <span class="at">max.order =</span> <span class="dv">12</span>, <span class="at">xreg =</span> X,  <span class="at">max.D =</span> <span class="dv">2</span>)</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>  ar_sum <span class="ot">=</span> <span class="fu">summary</span>(mod1)</span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">2</span>]] <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">country =</span> country_list[i],</span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainRMSE =</span> <span class="fu">RMSE</span>(ar_sum<span class="sc">$</span>fitted, ar_sum<span class="sc">$</span>x),</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainRsquared  =</span> <span class="cn">NA</span>,</span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>                               <span class="at">TrainMAE =</span> <span class="fu">MAE</span>(ar_sum<span class="sc">$</span>fitted, ar_sum<span class="sc">$</span>x),</span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>                               <span class="at">method =</span> <span class="st">&quot;ARIMAX&quot;</span>)</span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>  fitControl <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>,</span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">number =</span> <span class="dv">20</span>, <span class="do">## 20-fold CV..., only want to predict small amounts of data</span></span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">repeats =</span> <span class="dv">10</span>)  <span class="do">## repeated 10 times</span></span>
+<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a>  mod_svn <span class="ot">=</span>caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse, <span class="at">method=</span><span class="st">&quot;svmRadialSigma&quot;</span>, <span class="at">trControl =</span> fitControl, <span class="at">verbose=</span>F)</span>
+<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">3</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(mod_svn) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">country =</span> country_list[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
+<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a>  theData <span class="ot">=</span> <span class="fu">as.data.frame</span>(theData)</span>
 <span id="cb23-58"><a href="#cb23-58" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a>  theData <span class="ot">=</span> <span class="fu">as.data.frame</span>(theData)</span>
-<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-61"><a href="#cb23-61" aria-hidden="true" tabindex="-1"></a>  gbmGrid <span class="ot">&lt;-</span>  <span class="fu">expand.grid</span>(<span class="at">interaction.depth =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>), </span>
-<span id="cb23-62"><a href="#cb23-62" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n.trees =</span> <span class="fu">c</span>(<span class="dv">50</span>,<span class="dv">75</span>,<span class="dv">100</span>, <span class="dv">150</span>, <span class="dv">200</span>), </span>
-<span id="cb23-63"><a href="#cb23-63" aria-hidden="true" tabindex="-1"></a>                          <span class="at">shrinkage =</span> <span class="fl">0.1</span>,</span>
-<span id="cb23-64"><a href="#cb23-64" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n.minobsinnode =</span> <span class="dv">5</span>)</span>
-<span id="cb23-65"><a href="#cb23-65" aria-hidden="true" tabindex="-1"></a>  mod_gbm <span class="ot">=</span>caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse, <span class="at">method=</span><span class="st">&quot;gbm&quot;</span>, <span class="at">trControl =</span> fitControl, <span class="at">tuneGrid=</span>gbmGrid, <span class="at">verbose=</span>F)</span>
-<span id="cb23-66"><a href="#cb23-66" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-67"><a href="#cb23-67" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">4</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(mod_gbm) <span class="sc">%&gt;%</span> </span>
-<span id="cb23-68"><a href="#cb23-68" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">country =</span> country_list[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
-<span id="cb23-69"><a href="#cb23-69" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-70"><a href="#cb23-70" aria-hidden="true" tabindex="-1"></a>  mod_rf <span class="ot">=</span>caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse, <span class="at">method=</span><span class="st">&quot;rf&quot;</span>, <span class="at">trControl =</span> fitControl, <span class="at">verbose=</span>F)</span>
+<span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a>  gbmGrid <span class="ot">&lt;-</span>  <span class="fu">expand.grid</span>(<span class="at">interaction.depth =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>), </span>
+<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n.trees =</span> <span class="fu">c</span>(<span class="dv">20</span>,<span class="dv">50</span>,<span class="dv">75</span>,<span class="dv">100</span>, <span class="dv">150</span>, <span class="dv">200</span>,<span class="dv">350</span>,<span class="dv">500</span>), </span>
+<span id="cb23-61"><a href="#cb23-61" aria-hidden="true" tabindex="-1"></a>                          <span class="at">shrinkage =</span> <span class="fl">0.1</span>,</span>
+<span id="cb23-62"><a href="#cb23-62" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n.minobsinnode =</span> <span class="dv">5</span>)</span>
+<span id="cb23-63"><a href="#cb23-63" aria-hidden="true" tabindex="-1"></a>  mod_gbm <span class="ot">=</span>caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse, <span class="at">method=</span><span class="st">&quot;gbm&quot;</span>, <span class="at">trControl =</span> fitControl, <span class="at">tuneGrid=</span>gbmGrid, <span class="at">verbose=</span>F)</span>
+<span id="cb23-64"><a href="#cb23-64" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-65"><a href="#cb23-65" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">4</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(mod_gbm) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-66"><a href="#cb23-66" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">country =</span> country_list[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
+<span id="cb23-67"><a href="#cb23-67" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-68"><a href="#cb23-68" aria-hidden="true" tabindex="-1"></a>  mod_rf <span class="ot">=</span>caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse, <span class="at">method=</span><span class="st">&quot;rf&quot;</span>, <span class="at">trControl =</span> fitControl, <span class="at">verbose=</span>F)</span>
+<span id="cb23-69"><a href="#cb23-69" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">5</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(mod_rf) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-70"><a href="#cb23-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">country =</span> country_list[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
 <span id="cb23-71"><a href="#cb23-71" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-72"><a href="#cb23-72" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-73"><a href="#cb23-73" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">5</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(mod_rf) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-72"><a href="#cb23-72" aria-hidden="true" tabindex="-1"></a>  mod_brnn <span class="ot">=</span>caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse, <span class="at">method=</span><span class="st">&quot;brnn&quot;</span>, <span class="at">trControl =</span> fitControl, <span class="at">verbose=</span>F)</span>
+<span id="cb23-73"><a href="#cb23-73" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">6</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(mod_brnn) <span class="sc">%&gt;%</span> </span>
 <span id="cb23-74"><a href="#cb23-74" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">country =</span> country_list[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
 <span id="cb23-75"><a href="#cb23-75" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-76"><a href="#cb23-76" aria-hidden="true" tabindex="-1"></a>  mod_brnn <span class="ot">=</span>caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse, <span class="at">method=</span><span class="st">&quot;brnn&quot;</span>, <span class="at">trControl =</span> fitControl, <span class="at">verbose=</span>F)</span>
-<span id="cb23-77"><a href="#cb23-77" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">6</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(mod_rf) <span class="sc">%&gt;%</span> </span>
-<span id="cb23-78"><a href="#cb23-78" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">country =</span> country_list[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
-<span id="cb23-79"><a href="#cb23-79" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-80"><a href="#cb23-80" aria-hidden="true" tabindex="-1"></a>  res_df <span class="ot">=</span> <span class="fu">do.call</span>(rbind, stats_list)</span>
-<span id="cb23-81"><a href="#cb23-81" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb23-82"><a href="#cb23-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-83"><a href="#cb23-83" aria-hidden="true" tabindex="-1"></a><span class="fu">stopImplicitCluster</span>()</span>
-<span id="cb23-84"><a href="#cb23-84" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">=</span> <span class="fu">do.call</span>(bind_rows, out_list)</span>
-<span id="cb23-85"><a href="#cb23-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-86"><a href="#cb23-86" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(stats, <span class="st">&quot;modelling_stats_all.csv&quot;</span>)</span></code></pre></div>
+<span id="cb23-76"><a href="#cb23-76" aria-hidden="true" tabindex="-1"></a>  xgb_trcontrol <span class="ot">=</span> <span class="fu">trainControl</span>(</span>
+<span id="cb23-77"><a href="#cb23-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;cv&quot;</span>,</span>
+<span id="cb23-78"><a href="#cb23-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">number =</span> <span class="dv">5</span>,  </span>
+<span id="cb23-79"><a href="#cb23-79" aria-hidden="true" tabindex="-1"></a>    <span class="at">allowParallel =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb23-80"><a href="#cb23-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">verboseIter =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb23-81"><a href="#cb23-81" aria-hidden="true" tabindex="-1"></a>    <span class="at">returnData =</span> <span class="cn">FALSE</span></span>
+<span id="cb23-82"><a href="#cb23-82" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-83"><a href="#cb23-83" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-84"><a href="#cb23-84" aria-hidden="true" tabindex="-1"></a>  xgbGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">nrounds =</span> <span class="fu">c</span>(<span class="dv">50</span>,<span class="dv">100</span>,<span class="dv">200</span>,<span class="dv">250</span>),  <span class="co"># this is n_estimators in the python code above</span></span>
+<span id="cb23-85"><a href="#cb23-85" aria-hidden="true" tabindex="-1"></a>                         <span class="at">max_depth =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>),</span>
+<span id="cb23-86"><a href="#cb23-86" aria-hidden="true" tabindex="-1"></a>                         <span class="at">colsample_bytree =</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="at">length.out =</span> <span class="dv">5</span>),</span>
+<span id="cb23-87"><a href="#cb23-87" aria-hidden="true" tabindex="-1"></a>                         <span class="do">## The values below are default values in the sklearn-api. </span></span>
+<span id="cb23-88"><a href="#cb23-88" aria-hidden="true" tabindex="-1"></a>                         <span class="at">eta =</span> <span class="fl">0.1</span>,</span>
+<span id="cb23-89"><a href="#cb23-89" aria-hidden="true" tabindex="-1"></a>                         <span class="at">gamma=</span><span class="dv">0</span>,</span>
+<span id="cb23-90"><a href="#cb23-90" aria-hidden="true" tabindex="-1"></a>                         <span class="at">min_child_weight =</span> <span class="dv">1</span>,</span>
+<span id="cb23-91"><a href="#cb23-91" aria-hidden="true" tabindex="-1"></a>                         <span class="at">subsample =</span> <span class="dv">1</span></span>
+<span id="cb23-92"><a href="#cb23-92" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-93"><a href="#cb23-93" aria-hidden="true" tabindex="-1"></a>  xgb_model <span class="ot">=</span> caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse,  </span>
+<span id="cb23-94"><a href="#cb23-94" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> xgb_trcontrol,</span>
+<span id="cb23-95"><a href="#cb23-95" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> xgbGrid,</span>
+<span id="cb23-96"><a href="#cb23-96" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;xgbTree&quot;</span></span>
+<span id="cb23-97"><a href="#cb23-97" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-98"><a href="#cb23-98" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-99"><a href="#cb23-99" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">7</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(xgb_model) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-100"><a href="#cb23-100" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">country =</span> country_list[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
+<span id="cb23-101"><a href="#cb23-101" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-102"><a href="#cb23-102" aria-hidden="true" tabindex="-1"></a>  mod_svn2 <span class="ot">=</span>caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse, <span class="at">method=</span><span class="st">&quot;svmPoly&quot;</span>, <span class="at">trControl =</span> fitControl, <span class="at">verbose=</span>F)</span>
+<span id="cb23-103"><a href="#cb23-103" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">8</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(mod_svn2) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-104"><a href="#cb23-104" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">country =</span> country_list[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
+<span id="cb23-105"><a href="#cb23-105" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-106"><a href="#cb23-106" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-107"><a href="#cb23-107" aria-hidden="true" tabindex="-1"></a>  mod_svn3 <span class="ot">=</span>caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">x=</span>theData, <span class="at">y=</span>theResponse, <span class="at">method=</span><span class="st">&quot;svmLinear3&quot;</span>, <span class="at">trControl =</span> fitControl, <span class="at">verbose=</span>F)</span>
+<span id="cb23-108"><a href="#cb23-108" aria-hidden="true" tabindex="-1"></a>  stats_list[[<span class="dv">9</span>]] <span class="ot">=</span> <span class="fu">getTrainPerf</span>(mod_svn3) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-109"><a href="#cb23-109" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">country =</span> country_list[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
+<span id="cb23-110"><a href="#cb23-110" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-111"><a href="#cb23-111" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-112"><a href="#cb23-112" aria-hidden="true" tabindex="-1"></a>  res_df <span class="ot">=</span> <span class="fu">do.call</span>(rbind, stats_list)</span>
+<span id="cb23-113"><a href="#cb23-113" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-114"><a href="#cb23-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-115"><a href="#cb23-115" aria-hidden="true" tabindex="-1"></a><span class="fu">stopImplicitCluster</span>()</span>
+<span id="cb23-116"><a href="#cb23-116" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">=</span> <span class="fu">do.call</span>(bind_rows, out_list)</span>
+<span id="cb23-117"><a href="#cb23-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-118"><a href="#cb23-118" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(stats, <span class="st">&quot;modelling_stats_all.csv&quot;</span>)</span></code></pre></div>
 </div>
-<div id="results" class="section level1 tabset tabset-fade" number="4">
-<h1 class="tabset tabset-fade"><span class="header-section-number">4</span> Results</h1>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">&quot;modelling_stats_all.csv&quot;</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>a  <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">==</span> <span class="st">&quot;ARIMAX&quot;</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(a, <span class="at">n=</span><span class="fu">nrow</span>(a))</span></code></pre></div>
-<pre><code># A tibble: 24 × 5
-   country        TrainRMSE TrainRsquared TrainMAE method
-   &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; 
- 1 Austria            0.402            NA    0.296 ARIMAX
- 2 Belgium            0.531            NA    0.392 ARIMAX
- 3 Cyprus             0.305            NA    0.235 ARIMAX
- 4 Czech Republic     0.622            NA    0.407 ARIMAX
- 5 Germany            0.326            NA    0.262 ARIMAX
- 6 Denmark            0.501            NA    0.368 ARIMAX
- 7 Greece             0.313            NA    0.243 ARIMAX
- 8 Spain              0.401            NA    0.310 ARIMAX
- 9 Finland            0.647            NA    0.496 ARIMAX
-10 France             0.521            NA    0.389 ARIMAX
-11 Croatia            0.418            NA    0.309 ARIMAX
-12 Hungary            0.547            NA    0.413 ARIMAX
-13 Italy              0.480            NA    0.368 ARIMAX
-14 Lithuania          0.423            NA    0.309 ARIMAX
-15 Luxembourg         0.419            NA    0.285 ARIMAX
-16 Latvia             0.453            NA    0.357 ARIMAX
-17 Malta              0.337            NA    0.262 ARIMAX
-18 Netherlands        0.537            NA    0.406 ARIMAX
-19 Poland             0.431            NA    0.324 ARIMAX
-20 Portugal           0.337            NA    0.261 ARIMAX
-21 Romania            0.533            NA    0.397 ARIMAX
-22 Sweden             0.687            NA    0.449 ARIMAX
-23 Slovenia           0.504            NA    0.398 ARIMAX
-24 Slovakia           0.499            NA    0.368 ARIMAX</code></pre>
+<div id="results-for-div100-regressors" class="section level1 tabset tabset-fade" number="4">
+<h1 class="tabset tabset-fade"><span class="header-section-number">4</span> Results for div100
+regressors</h1>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">cache =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">&quot;stats_alltrends_100.csv&quot;</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>a  <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">==</span> <span class="st">&quot;ARIMAX&quot;</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(a, <span class="at">n=</span><span class="fu">nrow</span>(a))</span></code></pre></div>
+<pre><code># A tibble: 0 × 5
+# … with 5 variables: country &lt;chr&gt;, TrainRMSE &lt;dbl&gt;, TrainRsquared &lt;dbl&gt;,
+#   TrainMAE &lt;dbl&gt;, method &lt;chr&gt;</code></pre>
 <div id="overview" class="section level2 unnumbered">
 <h2 class="unnumbered">Overview</h2>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(stats, <span class="at">n=</span><span class="fu">nrow</span>(stats))</span></code></pre></div>
-<pre><code># A tibble: 216 × 5
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(stats, <span class="at">n=</span><span class="fu">nrow</span>(stats))</span></code></pre></div>
+<pre><code># A tibble: 192 × 5
     country        TrainRMSE TrainRsquared TrainMAE method        
     &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
   1 Austria            0.831         0.357    0.713 RAI           
-  2 Austria            0.402        NA        0.296 ARIMAX        
-  3 Austria            0.719         0.507    0.596 svmRadialSigma
-  4 Austria            0.716         0.509    0.590 gbm           
-  5 Austria            0.705         0.554    0.597 rf            
-  6 Austria            0.807         0.427    0.674 brnn          
-  7 Austria            0.746         0.478    0.619 xgbTree       
-  8 Austria            0.810         0.424    0.681 svmPoly       
-  9 Austria            0.886         0.320    0.770 svmLinear3    
- 10 Belgium            0.586         0.583    0.445 RAI           
- 11 Belgium            0.531        NA        0.392 ARIMAX        
- 12 Belgium            0.554         0.642    0.422 svmRadialSigma
- 13 Belgium            0.556         0.630    0.438 gbm           
- 14 Belgium            0.554         0.640    0.426 rf            
- 15 Belgium            0.634         0.546    0.494 brnn          
- 16 Belgium            0.555         0.631    0.429 xgbTree       
- 17 Belgium            0.662         0.531    0.510 svmPoly       
- 18 Belgium            0.689         0.501    0.545 svmLinear3    
- 19 Cyprus             0.638         0.588    0.511 RAI           
- 20 Cyprus             0.305        NA        0.235 ARIMAX        
- 21 Cyprus             0.605         0.643    0.485 svmRadialSigma
- 22 Cyprus             0.614         0.632    0.483 gbm           
- 23 Cyprus             0.627         0.618    0.511 rf            
- 24 Cyprus             0.660         0.603    0.516 brnn          
- 25 Cyprus             0.631         0.613    0.494 xgbTree       
- 26 Cyprus             0.707         0.547    0.580 svmPoly       
- 27 Cyprus             0.811         0.415    0.715 svmLinear3    
- 28 Czech Republic     1.02          0        0.740 RAI           
- 29 Czech Republic     0.622        NA        0.407 ARIMAX        
- 30 Czech Republic     0.761         0.469    0.530 svmRadialSigma
- 31 Czech Republic     0.768         0.442    0.577 gbm           
- 32 Czech Republic     0.776         0.445    0.577 rf            
- 33 Czech Republic     0.938         0.379    0.654 brnn          
- 34 Czech Republic     0.829         0.361    0.580 xgbTree       
- 35 Czech Republic     0.992         0.229    0.675 svmPoly       
- 36 Czech Republic     0.930         0.244    0.699 svmLinear3    
- 37 Germany            0.549         0.729    0.444 RAI           
- 38 Germany            0.326        NA        0.262 ARIMAX        
- 39 Germany            0.501         0.778    0.397 svmRadialSigma
- 40 Germany            0.492         0.776    0.375 gbm           
- 41 Germany            0.501         0.775    0.386 rf            
- 42 Germany            0.509         0.770    0.400 brnn          
- 43 Germany            0.512         0.764    0.393 xgbTree       
- 44 Germany            0.505         0.782    0.403 svmPoly       
- 45 Germany            0.616         0.691    0.507 svmLinear3    
- 46 Denmark            0.545         0.668    0.407 RAI           
- 47 Denmark            0.501        NA        0.368 ARIMAX        
- 48 Denmark            0.571         0.636    0.402 svmRadialSigma
- 49 Denmark            0.494         0.712    0.374 gbm           
- 50 Denmark            0.493         0.735    0.376 rf            
- 51 Denmark            0.510         0.707    0.384 brnn          
- 52 Denmark            0.504         0.738    0.376 xgbTree       
- 53 Denmark            0.531         0.699    0.406 svmPoly       
- 54 Denmark            0.544         0.689    0.423 svmLinear3    
- 55 Greece             0.533         0.783    0.401 RAI           
- 56 Greece             0.313        NA        0.243 ARIMAX        
- 57 Greece             0.550         0.766    0.404 svmRadialSigma
- 58 Greece             0.522         0.795    0.386 gbm           
- 59 Greece             0.529         0.781    0.392 rf            
- 60 Greece             0.463         0.834    0.357 brnn          
- 61 Greece             0.550         0.778    0.384 xgbTree       
- 62 Greece             0.553         0.771    0.402 svmPoly       
- 63 Greece             0.896         0.436    0.723 svmLinear3    
- 64 Spain              0.513         0.748    0.387 RAI           
- 65 Spain              0.401        NA        0.310 ARIMAX        
- 66 Spain              0.466         0.807    0.353 svmRadialSigma
- 67 Spain              0.415         0.841    0.328 gbm           
- 68 Spain              0.478         0.800    0.363 rf            
- 69 Spain              0.442         0.829    0.344 brnn          
- 70 Spain              0.477         0.793    0.349 xgbTree       
- 71 Spain              0.432         0.842    0.323 svmPoly       
- 72 Spain              0.562         0.735    0.441 svmLinear3    
- 73 Finland            0.771         0.361    0.597 RAI           
- 74 Finland            0.647        NA        0.496 ARIMAX        
- 75 Finland            0.731         0.470    0.534 svmRadialSigma
- 76 Finland            0.747         0.422    0.555 gbm           
- 77 Finland            0.733         0.455    0.548 rf            
- 78 Finland            0.719         0.485    0.536 brnn          
- 79 Finland            0.767         0.375    0.545 xgbTree       
- 80 Finland            0.808         0.368    0.577 svmPoly       
- 81 Finland            0.801         0.371    0.612 svmLinear3    
- 82 France             0.615         0.632    0.490 RAI           
- 83 France             0.521        NA        0.389 ARIMAX        
- 84 France             0.559         0.750    0.407 svmRadialSigma
- 85 France             0.556         0.710    0.416 gbm           
- 86 France             0.549         0.732    0.406 rf            
- 87 France             0.474         0.797    0.356 brnn          
- 88 France             0.590         0.693    0.406 xgbTree       
- 89 France             0.574         0.753    0.420 svmPoly       
- 90 France             0.678         0.647    0.524 svmLinear3    
- 91 Croatia            0.438         0.814    0.328 RAI           
- 92 Croatia            0.418        NA        0.309 ARIMAX        
- 93 Croatia            0.498         0.773    0.329 svmRadialSigma
- 94 Croatia            0.464         0.786    0.309 gbm           
- 95 Croatia            0.481         0.775    0.319 rf            
- 96 Croatia            0.413         0.820    0.307 brnn          
- 97 Croatia            0.483         0.780    0.318 xgbTree       
- 98 Croatia            0.444         0.791    0.288 svmPoly       
- 99 Croatia            0.672         0.573    0.522 svmLinear3    
-100 Hungary            0.751         0.451    0.554 RAI           
-101 Hungary            0.547        NA        0.413 ARIMAX        
-102 Hungary            0.662         0.582    0.510 svmRadialSigma
-103 Hungary            0.701         0.507    0.543 gbm           
-104 Hungary            0.703         0.508    0.552 rf            
-105 Hungary            0.747         0.473    0.583 brnn          
-106 Hungary            0.734         0.505    0.564 xgbTree       
-107 Hungary            0.885         0.424    0.646 svmPoly       
-108 Hungary            0.877         0.308    0.683 svmLinear3    
-109 Italy              0.592         0.691    0.442 RAI           
-110 Italy              0.480        NA        0.368 ARIMAX        
-111 Italy              0.563         0.763    0.401 svmRadialSigma
-112 Italy              0.479         0.816    0.353 gbm           
-113 Italy              0.542         0.759    0.380 rf            
-114 Italy              0.554         0.748    0.413 brnn          
-115 Italy              0.499         0.785    0.341 xgbTree       
-116 Italy              0.561         0.763    0.399 svmPoly       
-117 Italy              0.659         0.668    0.505 svmLinear3    
-118 Lithuania          0.807         0.347    0.649 RAI           
-119 Lithuania          0.423        NA        0.309 ARIMAX        
-120 Lithuania          0.582         0.682    0.452 svmRadialSigma
-121 Lithuania          0.613         0.621    0.485 gbm           
-122 Lithuania          0.589         0.659    0.461 rf            
-123 Lithuania          0.697         0.543    0.552 brnn          
-124 Lithuania          0.593         0.644    0.468 xgbTree       
-125 Lithuania          0.735         0.504    0.572 svmPoly       
-126 Lithuania          0.810         0.373    0.664 svmLinear3    
-127 Luxembourg         0.530         0.571    0.398 RAI           
-128 Luxembourg         0.419        NA        0.285 ARIMAX        
-129 Luxembourg         0.542         0.566    0.390 svmRadialSigma
-130 Luxembourg         0.566         0.534    0.434 gbm           
-131 Luxembourg         0.579         0.534    0.448 rf            
-132 Luxembourg         0.571         0.547    0.421 brnn          
-133 Luxembourg         0.589         0.491    0.441 xgbTree       
-134 Luxembourg         0.582         0.568    0.434 svmPoly       
-135 Luxembourg         0.582         0.547    0.458 svmLinear3    
-136 Latvia             0.918         0.148    0.732 RAI           
-137 Latvia             0.453        NA        0.357 ARIMAX        
-138 Latvia             0.649         0.585    0.506 svmRadialSigma
-139 Latvia             0.685         0.508    0.550 gbm           
-140 Latvia             0.690         0.526    0.567 rf            
-141 Latvia             0.667         0.551    0.536 brnn          
-142 Latvia             0.726         0.481    0.580 xgbTree       
-143 Latvia             0.819         0.441    0.620 svmPoly       
-144 Latvia             0.859         0.298    0.695 svmLinear3    
-145 Malta              0.539         0.701    0.416 RAI           
-146 Malta              0.337        NA        0.262 ARIMAX        
-147 Malta              0.528         0.709    0.419 svmRadialSigma
-148 Malta              0.543         0.689    0.432 gbm           
-149 Malta              0.531         0.717    0.428 rf            
-150 Malta              0.551         0.691    0.434 brnn          
-151 Malta              0.548         0.699    0.443 xgbTree       
-152 Malta              0.553         0.684    0.433 svmPoly       
-153 Malta              0.558         0.682    0.441 svmLinear3    
-154 Netherlands        0.803         0.357    0.619 RAI           
-155 Netherlands        0.537        NA        0.406 ARIMAX        
-156 Netherlands        0.685         0.570    0.526 svmRadialSigma
-157 Netherlands        0.735         0.483    0.584 gbm           
-158 Netherlands        0.715         0.512    0.566 rf            
-159 Netherlands        0.840         0.434    0.641 brnn          
-160 Netherlands        0.730         0.488    0.582 xgbTree       
-161 Netherlands        0.795         0.497    0.578 svmPoly       
-162 Netherlands        0.856         0.362    0.689 svmLinear3    
-163 Poland             0.713         0.489    0.560 RAI           
-164 Poland             0.431        NA        0.324 ARIMAX        
-165 Poland             0.639         0.590    0.484 svmRadialSigma
-166 Poland             0.645         0.575    0.497 gbm           
-167 Poland             0.631         0.596    0.491 rf            
-168 Poland             0.699         0.526    0.547 brnn          
-169 Poland             0.641         0.597    0.486 xgbTree       
-170 Poland             0.767         0.526    0.563 svmPoly       
-171 Poland             0.803         0.400    0.635 svmLinear3    
-172 Portugal           0.656         0.633    0.523 RAI           
-173 Portugal           0.337        NA        0.261 ARIMAX        
-174 Portugal           0.487         0.809    0.389 svmRadialSigma
-175 Portugal           0.455         0.824    0.367 gbm           
-176 Portugal           0.496         0.795    0.396 rf            
-177 Portugal           0.502         0.784    0.387 brnn          
-178 Portugal           0.503         0.791    0.391 xgbTree       
-179 Portugal           0.547         0.742    0.436 svmPoly       
-180 Portugal           0.655         0.652    0.543 svmLinear3    
-181 Romania            0.722         0.483    0.543 RAI           
-182 Romania            0.533        NA        0.397 ARIMAX        
-183 Romania            0.677         0.554    0.507 svmRadialSigma
-184 Romania            0.686         0.543    0.529 gbm           
-185 Romania            0.683         0.572    0.528 rf            
-186 Romania            0.788         0.420    0.621 brnn          
-187 Romania            0.670         0.574    0.502 xgbTree       
-188 Romania            0.812         0.432    0.595 svmPoly       
-189 Romania            0.832         0.347    0.660 svmLinear3    
-190 Sweden             0.791         0.466    0.565 RAI           
-191 Sweden             0.687        NA        0.449 ARIMAX        
-192 Sweden             0.693         0.632    0.446 svmRadialSigma
-193 Sweden             0.697         0.602    0.473 gbm           
-194 Sweden             0.694         0.602    0.472 rf            
-195 Sweden             0.762         0.537    0.514 brnn          
-196 Sweden             0.717         0.592    0.479 xgbTree       
-197 Sweden             0.728         0.609    0.473 svmPoly       
-198 Sweden             0.830         0.481    0.608 svmLinear3    
-199 Slovenia           0.535         0.740    0.408 RAI           
-200 Slovenia           0.504        NA        0.398 ARIMAX        
-201 Slovenia           0.527         0.728    0.399 svmRadialSigma
-202 Slovenia           0.543         0.693    0.404 gbm           
-203 Slovenia           0.552         0.685    0.409 rf            
-204 Slovenia           0.694         0.605    0.480 brnn          
-205 Slovenia           0.580         0.705    0.418 xgbTree       
-206 Slovenia           0.659         0.651    0.456 svmPoly       
-207 Slovenia           0.756         0.506    0.559 svmLinear3    
-208 Slovakia           1.00          0        0.755 RAI           
-209 Slovakia           0.499        NA        0.368 ARIMAX        
-210 Slovakia           0.745         0.466    0.545 svmRadialSigma
-211 Slovakia           0.756         0.439    0.598 gbm           
-212 Slovakia           0.727         0.473    0.574 rf            
-213 Slovakia           0.865         0.382    0.665 brnn          
-214 Slovakia           0.747         0.436    0.582 xgbTree       
-215 Slovakia           0.913         0.274    0.676 svmPoly       
-216 Slovakia           0.896         0.283    0.710 svmLinear3    </code></pre>
+  2 Austria            0.722         0.515    0.596 svmRadialSigma
+  3 Austria            0.710         0.519    0.585 gbm           
+  4 Austria            0.707         0.544    0.598 rf            
+  5 Austria            0.810         0.435    0.680 brnn          
+  6 Austria            0.741         0.487    0.608 xgbTree       
+  7 Austria            0.808         0.433    0.674 svmPoly       
+  8 Austria            0.889         0.320    0.771 svmLinear3    
+  9 Belgium            0.586         0.583    0.445 RAI           
+ 10 Belgium            0.553         0.638    0.417 svmRadialSigma
+ 11 Belgium            0.557         0.625    0.442 gbm           
+ 12 Belgium            0.549         0.638    0.420 rf            
+ 13 Belgium            0.635         0.541    0.494 brnn          
+ 14 Belgium            0.567         0.609    0.437 xgbTree       
+ 15 Belgium            0.663         0.539    0.512 svmPoly       
+ 16 Belgium            0.689         0.500    0.545 svmLinear3    
+ 17 Cyprus             0.638         0.588    0.511 RAI           
+ 18 Cyprus             0.598         0.647    0.480 svmRadialSigma
+ 19 Cyprus             0.612         0.633    0.481 gbm           
+ 20 Cyprus             0.628         0.615    0.507 rf            
+ 21 Cyprus             0.645         0.625    0.508 brnn          
+ 22 Cyprus             0.622         0.610    0.483 xgbTree       
+ 23 Cyprus             0.722         0.546    0.590 svmPoly       
+ 24 Cyprus             0.810         0.416    0.714 svmLinear3    
+ 25 Czech Republic     1.02          0        0.740 RAI           
+ 26 Czech Republic     0.767         0.468    0.533 svmRadialSigma
+ 27 Czech Republic     0.759         0.453    0.563 gbm           
+ 28 Czech Republic     0.773         0.451    0.575 rf            
+ 29 Czech Republic     0.925         0.409    0.648 brnn          
+ 30 Czech Republic     0.842         0.333    0.593 xgbTree       
+ 31 Czech Republic     0.994         0.235    0.674 svmPoly       
+ 32 Czech Republic     0.930         0.233    0.696 svmLinear3    
+ 33 Germany            0.549         0.729    0.444 RAI           
+ 34 Germany            0.510         0.775    0.404 svmRadialSigma
+ 35 Germany            0.497         0.775    0.378 gbm           
+ 36 Germany            0.500         0.774    0.386 rf            
+ 37 Germany            0.509         0.771    0.399 brnn          
+ 38 Germany            0.513         0.758    0.390 xgbTree       
+ 39 Germany            0.503         0.784    0.399 svmPoly       
+ 40 Germany            0.614         0.686    0.505 svmLinear3    
+ 41 Denmark            0.545         0.668    0.407 RAI           
+ 42 Denmark            0.557         0.657    0.396 svmRadialSigma
+ 43 Denmark            0.500         0.716    0.380 gbm           
+ 44 Denmark            0.489         0.722    0.372 rf            
+ 45 Denmark            0.510         0.710    0.386 brnn          
+ 46 Denmark            0.516         0.706    0.369 xgbTree       
+ 47 Denmark            0.531         0.701    0.406 svmPoly       
+ 48 Denmark            0.544         0.682    0.420 svmLinear3    
+ 49 Greece             0.533         0.783    0.401 RAI           
+ 50 Greece             0.553         0.770    0.405 svmRadialSigma
+ 51 Greece             0.517         0.795    0.382 gbm           
+ 52 Greece             0.530         0.782    0.395 rf            
+ 53 Greece             0.470         0.842    0.360 brnn          
+ 54 Greece             0.532         0.781    0.374 xgbTree       
+ 55 Greece             0.545         0.766    0.397 svmPoly       
+ 56 Greece             0.898         0.430    0.723 svmLinear3    
+ 57 Spain              0.513         0.748    0.387 RAI           
+ 58 Spain              0.453         0.826    0.344 svmRadialSigma
+ 59 Spain              0.414         0.849    0.324 gbm           
+ 60 Spain              0.479         0.793    0.366 rf            
+ 61 Spain              0.443         0.829    0.348 brnn          
+ 62 Spain              0.435         0.827    0.337 xgbTree       
+ 63 Spain              0.432         0.833    0.323 svmPoly       
+ 64 Spain              0.565         0.741    0.442 svmLinear3    
+ 65 Finland            0.771         0.361    0.597 RAI           
+ 66 Finland            0.743         0.438    0.538 svmRadialSigma
+ 67 Finland            0.736         0.441    0.546 gbm           
+ 68 Finland            0.733         0.456    0.549 rf            
+ 69 Finland            0.742         0.478    0.548 brnn          
+ 70 Finland            0.776         0.362    0.562 xgbTree       
+ 71 Finland            0.809         0.364    0.576 svmPoly       
+ 72 Finland            0.800         0.356    0.611 svmLinear3    
+ 73 France             0.615         0.632    0.490 RAI           
+ 74 France             0.565         0.752    0.409 svmRadialSigma
+ 75 France             0.538         0.735    0.401 gbm           
+ 76 France             0.553         0.723    0.406 rf            
+ 77 France             0.477         0.803    0.357 brnn          
+ 78 France             0.569         0.693    0.411 xgbTree       
+ 79 France             0.570         0.740    0.415 svmPoly       
+ 80 France             0.675         0.635    0.523 svmLinear3    
+ 81 Croatia            0.438         0.814    0.328 RAI           
+ 82 Croatia            0.452         0.809    0.293 svmRadialSigma
+ 83 Croatia            0.458         0.790    0.310 gbm           
+ 84 Croatia            0.481         0.760    0.324 rf            
+ 85 Croatia            0.412         0.822    0.307 brnn          
+ 86 Croatia            0.507         0.752    0.324 xgbTree       
+ 87 Croatia            0.437         0.811    0.285 svmPoly       
+ 88 Croatia            0.673         0.572    0.523 svmLinear3    
+ 89 Hungary            0.751         0.451    0.554 RAI           
+ 90 Hungary            0.658         0.590    0.512 svmRadialSigma
+ 91 Hungary            0.704         0.510    0.548 gbm           
+ 92 Hungary            0.702         0.508    0.550 rf            
+ 93 Hungary            0.750         0.483    0.585 brnn          
+ 94 Hungary            0.690         0.529    0.534 xgbTree       
+ 95 Hungary            0.877         0.401    0.641 svmPoly       
+ 96 Hungary            0.883         0.302    0.685 svmLinear3    
+ 97 Italy              0.592         0.691    0.442 RAI           
+ 98 Italy              0.573         0.759    0.403 svmRadialSigma
+ 99 Italy              0.477         0.807    0.349 gbm           
+100 Italy              0.538         0.769    0.380 rf            
+101 Italy              0.556         0.755    0.413 brnn          
+102 Italy              0.488         0.801    0.332 xgbTree       
+103 Italy              0.553         0.777    0.396 svmPoly       
+104 Italy              0.663         0.662    0.504 svmLinear3    
+105 Lithuania          0.807         0.347    0.649 RAI           
+106 Lithuania          0.585         0.672    0.452 svmRadialSigma
+107 Lithuania          0.608         0.635    0.480 gbm           
+108 Lithuania          0.587         0.674    0.462 rf            
+109 Lithuania          0.697         0.540    0.555 brnn          
+110 Lithuania          0.609         0.632    0.466 xgbTree       
+111 Lithuania          0.735         0.506    0.574 svmPoly       
+112 Lithuania          0.813         0.375    0.664 svmLinear3    
+113 Luxembourg         0.530         0.571    0.398 RAI           
+114 Luxembourg         0.543         0.563    0.390 svmRadialSigma
+115 Luxembourg         0.568         0.549    0.436 gbm           
+116 Luxembourg         0.576         0.536    0.447 rf            
+117 Luxembourg         0.573         0.545    0.424 brnn          
+118 Luxembourg         0.600         0.453    0.443 xgbTree       
+119 Luxembourg         0.580         0.560    0.434 svmPoly       
+120 Luxembourg         0.586         0.545    0.461 svmLinear3    
+121 Latvia             0.918         0.148    0.732 RAI           
+122 Latvia             0.648         0.579    0.505 svmRadialSigma
+123 Latvia             0.690         0.515    0.560 gbm           
+124 Latvia             0.693         0.528    0.568 rf            
+125 Latvia             0.669         0.556    0.536 brnn          
+126 Latvia             0.673         0.538    0.529 xgbTree       
+127 Latvia             0.816         0.440    0.620 svmPoly       
+128 Latvia             0.858         0.301    0.697 svmLinear3    
+129 Malta              0.539         0.701    0.416 RAI           
+130 Malta              0.530         0.707    0.421 svmRadialSigma
+131 Malta              0.550         0.688    0.441 gbm           
+132 Malta              0.530         0.715    0.429 rf            
+133 Malta              0.550         0.691    0.430 brnn          
+134 Malta              0.561         0.680    0.444 xgbTree       
+135 Malta              0.553         0.679    0.434 svmPoly       
+136 Malta              0.558         0.684    0.442 svmLinear3    
+137 Netherlands        0.803         0.357    0.619 RAI           
+138 Netherlands        0.687         0.565    0.523 svmRadialSigma
+139 Netherlands        0.738         0.476    0.583 gbm           
+140 Netherlands        0.716         0.506    0.569 rf            
+141 Netherlands        0.817         0.445    0.628 brnn          
+142 Netherlands        0.746         0.449    0.572 xgbTree       
+143 Netherlands        0.798         0.499    0.583 svmPoly       
+144 Netherlands        0.856         0.341    0.690 svmLinear3    
+145 Poland             0.713         0.489    0.560 RAI           
+146 Poland             0.642         0.595    0.487 svmRadialSigma
+147 Poland             0.643         0.580    0.496 gbm           
+148 Poland             0.634         0.588    0.493 rf            
+149 Poland             0.701         0.533    0.541 brnn          
+150 Poland             0.650         0.584    0.499 xgbTree       
+151 Poland             0.753         0.519    0.555 svmPoly       
+152 Poland             0.805         0.401    0.634 svmLinear3    
+153 Portugal           0.656         0.633    0.523 RAI           
+154 Portugal           0.487         0.810    0.391 svmRadialSigma
+155 Portugal           0.459         0.828    0.371 gbm           
+156 Portugal           0.496         0.793    0.398 rf            
+157 Portugal           0.507         0.781    0.395 brnn          
+158 Portugal           0.476         0.813    0.366 xgbTree       
+159 Portugal           0.553         0.745    0.440 svmPoly       
+160 Portugal           0.656         0.652    0.541 svmLinear3    
+161 Romania            0.722         0.483    0.543 RAI           
+162 Romania            0.676         0.572    0.500 svmRadialSigma
+163 Romania            0.688         0.548    0.531 gbm           
+164 Romania            0.679         0.583    0.525 rf            
+165 Romania            0.786         0.430    0.623 brnn          
+166 Romania            0.706         0.508    0.526 xgbTree       
+167 Romania            0.803         0.435    0.588 svmPoly       
+168 Romania            0.838         0.341    0.662 svmLinear3    
+169 Sweden             0.791         0.466    0.565 RAI           
+170 Sweden             0.682         0.637    0.439 svmRadialSigma
+171 Sweden             0.695         0.600    0.473 gbm           
+172 Sweden             0.699         0.600    0.471 rf            
+173 Sweden             0.760         0.530    0.514 brnn          
+174 Sweden             0.695         0.572    0.462 xgbTree       
+175 Sweden             0.727         0.616    0.479 svmPoly       
+176 Sweden             0.825         0.479    0.607 svmLinear3    
+177 Slovenia           0.535         0.740    0.408 RAI           
+178 Slovenia           0.526         0.740    0.397 svmRadialSigma
+179 Slovenia           0.551         0.700    0.407 gbm           
+180 Slovenia           0.551         0.683    0.408 rf            
+181 Slovenia           0.687         0.617    0.480 brnn          
+182 Slovenia           0.564         0.708    0.413 xgbTree       
+183 Slovenia           0.668         0.629    0.459 svmPoly       
+184 Slovenia           0.760         0.509    0.561 svmLinear3    
+185 Slovakia           1.00          0        0.755 RAI           
+186 Slovakia           0.746         0.452    0.548 svmRadialSigma
+187 Slovakia           0.752         0.437    0.597 gbm           
+188 Slovakia           0.735         0.467    0.578 rf            
+189 Slovakia           0.854         0.393    0.658 brnn          
+190 Slovakia           0.719         0.480    0.563 xgbTree       
+191 Slovakia           0.914         0.284    0.675 svmPoly       
+192 Slovakia           0.899         0.264    0.712 svmLinear3    </code></pre>
 </div>
 <div id="best-fits-rmse" class="section level2 unnumbered">
 <h2 class="unnumbered">Best fits RMSE</h2>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;ARIMAX&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared,</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_RMSE =</span> <span class="fu">min</span>(TrainRMSE),</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_R2 =</span> <span class="fu">max</span>(TrainRsquared)) <span class="sc">%&gt;%</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainRMSE<span class="sc">==</span>min_RMSE)</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse, <span class="at">n=</span><span class="fu">nrow</span>(rmse))</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;ARIMAX&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_RMSE =</span> <span class="fu">min</span>(TrainRMSE),</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_R2 =</span> <span class="fu">max</span>(TrainRsquared)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainRMSE<span class="sc">==</span>min_RMSE)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse, <span class="at">n=</span><span class="fu">nrow</span>(rmse))</span></code></pre></div>
 <pre><code># A tibble: 24 × 6
 # Groups:   country [24]
    country        method         TrainRMSE TrainRsquared min_RMSE max_R2
    &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
- 1 Austria        rf                 0.705         0.554    0.705  0.554
- 2 Belgium        rf                 0.554         0.640    0.554  0.642
- 3 Croatia        brnn               0.413         0.820    0.413  0.820
- 4 Cyprus         svmRadialSigma     0.605         0.643    0.605  0.643
- 5 Czech Republic svmRadialSigma     0.761         0.469    0.761  0.469
- 6 Denmark        rf                 0.493         0.735    0.493  0.738
- 7 Finland        brnn               0.719         0.485    0.719  0.485
- 8 France         brnn               0.474         0.797    0.474  0.797
- 9 Germany        gbm                0.492         0.776    0.492  0.782
-10 Greece         brnn               0.463         0.834    0.463  0.834
-11 Hungary        svmRadialSigma     0.662         0.582    0.662  0.582
-12 Italy          gbm                0.479         0.816    0.479  0.816
-13 Latvia         svmRadialSigma     0.649         0.585    0.649  0.585
-14 Lithuania      svmRadialSigma     0.582         0.682    0.582  0.682
+ 1 Austria        rf                 0.707         0.544    0.707  0.544
+ 2 Belgium        rf                 0.549         0.638    0.549  0.638
+ 3 Croatia        brnn               0.412         0.822    0.412  0.822
+ 4 Cyprus         svmRadialSigma     0.598         0.647    0.598  0.647
+ 5 Czech Republic gbm                0.759         0.453    0.759  0.468
+ 6 Denmark        rf                 0.489         0.722    0.489  0.722
+ 7 Finland        rf                 0.733         0.456    0.733  0.478
+ 8 France         brnn               0.477         0.803    0.477  0.803
+ 9 Germany        gbm                0.497         0.775    0.497  0.784
+10 Greece         brnn               0.470         0.842    0.470  0.842
+11 Hungary        svmRadialSigma     0.658         0.590    0.658  0.590
+12 Italy          gbm                0.477         0.807    0.477  0.807
+13 Latvia         svmRadialSigma     0.648         0.579    0.648  0.579
+14 Lithuania      svmRadialSigma     0.585         0.672    0.585  0.674
 15 Luxembourg     RAI                0.530         0.571    0.530  0.571
-16 Malta          svmRadialSigma     0.528         0.709    0.528  0.717
-17 Netherlands    svmRadialSigma     0.685         0.570    0.685  0.570
-18 Poland         rf                 0.631         0.596    0.631  0.597
-19 Portugal       gbm                0.455         0.824    0.455  0.824
-20 Romania        xgbTree            0.670         0.574    0.670  0.574
-21 Slovakia       rf                 0.727         0.473    0.727  0.473
-22 Slovenia       svmRadialSigma     0.527         0.728    0.527  0.740
-23 Spain          gbm                0.415         0.841    0.415  0.842
-24 Sweden         svmRadialSigma     0.693         0.632    0.693  0.632</code></pre>
+16 Malta          svmRadialSigma     0.530         0.707    0.530  0.715
+17 Netherlands    svmRadialSigma     0.687         0.565    0.687  0.565
+18 Poland         rf                 0.634         0.588    0.634  0.595
+19 Portugal       gbm                0.459         0.828    0.459  0.828
+20 Romania        svmRadialSigma     0.676         0.572    0.676  0.583
+21 Slovakia       xgbTree            0.719         0.480    0.719  0.480
+22 Slovenia       svmRadialSigma     0.526         0.740    0.526  0.740
+23 Spain          gbm                0.414         0.849    0.414  0.849
+24 Sweden         svmRadialSigma     0.682         0.637    0.682  0.637</code></pre>
 </div>
 <div id="best-fits-r2" class="section level2 unnumbered">
 <h2 class="unnumbered">Best fits R2</h2>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;ARIMAX&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared,</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_R2 =</span> <span class="fu">max</span>(TrainRsquared)) <span class="sc">%&gt;%</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainRsquared <span class="sc">==</span> max_R2)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(r2, <span class="at">n=</span><span class="fu">nrow</span>(r2))</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;ARIMAX&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_R2 =</span> <span class="fu">max</span>(TrainRsquared)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainRsquared <span class="sc">==</span> max_R2)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(r2, <span class="at">n=</span><span class="fu">nrow</span>(r2))</span></code></pre></div>
 <pre><code># A tibble: 24 × 5
 # Groups:   country [24]
    country        method         TrainRMSE TrainRsquared max_R2
    &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;
- 1 Austria        rf                 0.714         0.541  0.541
- 2 Belgium        rf                 0.553         0.638  0.638
- 3 Croatia        RAI                0.438         0.814  0.814
- 4 Cyprus         svmRadialSigma     0.605         0.641  0.641
- 5 Czech Republic svmRadialSigma     0.775         0.456  0.456
- 6 Denmark        gbm                0.503         0.724  0.724
- 7 Finland        brnn               0.721         0.477  0.477
- 8 France         brnn               0.478         0.794  0.794
- 9 Germany        svmRadialSigma     0.502         0.775  0.775
-10 Greece         brnn               0.475         0.834  0.834
-11 Hungary        svmRadialSigma     0.662         0.585  0.585
-12 Italy          gbm                0.482         0.807  0.807
-13 Latvia         svmRadialSigma     0.653         0.578  0.578
-14 Lithuania      svmRadialSigma     0.590         0.670  0.670
+ 1 Austria        rf                 0.707         0.544  0.544
+ 2 Belgium        rf                 0.549         0.638  0.638
+ 3 Croatia        brnn               0.412         0.822  0.822
+ 4 Cyprus         svmRadialSigma     0.598         0.647  0.647
+ 5 Czech Republic svmRadialSigma     0.767         0.468  0.468
+ 6 Denmark        rf                 0.489         0.722  0.722
+ 7 Finland        brnn               0.742         0.478  0.478
+ 8 France         brnn               0.477         0.803  0.803
+ 9 Germany        svmPoly            0.503         0.784  0.784
+10 Greece         brnn               0.470         0.842  0.842
+11 Hungary        svmRadialSigma     0.658         0.590  0.590
+12 Italy          gbm                0.477         0.807  0.807
+13 Latvia         svmRadialSigma     0.648         0.579  0.579
+14 Lithuania      rf                 0.587         0.674  0.674
 15 Luxembourg     RAI                0.530         0.571  0.571
-16 Malta          svmRadialSigma     0.532         0.712  0.712
-17 Netherlands    svmRadialSigma     0.691         0.556  0.556
-18 Poland         xgbTree            0.642         0.594  0.594
-19 Portugal       gbm                0.466         0.814  0.814
-20 Romania        rf                 0.683         0.585  0.585
-21 Slovakia       rf                 0.736         0.468  0.468
-22 Slovenia       svmRadialSigma     0.532         0.741  0.741
-23 Spain          gbm                0.421         0.841  0.841
-24 Sweden         gbm                0.698         0.600  0.600</code></pre>
+16 Malta          rf                 0.530         0.715  0.715
+17 Netherlands    svmRadialSigma     0.687         0.565  0.565
+18 Poland         svmRadialSigma     0.642         0.595  0.595
+19 Portugal       gbm                0.459         0.828  0.828
+20 Romania        rf                 0.679         0.583  0.583
+21 Slovakia       xgbTree            0.719         0.480  0.480
+22 Slovenia       svmRadialSigma     0.526         0.740  0.740
+23 Spain          gbm                0.414         0.849  0.849
+24 Sweden         svmRadialSigma     0.682         0.637  0.637</code></pre>
 </div>
 <div id="best-fits-mae" class="section level2 unnumbered">
 <h2 class="unnumbered">Best fits MAE</h2>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>mae <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;ARIMAX&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared, TrainMAE,</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_MAE =</span> <span class="fu">min</span>(TrainMAE)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainMAE <span class="sc">==</span> min_MAE)</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mae, <span class="at">n=</span><span class="fu">nrow</span>(mae))</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>mae <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;ARIMAX&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared, TrainMAE,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_MAE =</span> <span class="fu">min</span>(TrainMAE)) <span class="sc">%&gt;%</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainMAE <span class="sc">==</span> min_MAE)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mae, <span class="at">n=</span><span class="fu">nrow</span>(mae))</span></code></pre></div>
 <pre><code># A tibble: 24 × 6
 # Groups:   country [24]
    country        method         TrainRMSE TrainRsquared TrainMAE min_MAE
    &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
- 1 Austria        gbm                0.716         0.509    0.590   0.590
- 2 Belgium        svmRadialSigma     0.554         0.642    0.422   0.422
- 3 Croatia        svmPoly            0.444         0.791    0.288   0.288
- 4 Cyprus         gbm                0.614         0.632    0.483   0.483
- 5 Czech Republic svmRadialSigma     0.761         0.469    0.530   0.530
- 6 Denmark        gbm                0.494         0.712    0.374   0.374
- 7 Finland        svmRadialSigma     0.731         0.470    0.534   0.534
- 8 France         brnn               0.474         0.797    0.356   0.356
- 9 Germany        gbm                0.492         0.776    0.375   0.375
-10 Greece         brnn               0.463         0.834    0.357   0.357
-11 Hungary        svmRadialSigma     0.662         0.582    0.510   0.510
-12 Italy          xgbTree            0.499         0.785    0.341   0.341
-13 Latvia         svmRadialSigma     0.649         0.585    0.506   0.506
-14 Lithuania      svmRadialSigma     0.582         0.682    0.452   0.452
-15 Luxembourg     svmRadialSigma     0.542         0.566    0.390   0.390
+ 1 Austria        gbm                0.710         0.519    0.585   0.585
+ 2 Belgium        svmRadialSigma     0.553         0.638    0.417   0.417
+ 3 Croatia        svmPoly            0.437         0.811    0.285   0.285
+ 4 Cyprus         svmRadialSigma     0.598         0.647    0.480   0.480
+ 5 Czech Republic svmRadialSigma     0.767         0.468    0.533   0.533
+ 6 Denmark        xgbTree            0.516         0.706    0.369   0.369
+ 7 Finland        svmRadialSigma     0.743         0.438    0.538   0.538
+ 8 France         brnn               0.477         0.803    0.357   0.357
+ 9 Germany        gbm                0.497         0.775    0.378   0.378
+10 Greece         brnn               0.470         0.842    0.360   0.360
+11 Hungary        svmRadialSigma     0.658         0.590    0.512   0.512
+12 Italy          xgbTree            0.488         0.801    0.332   0.332
+13 Latvia         svmRadialSigma     0.648         0.579    0.505   0.505
+14 Lithuania      svmRadialSigma     0.585         0.672    0.452   0.452
+15 Luxembourg     svmRadialSigma     0.543         0.563    0.390   0.390
 16 Malta          RAI                0.539         0.701    0.416   0.416
-17 Netherlands    svmRadialSigma     0.685         0.570    0.526   0.526
-18 Poland         svmRadialSigma     0.639         0.590    0.484   0.484
-19 Portugal       gbm                0.455         0.824    0.367   0.367
-20 Romania        xgbTree            0.670         0.574    0.502   0.502
-21 Slovakia       svmRadialSigma     0.745         0.466    0.545   0.545
-22 Slovenia       svmRadialSigma     0.527         0.728    0.399   0.399
-23 Spain          svmPoly            0.432         0.842    0.323   0.323
-24 Sweden         svmRadialSigma     0.693         0.632    0.446   0.446</code></pre>
+17 Netherlands    svmRadialSigma     0.687         0.565    0.523   0.523
+18 Poland         svmRadialSigma     0.642         0.595    0.487   0.487
+19 Portugal       xgbTree            0.476         0.813    0.366   0.366
+20 Romania        svmRadialSigma     0.676         0.572    0.500   0.500
+21 Slovakia       svmRadialSigma     0.746         0.452    0.548   0.548
+22 Slovenia       svmRadialSigma     0.526         0.740    0.397   0.397
+23 Spain          svmPoly            0.432         0.833    0.323   0.323
+24 Sweden         svmRadialSigma     0.682         0.637    0.439   0.439</code></pre>
 </div>
 </div>
-<div id="arimax-modelling" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> ARIMAX Modelling</h1>
+<div id="results-for-normalised-regressors" class="section level1 tabset tabset-fade" number="5">
+<h1 class="tabset tabset-fade"><span class="header-section-number">5</span> Results for normalised
+regressors</h1>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">&quot;stats_alltrends_norm.csv&quot;</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>a  <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">==</span> <span class="st">&quot;ARIMAX&quot;</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(a, <span class="at">n=</span><span class="fu">nrow</span>(a))</span></code></pre></div>
+<pre><code># A tibble: 0 × 5
+# … with 5 variables: country &lt;chr&gt;, TrainRMSE &lt;dbl&gt;, TrainRsquared &lt;dbl&gt;,
+#   TrainMAE &lt;dbl&gt;, method &lt;chr&gt;</code></pre>
+<div id="overview-1" class="section level2 unnumbered">
+<h2 class="unnumbered">Overview</h2>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(stats, <span class="at">n=</span><span class="fu">nrow</span>(stats))</span></code></pre></div>
+<pre><code># A tibble: 192 × 5
+    country        TrainRMSE TrainRsquared TrainMAE method        
+    &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
+  1 Austria            0.831         0.357    0.713 RAI           
+  2 Austria            0.725         0.505    0.600 svmRadialSigma
+  3 Austria            0.715         0.516    0.590 gbm           
+  4 Austria            0.696         0.551    0.591 rf            
+  5 Austria            0.810         0.426    0.674 brnn          
+  6 Austria            0.757         0.477    0.627 xgbTree       
+  7 Austria            0.812         0.435    0.677 svmPoly       
+  8 Austria            0.873         0.336    0.744 svmLinear3    
+  9 Belgium            0.573         0.601    0.438 RAI           
+ 10 Belgium            0.551         0.641    0.415 svmRadialSigma
+ 11 Belgium            0.561         0.619    0.441 gbm           
+ 12 Belgium            0.549         0.638    0.423 rf            
+ 13 Belgium            0.633         0.549    0.492 brnn          
+ 14 Belgium            0.541         0.646    0.416 xgbTree       
+ 15 Belgium            0.662         0.542    0.514 svmPoly       
+ 16 Belgium            0.646         0.548    0.497 svmLinear3    
+ 17 Cyprus             0.637         0.590    0.529 RAI           
+ 18 Cyprus             0.597         0.647    0.481 svmRadialSigma
+ 19 Cyprus             0.608         0.639    0.481 gbm           
+ 20 Cyprus             0.631         0.609    0.512 rf            
+ 21 Cyprus             0.664         0.604    0.518 brnn          
+ 22 Cyprus             0.623         0.608    0.487 xgbTree       
+ 23 Cyprus             0.705         0.563    0.560 svmPoly       
+ 24 Cyprus             0.781         0.462    0.678 svmLinear3    
+ 25 Czech Republic     1.02          0        0.740 RAI           
+ 26 Czech Republic     0.767         0.465    0.529 svmRadialSigma
+ 27 Czech Republic     0.762         0.455    0.566 gbm           
+ 28 Czech Republic     0.777         0.444    0.577 rf            
+ 29 Czech Republic     0.938         0.398    0.657 brnn          
+ 30 Czech Republic     0.820         0.383    0.585 xgbTree       
+ 31 Czech Republic     0.997         0.237    0.673 svmPoly       
+ 32 Czech Republic     0.939         0.238    0.705 svmLinear3    
+ 33 Germany            0.503         0.773    0.394 RAI           
+ 34 Germany            0.507         0.778    0.403 svmRadialSigma
+ 35 Germany            0.496         0.771    0.379 gbm           
+ 36 Germany            0.504         0.768    0.390 rf            
+ 37 Germany            0.515         0.762    0.404 brnn          
+ 38 Germany            0.542         0.744    0.411 xgbTree       
+ 39 Germany            0.500         0.788    0.398 svmPoly       
+ 40 Germany            0.582         0.704    0.478 svmLinear3    
+ 41 Denmark            0.512         0.707    0.375 RAI           
+ 42 Denmark            0.567         0.647    0.401 svmRadialSigma
+ 43 Denmark            0.496         0.718    0.378 gbm           
+ 44 Denmark            0.491         0.730    0.373 rf            
+ 45 Denmark            0.510         0.715    0.386 brnn          
+ 46 Denmark            0.516         0.721    0.390 xgbTree       
+ 47 Denmark            0.534         0.705    0.401 svmPoly       
+ 48 Denmark            0.536         0.690    0.412 svmLinear3    
+ 49 Greece             0.527         0.787    0.399 RAI           
+ 50 Greece             0.548         0.773    0.404 svmRadialSigma
+ 51 Greece             0.517         0.792    0.384 gbm           
+ 52 Greece             0.533         0.788    0.391 rf            
+ 53 Greece             0.467         0.839    0.359 brnn          
+ 54 Greece             0.539         0.790    0.382 xgbTree       
+ 55 Greece             0.544         0.774    0.396 svmPoly       
+ 56 Greece             0.830         0.522    0.667 svmLinear3    
+ 57 Spain              0.437         0.818    0.333 RAI           
+ 58 Spain              0.445         0.826    0.336 svmRadialSigma
+ 59 Spain              0.415         0.849    0.327 gbm           
+ 60 Spain              0.479         0.795    0.364 rf            
+ 61 Spain              0.445         0.830    0.347 brnn          
+ 62 Spain              0.476         0.782    0.362 xgbTree       
+ 63 Spain              0.430         0.835    0.322 svmPoly       
+ 64 Spain              0.529         0.752    0.414 svmLinear3    
+ 65 Finland            0.741         0.409    0.570 RAI           
+ 66 Finland            0.724         0.484    0.528 svmRadialSigma
+ 67 Finland            0.740         0.429    0.551 gbm           
+ 68 Finland            0.735         0.453    0.554 rf            
+ 69 Finland            0.711         0.502    0.533 brnn          
+ 70 Finland            0.798         0.345    0.579 xgbTree       
+ 71 Finland            0.809         0.360    0.576 svmPoly       
+ 72 Finland            0.775         0.389    0.605 svmLinear3    
+ 73 France             0.539         0.717    0.414 RAI           
+ 74 France             0.567         0.731    0.410 svmRadialSigma
+ 75 France             0.550         0.736    0.410 gbm           
+ 76 France             0.548         0.722    0.404 rf            
+ 77 France             0.472         0.806    0.354 brnn          
+ 78 France             0.545         0.714    0.387 xgbTree       
+ 79 France             0.581         0.732    0.423 svmPoly       
+ 80 France             0.649         0.677    0.511 svmLinear3    
+ 81 Croatia            0.410         0.837    0.302 RAI           
+ 82 Croatia            0.450         0.812    0.293 svmRadialSigma
+ 83 Croatia            0.458         0.796    0.306 gbm           
+ 84 Croatia            0.475         0.782    0.322 rf            
+ 85 Croatia            0.412         0.817    0.307 brnn          
+ 86 Croatia            0.474         0.794    0.299 xgbTree       
+ 87 Croatia            0.448         0.799    0.288 svmPoly       
+ 88 Croatia            0.653         0.599    0.507 svmLinear3    
+ 89 Hungary            0.815         0.354    0.624 RAI           
+ 90 Hungary            0.661         0.579    0.516 svmRadialSigma
+ 91 Hungary            0.700         0.517    0.546 gbm           
+ 92 Hungary            0.701         0.522    0.557 rf            
+ 93 Hungary            0.742         0.492    0.582 brnn          
+ 94 Hungary            0.716         0.507    0.551 xgbTree       
+ 95 Hungary            0.880         0.405    0.641 svmPoly       
+ 96 Hungary            0.868         0.305    0.677 svmLinear3    
+ 97 Italy              0.482         0.795    0.367 RAI           
+ 98 Italy              0.568         0.762    0.401 svmRadialSigma
+ 99 Italy              0.478         0.809    0.346 gbm           
+100 Italy              0.536         0.766    0.379 rf            
+101 Italy              0.556         0.760    0.412 brnn          
+102 Italy              0.478         0.809    0.341 xgbTree       
+103 Italy              0.567         0.758    0.402 svmPoly       
+104 Italy              0.631         0.695    0.453 svmLinear3    
+105 Lithuania          0.673         0.545    0.516 RAI           
+106 Lithuania          0.586         0.668    0.453 svmRadialSigma
+107 Lithuania          0.609         0.625    0.482 gbm           
+108 Lithuania          0.582         0.673    0.457 rf            
+109 Lithuania          0.693         0.544    0.544 brnn          
+110 Lithuania          0.602         0.636    0.467 xgbTree       
+111 Lithuania          0.732         0.505    0.567 svmPoly       
+112 Lithuania          0.815         0.378    0.665 svmLinear3    
+113 Luxembourg         0.530         0.571    0.398 RAI           
+114 Luxembourg         0.535         0.573    0.386 svmRadialSigma
+115 Luxembourg         0.571         0.537    0.436 gbm           
+116 Luxembourg         0.581         0.536    0.448 rf            
+117 Luxembourg         0.576         0.555    0.426 brnn          
+118 Luxembourg         0.589         0.476    0.443 xgbTree       
+119 Luxembourg         0.585         0.556    0.436 svmPoly       
+120 Luxembourg         0.593         0.521    0.456 svmLinear3    
+121 Latvia             0.918         0.148    0.732 RAI           
+122 Latvia             0.646         0.579    0.505 svmRadialSigma
+123 Latvia             0.688         0.512    0.550 gbm           
+124 Latvia             0.696         0.520    0.569 rf            
+125 Latvia             0.671         0.544    0.536 brnn          
+126 Latvia             0.711         0.493    0.564 xgbTree       
+127 Latvia             0.808         0.452    0.619 svmPoly       
+128 Latvia             0.845         0.322    0.687 svmLinear3    
+129 Malta              0.539         0.701    0.416 RAI           
+130 Malta              0.515         0.731    0.410 svmRadialSigma
+131 Malta              0.550         0.693    0.440 gbm           
+132 Malta              0.532         0.717    0.431 rf            
+133 Malta              0.549         0.696    0.431 brnn          
+134 Malta              0.556         0.680    0.434 xgbTree       
+135 Malta              0.553         0.680    0.434 svmPoly       
+136 Malta              0.556         0.688    0.440 svmLinear3    
+137 Netherlands        0.728         0.472    0.577 RAI           
+138 Netherlands        0.690         0.565    0.528 svmRadialSigma
+139 Netherlands        0.745         0.482    0.589 gbm           
+140 Netherlands        0.714         0.513    0.569 rf            
+141 Netherlands        0.828         0.437    0.631 brnn          
+142 Netherlands        0.726         0.481    0.567 xgbTree       
+143 Netherlands        0.790         0.516    0.576 svmPoly       
+144 Netherlands        0.841         0.352    0.667 svmLinear3    
+145 Poland             0.703         0.502    0.543 RAI           
+146 Poland             0.643         0.603    0.487 svmRadialSigma
+147 Poland             0.643         0.577    0.501 gbm           
+148 Poland             0.634         0.599    0.493 rf            
+149 Poland             0.698         0.537    0.545 brnn          
+150 Poland             0.664         0.554    0.507 xgbTree       
+151 Poland             0.763         0.517    0.559 svmPoly       
+152 Poland             0.788         0.407    0.615 svmLinear3    
+153 Portugal           0.636         0.655    0.501 RAI           
+154 Portugal           0.483         0.816    0.389 svmRadialSigma
+155 Portugal           0.462         0.819    0.373 gbm           
+156 Portugal           0.497         0.799    0.398 rf            
+157 Portugal           0.508         0.785    0.391 brnn          
+158 Portugal           0.468         0.807    0.367 xgbTree       
+159 Portugal           0.546         0.748    0.435 svmPoly       
+160 Portugal           0.624         0.671    0.501 svmLinear3    
+161 Romania            0.729         0.473    0.553 RAI           
+162 Romania            0.675         0.570    0.499 svmRadialSigma
+163 Romania            0.688         0.552    0.530 gbm           
+164 Romania            0.679         0.594    0.527 rf            
+165 Romania            0.780         0.450    0.613 brnn          
+166 Romania            0.689         0.543    0.511 xgbTree       
+167 Romania            0.815         0.429    0.599 svmPoly       
+168 Romania            0.835         0.346    0.667 svmLinear3    
+169 Sweden             0.641         0.649    0.427 RAI           
+170 Sweden             0.709         0.607    0.455 svmRadialSigma
+171 Sweden             0.695         0.613    0.470 gbm           
+172 Sweden             0.701         0.599    0.473 rf            
+173 Sweden             0.766         0.541    0.519 brnn          
+174 Sweden             0.742         0.536    0.475 xgbTree       
+175 Sweden             0.726         0.607    0.474 svmPoly       
+176 Sweden             0.812         0.484    0.607 svmLinear3    
+177 Slovenia           0.529         0.746    0.399 RAI           
+178 Slovenia           0.524         0.733    0.395 svmRadialSigma
+179 Slovenia           0.546         0.688    0.403 gbm           
+180 Slovenia           0.552         0.714    0.408 rf            
+181 Slovenia           0.701         0.614    0.483 brnn          
+182 Slovenia           0.577         0.707    0.415 xgbTree       
+183 Slovenia           0.657         0.646    0.454 svmPoly       
+184 Slovenia           0.761         0.504    0.566 svmLinear3    
+185 Slovakia           1.00          0        0.755 RAI           
+186 Slovakia           0.749         0.451    0.550 svmRadialSigma
+187 Slovakia           0.752         0.434    0.594 gbm           
+188 Slovakia           0.737         0.464    0.578 rf            
+189 Slovakia           0.868         0.390    0.659 brnn          
+190 Slovakia           0.745         0.437    0.575 xgbTree       
+191 Slovakia           0.915         0.264    0.678 svmPoly       
+192 Slovakia           0.897         0.263    0.711 svmLinear3    </code></pre>
+</div>
+<div id="best-fits-rmse-1" class="section level2 unnumbered">
+<h2 class="unnumbered">Best fits RMSE</h2>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;ARIMAX&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_RMSE =</span> <span class="fu">min</span>(TrainRMSE),</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_R2 =</span> <span class="fu">max</span>(TrainRsquared)) <span class="sc">%&gt;%</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainRMSE<span class="sc">==</span>min_RMSE)</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse, <span class="at">n=</span><span class="fu">nrow</span>(rmse))</span></code></pre></div>
+<pre><code># A tibble: 24 × 6
+# Groups:   country [24]
+   country        method         TrainRMSE TrainRsquared min_RMSE max_R2
+   &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Austria        rf                 0.696         0.551    0.696  0.551
+ 2 Belgium        xgbTree            0.541         0.646    0.541  0.646
+ 3 Croatia        RAI                0.410         0.837    0.410  0.837
+ 4 Cyprus         svmRadialSigma     0.597         0.647    0.597  0.647
+ 5 Czech Republic gbm                0.762         0.455    0.762  0.465
+ 6 Denmark        rf                 0.491         0.730    0.491  0.730
+ 7 Finland        brnn               0.711         0.502    0.711  0.502
+ 8 France         brnn               0.472         0.806    0.472  0.806
+ 9 Germany        gbm                0.496         0.771    0.496  0.788
+10 Greece         brnn               0.467         0.839    0.467  0.839
+11 Hungary        svmRadialSigma     0.661         0.579    0.661  0.579
+12 Italy          gbm                0.478         0.809    0.478  0.809
+13 Latvia         svmRadialSigma     0.646         0.579    0.646  0.579
+14 Lithuania      rf                 0.582         0.673    0.582  0.673
+15 Luxembourg     RAI                0.530         0.571    0.530  0.573
+16 Malta          svmRadialSigma     0.515         0.731    0.515  0.731
+17 Netherlands    svmRadialSigma     0.690         0.565    0.690  0.565
+18 Poland         rf                 0.634         0.599    0.634  0.603
+19 Portugal       gbm                0.462         0.819    0.462  0.819
+20 Romania        svmRadialSigma     0.675         0.570    0.675  0.594
+21 Slovakia       rf                 0.737         0.464    0.737  0.464
+22 Slovenia       svmRadialSigma     0.524         0.733    0.524  0.746
+23 Spain          gbm                0.415         0.849    0.415  0.849
+24 Sweden         RAI                0.641         0.649    0.641  0.649</code></pre>
+</div>
+<div id="best-fits-r2-1" class="section level2 unnumbered">
+<h2 class="unnumbered">Best fits R2</h2>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;ARIMAX&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_R2 =</span> <span class="fu">max</span>(TrainRsquared)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainRsquared <span class="sc">==</span> max_R2)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(r2, <span class="at">n=</span><span class="fu">nrow</span>(r2))</span></code></pre></div>
+<pre><code># A tibble: 24 × 5
+# Groups:   country [24]
+   country        method         TrainRMSE TrainRsquared max_R2
+   &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Austria        rf                 0.696         0.551  0.551
+ 2 Belgium        xgbTree            0.541         0.646  0.646
+ 3 Croatia        RAI                0.410         0.837  0.837
+ 4 Cyprus         svmRadialSigma     0.597         0.647  0.647
+ 5 Czech Republic svmRadialSigma     0.767         0.465  0.465
+ 6 Denmark        rf                 0.491         0.730  0.730
+ 7 Finland        brnn               0.711         0.502  0.502
+ 8 France         brnn               0.472         0.806  0.806
+ 9 Germany        svmPoly            0.500         0.788  0.788
+10 Greece         brnn               0.467         0.839  0.839
+11 Hungary        svmRadialSigma     0.661         0.579  0.579
+12 Italy          gbm                0.478         0.809  0.809
+13 Latvia         svmRadialSigma     0.646         0.579  0.579
+14 Lithuania      rf                 0.582         0.673  0.673
+15 Luxembourg     svmRadialSigma     0.535         0.573  0.573
+16 Malta          svmRadialSigma     0.515         0.731  0.731
+17 Netherlands    svmRadialSigma     0.690         0.565  0.565
+18 Poland         svmRadialSigma     0.643         0.603  0.603
+19 Portugal       gbm                0.462         0.819  0.819
+20 Romania        rf                 0.679         0.594  0.594
+21 Slovakia       rf                 0.737         0.464  0.464
+22 Slovenia       RAI                0.529         0.746  0.746
+23 Spain          gbm                0.415         0.849  0.849
+24 Sweden         RAI                0.641         0.649  0.649</code></pre>
+</div>
+<div id="best-fits-mae-1" class="section level2 unnumbered">
+<h2 class="unnumbered">Best fits MAE</h2>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>mae <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;ARIMAX&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared, TrainMAE,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_MAE =</span> <span class="fu">min</span>(TrainMAE)) <span class="sc">%&gt;%</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainMAE <span class="sc">==</span> min_MAE)</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mae, <span class="at">n=</span><span class="fu">nrow</span>(mae))</span></code></pre></div>
+<pre><code># A tibble: 24 × 6
+# Groups:   country [24]
+   country        method         TrainRMSE TrainRsquared TrainMAE min_MAE
+   &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+ 1 Austria        gbm                0.715         0.516    0.590   0.590
+ 2 Belgium        svmRadialSigma     0.551         0.641    0.415   0.415
+ 3 Croatia        svmPoly            0.448         0.799    0.288   0.288
+ 4 Cyprus         gbm                0.608         0.639    0.481   0.481
+ 5 Czech Republic svmRadialSigma     0.767         0.465    0.529   0.529
+ 6 Denmark        rf                 0.491         0.730    0.373   0.373
+ 7 Finland        svmRadialSigma     0.724         0.484    0.528   0.528
+ 8 France         brnn               0.472         0.806    0.354   0.354
+ 9 Germany        gbm                0.496         0.771    0.379   0.379
+10 Greece         brnn               0.467         0.839    0.359   0.359
+11 Hungary        svmRadialSigma     0.661         0.579    0.516   0.516
+12 Italy          xgbTree            0.478         0.809    0.341   0.341
+13 Latvia         svmRadialSigma     0.646         0.579    0.505   0.505
+14 Lithuania      svmRadialSigma     0.586         0.668    0.453   0.453
+15 Luxembourg     svmRadialSigma     0.535         0.573    0.386   0.386
+16 Malta          svmRadialSigma     0.515         0.731    0.410   0.410
+17 Netherlands    svmRadialSigma     0.690         0.565    0.528   0.528
+18 Poland         svmRadialSigma     0.643         0.603    0.487   0.487
+19 Portugal       xgbTree            0.468         0.807    0.367   0.367
+20 Romania        svmRadialSigma     0.675         0.570    0.499   0.499
+21 Slovakia       svmRadialSigma     0.749         0.451    0.550   0.550
+22 Slovenia       svmRadialSigma     0.524         0.733    0.395   0.395
+23 Spain          svmPoly            0.430         0.835    0.322   0.322
+24 Sweden         RAI                0.641         0.649    0.427   0.427</code></pre>
+</div>
+</div>
+<div id="results-for-lagged-div100-regressors" class="section level1 tabset tabset-fade" number="6">
+<h1 class="tabset tabset-fade"><span class="header-section-number">6</span> Results for lagged div100
+regressors</h1>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">&quot;stats_alltrends_100_lag.csv&quot;</span>)</span></code></pre></div>
+<div id="overview-2" class="section level2 unnumbered">
+<h2 class="unnumbered">Overview</h2>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(stats, <span class="at">n=</span><span class="fu">nrow</span>(stats))</span></code></pre></div>
+<pre><code># A tibble: 192 × 5
+    country        TrainRMSE TrainRsquared TrainMAE method        
+    &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
+  1 Austria            0.392         0.860    0.311 RAI           
+  2 Austria            0.559         0.771    0.437 svmRadialSigma
+  3 Austria            0.492         0.787    0.393 gbm           
+  4 Austria            0.600         0.763    0.486 rf            
+  5 Austria            0.563         0.762    0.416 brnn          
+  6 Austria            0.520         0.766    0.401 xgbTree       
+  7 Austria            0.419         0.842    0.323 svmPoly       
+  8 Austria            0.528         0.766    0.412 svmLinear3    
+  9 Belgium            0.587         0.585    0.442 RAI           
+ 10 Belgium            0.504         0.726    0.370 svmRadialSigma
+ 11 Belgium            0.405         0.806    0.316 gbm           
+ 12 Belgium            0.479         0.759    0.372 rf            
+ 13 Belgium            0.484         0.753    0.369 brnn          
+ 14 Belgium            0.463         0.748    0.345 xgbTree       
+ 15 Belgium            0.393         0.820    0.308 svmPoly       
+ 16 Belgium            0.510         0.710    0.404 svmLinear3    
+ 17 Cyprus             0.328         0.893    0.250 RAI           
+ 18 Cyprus             0.378         0.871    0.288 svmRadialSigma
+ 19 Cyprus             0.298         0.919    0.229 gbm           
+ 20 Cyprus             0.353         0.910    0.288 rf            
+ 21 Cyprus             0.357         0.895    0.259 brnn          
+ 22 Cyprus             0.324         0.900    0.247 xgbTree       
+ 23 Cyprus             0.230         0.952    0.183 svmPoly       
+ 24 Cyprus             0.469         0.818    0.385 svmLinear3    
+ 25 Czech Republic     0.669         0.578    0.505 RAI           
+ 26 Czech Republic     0.751         0.528    0.499 svmRadialSigma
+ 27 Czech Republic     0.603         0.648    0.446 gbm           
+ 28 Czech Republic     0.680         0.607    0.494 rf            
+ 29 Czech Republic     0.704         0.603    0.529 brnn          
+ 30 Czech Republic     0.680         0.595    0.467 xgbTree       
+ 31 Czech Republic     0.725         0.541    0.511 svmPoly       
+ 32 Czech Republic     0.646         0.622    0.479 svmLinear3    
+ 33 Germany            0.356         0.889    0.282 RAI           
+ 34 Germany            0.415         0.864    0.298 svmRadialSigma
+ 35 Germany            0.320         0.917    0.245 gbm           
+ 36 Germany            0.376         0.899    0.282 rf            
+ 37 Germany            0.358         0.897    0.280 brnn          
+ 38 Germany            0.350         0.893    0.251 xgbTree       
+ 39 Germany            0.282         0.936    0.209 svmPoly       
+ 40 Germany            0.451         0.846    0.348 svmLinear3    
+ 41 Denmark            0.331         0.877    0.255 RAI           
+ 42 Denmark            0.418         0.852    0.275 svmRadialSigma
+ 43 Denmark            0.354         0.851    0.259 gbm           
+ 44 Denmark            0.390         0.831    0.274 rf            
+ 45 Denmark            0.432         0.819    0.315 brnn          
+ 46 Denmark            0.415         0.803    0.272 xgbTree       
+ 47 Denmark            0.330         0.900    0.236 svmPoly       
+ 48 Denmark            0.357         0.862    0.271 svmLinear3    
+ 49 Greece             0.423         0.868    0.325 RAI           
+ 50 Greece             0.272         0.952    0.205 svmRadialSigma
+ 51 Greece             0.273         0.948    0.196 gbm           
+ 52 Greece             0.300         0.945    0.218 rf            
+ 53 Greece             0.352         0.915    0.255 brnn          
+ 54 Greece             0.266         0.947    0.185 xgbTree       
+ 55 Greece             0.251         0.954    0.191 svmPoly       
+ 56 Greece             0.567         0.796    0.449 svmLinear3    
+ 57 Spain              0.262         0.936    0.207 RAI           
+ 58 Spain              0.307         0.924    0.214 svmRadialSigma
+ 59 Spain              0.304         0.916    0.226 gbm           
+ 60 Spain              0.372         0.893    0.267 rf            
+ 61 Spain              0.333         0.903    0.242 brnn          
+ 62 Spain              0.355         0.886    0.252 xgbTree       
+ 63 Spain              0.246         0.942    0.176 svmPoly       
+ 64 Spain              0.358         0.885    0.256 svmLinear3    
+ 65 Finland            0.591         0.622    0.451 RAI           
+ 66 Finland            0.664         0.615    0.470 svmRadialSigma
+ 67 Finland            0.596         0.622    0.445 gbm           
+ 68 Finland            0.683         0.579    0.508 rf            
+ 69 Finland            0.689         0.616    0.525 brnn          
+ 70 Finland            0.645         0.561    0.460 xgbTree       
+ 71 Finland            0.508         0.728    0.397 svmPoly       
+ 72 Finland            0.646         0.600    0.497 svmLinear3    
+ 73 France             0.336         0.891    0.260 RAI           
+ 74 France             0.337         0.921    0.239 svmRadialSigma
+ 75 France             0.297         0.920    0.210 gbm           
+ 76 France             0.307         0.903    0.207 rf            
+ 77 France             0.300         0.921    0.220 brnn          
+ 78 France             0.317         0.908    0.208 xgbTree       
+ 79 France             0.263         0.939    0.201 svmPoly       
+ 80 France             0.370         0.896    0.288 svmLinear3    
+ 81 Croatia            0.215         0.957    0.152 RAI           
+ 82 Croatia            0.230         0.958    0.163 svmRadialSigma
+ 83 Croatia            0.249         0.942    0.163 gbm           
+ 84 Croatia            0.296         0.934    0.186 rf            
+ 85 Croatia            0.343         0.898    0.243 brnn          
+ 86 Croatia            0.253         0.951    0.150 xgbTree       
+ 87 Croatia            0.206         0.965    0.152 svmPoly       
+ 88 Croatia            0.466         0.836    0.334 svmLinear3    
+ 89 Hungary            0.330         0.896    0.259 RAI           
+ 90 Hungary            0.484         0.786    0.363 svmRadialSigma
+ 91 Hungary            0.463         0.789    0.353 gbm           
+ 92 Hungary            0.551         0.734    0.419 rf            
+ 93 Hungary            0.398         0.857    0.308 brnn          
+ 94 Hungary            0.511         0.762    0.380 xgbTree       
+ 95 Hungary            0.450         0.805    0.349 svmPoly       
+ 96 Hungary            0.463         0.827    0.360 svmLinear3    
+ 97 Italy              0.306         0.918    0.240 RAI           
+ 98 Italy              0.378         0.899    0.254 svmRadialSigma
+ 99 Italy              0.310         0.914    0.219 gbm           
+100 Italy              0.341         0.916    0.233 rf            
+101 Italy              0.278         0.938    0.201 brnn          
+102 Italy              0.327         0.917    0.210 xgbTree       
+103 Italy              0.257         0.939    0.188 svmPoly       
+104 Italy              0.371         0.903    0.277 svmLinear3    
+105 Lithuania          0.502         0.746    0.395 RAI           
+106 Lithuania          0.381         0.891    0.302 svmRadialSigma
+107 Lithuania          0.428         0.822    0.338 gbm           
+108 Lithuania          0.504         0.827    0.402 rf            
+109 Lithuania          0.532         0.736    0.399 brnn          
+110 Lithuania          0.479         0.803    0.366 xgbTree       
+111 Lithuania          0.435         0.843    0.337 svmPoly       
+112 Lithuania          0.557         0.725    0.449 svmLinear3    
+113 Luxembourg         0.335         0.820    0.266 RAI           
+114 Luxembourg         0.435         0.725    0.297 svmRadialSigma
+115 Luxembourg         0.368         0.792    0.273 gbm           
+116 Luxembourg         0.432         0.727    0.316 rf            
+117 Luxembourg         0.331         0.836    0.252 brnn          
+118 Luxembourg         0.398         0.754    0.288 xgbTree       
+119 Luxembourg         0.314         0.855    0.240 svmPoly       
+120 Luxembourg         0.383         0.796    0.303 svmLinear3    
+121 Latvia             0.935         0.114    0.710 RAI           
+122 Latvia             0.571         0.692    0.431 svmRadialSigma
+123 Latvia             0.588         0.634    0.458 gbm           
+124 Latvia             0.650         0.650    0.509 rf            
+125 Latvia             0.862         0.488    0.629 brnn          
+126 Latvia             0.593         0.639    0.457 xgbTree       
+127 Latvia             0.568         0.669    0.440 svmPoly       
+128 Latvia             0.736         0.501    0.568 svmLinear3    
+129 Malta              0.274         0.924    0.220 RAI           
+130 Malta              0.277         0.924    0.209 svmRadialSigma
+131 Malta              0.299         0.909    0.231 gbm           
+132 Malta              0.341         0.896    0.261 rf            
+133 Malta              0.337         0.890    0.250 brnn          
+134 Malta              0.323         0.895    0.234 xgbTree       
+135 Malta              0.260         0.929    0.191 svmPoly       
+136 Malta              0.380         0.863    0.291 svmLinear3    
+137 Netherlands        0.514         0.738    0.382 RAI           
+138 Netherlands        0.483         0.802    0.353 svmRadialSigma
+139 Netherlands        0.444         0.808    0.343 gbm           
+140 Netherlands        0.494         0.802    0.377 rf            
+141 Netherlands        0.443         0.826    0.346 brnn          
+142 Netherlands        0.485         0.782    0.357 xgbTree       
+143 Netherlands        0.362         0.879    0.281 svmPoly       
+144 Netherlands        0.441         0.816    0.344 svmLinear3    
+145 Poland             0.345         0.881    0.280 RAI           
+146 Poland             0.494         0.783    0.360 svmRadialSigma
+147 Poland             0.376         0.865    0.284 gbm           
+148 Poland             0.497         0.797    0.358 rf            
+149 Poland             0.352         0.879    0.281 brnn          
+150 Poland             0.428         0.833    0.313 xgbTree       
+151 Poland             0.372         0.862    0.286 svmPoly       
+152 Poland             0.432         0.836    0.335 svmLinear3    
+153 Portugal           0.251         0.947    0.197 RAI           
+154 Portugal           0.265         0.953    0.194 svmRadialSigma
+155 Portugal           0.278         0.935    0.208 gbm           
+156 Portugal           0.356         0.903    0.264 rf            
+157 Portugal           0.246         0.952    0.189 brnn          
+158 Portugal           0.318         0.916    0.230 xgbTree       
+159 Portugal           0.220         0.960    0.171 svmPoly       
+160 Portugal           0.307         0.929    0.246 svmLinear3    
+161 Romania            0.397         0.844    0.318 RAI           
+162 Romania            0.498         0.790    0.353 svmRadialSigma
+163 Romania            0.440         0.821    0.341 gbm           
+164 Romania            0.555         0.754    0.421 rf            
+165 Romania            0.471         0.810    0.357 brnn          
+166 Romania            0.525         0.750    0.382 xgbTree       
+167 Romania            0.450         0.818    0.336 svmPoly       
+168 Romania            0.463         0.807    0.361 svmLinear3    
+169 Sweden             0.448         0.828    0.355 RAI           
+170 Sweden             0.623         0.732    0.392 svmRadialSigma
+171 Sweden             0.466         0.795    0.321 gbm           
+172 Sweden             0.546         0.764    0.357 rf            
+173 Sweden             0.422         0.826    0.322 brnn          
+174 Sweden             0.544         0.748    0.339 xgbTree       
+175 Sweden             0.461         0.814    0.331 svmPoly       
+176 Sweden             0.498         0.800    0.376 svmLinear3    
+177 Slovenia           0.382         0.871    0.285 RAI           
+178 Slovenia           0.379         0.896    0.271 svmRadialSigma
+179 Slovenia           0.383         0.852    0.288 gbm           
+180 Slovenia           0.427         0.874    0.314 rf            
+181 Slovenia           0.500         0.795    0.347 brnn          
+182 Slovenia           0.346         0.896    0.256 xgbTree       
+183 Slovenia           0.315         0.899    0.241 svmPoly       
+184 Slovenia           0.506         0.783    0.377 svmLinear3    
+185 Slovakia           0.521         0.735    0.402 RAI           
+186 Slovakia           0.609         0.653    0.436 svmRadialSigma
+187 Slovakia           0.535         0.698    0.407 gbm           
+188 Slovakia           0.627         0.658    0.475 rf            
+189 Slovakia           0.687         0.607    0.507 brnn          
+190 Slovakia           0.559         0.706    0.417 xgbTree       
+191 Slovakia           0.635         0.641    0.480 svmPoly       
+192 Slovakia           0.552         0.717    0.425 svmLinear3    </code></pre>
+</div>
+<div id="rai" class="section level2 unnumbered">
+<h2 class="unnumbered">RAI</h2>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>a  <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">==</span> <span class="st">&quot;RAI&quot;</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(a, <span class="at">n=</span><span class="fu">nrow</span>(a))</span></code></pre></div>
+<pre><code># A tibble: 24 × 5
+   country        TrainRMSE TrainRsquared TrainMAE method
+   &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; 
+ 1 Austria            0.392         0.860    0.311 RAI   
+ 2 Belgium            0.587         0.585    0.442 RAI   
+ 3 Cyprus             0.328         0.893    0.250 RAI   
+ 4 Czech Republic     0.669         0.578    0.505 RAI   
+ 5 Germany            0.356         0.889    0.282 RAI   
+ 6 Denmark            0.331         0.877    0.255 RAI   
+ 7 Greece             0.423         0.868    0.325 RAI   
+ 8 Spain              0.262         0.936    0.207 RAI   
+ 9 Finland            0.591         0.622    0.451 RAI   
+10 France             0.336         0.891    0.260 RAI   
+11 Croatia            0.215         0.957    0.152 RAI   
+12 Hungary            0.330         0.896    0.259 RAI   
+13 Italy              0.306         0.918    0.240 RAI   
+14 Lithuania          0.502         0.746    0.395 RAI   
+15 Luxembourg         0.335         0.820    0.266 RAI   
+16 Latvia             0.935         0.114    0.710 RAI   
+17 Malta              0.274         0.924    0.220 RAI   
+18 Netherlands        0.514         0.738    0.382 RAI   
+19 Poland             0.345         0.881    0.280 RAI   
+20 Portugal           0.251         0.947    0.197 RAI   
+21 Romania            0.397         0.844    0.318 RAI   
+22 Sweden             0.448         0.828    0.355 RAI   
+23 Slovenia           0.382         0.871    0.285 RAI   
+24 Slovakia           0.521         0.735    0.402 RAI   </code></pre>
+</div>
+<div id="best-fits-rmse-2" class="section level2 unnumbered">
+<h2 class="unnumbered">Best fits RMSE</h2>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;RAI&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared,</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_RMSE =</span> <span class="fu">min</span>(TrainRMSE),</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_R2 =</span> <span class="fu">max</span>(TrainRsquared)) <span class="sc">%&gt;%</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainRMSE<span class="sc">==</span>min_RMSE)</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse, <span class="at">n=</span><span class="fu">nrow</span>(rmse))</span></code></pre></div>
+<pre><code># A tibble: 24 × 6
+# Groups:   country [24]
+   country        method         TrainRMSE TrainRsquared min_RMSE max_R2
+   &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Austria        svmPoly            0.419         0.842    0.419  0.842
+ 2 Belgium        svmPoly            0.393         0.820    0.393  0.820
+ 3 Croatia        svmPoly            0.206         0.965    0.206  0.965
+ 4 Cyprus         svmPoly            0.230         0.952    0.230  0.952
+ 5 Czech Republic gbm                0.603         0.648    0.603  0.648
+ 6 Denmark        svmPoly            0.330         0.900    0.330  0.900
+ 7 Finland        svmPoly            0.508         0.728    0.508  0.728
+ 8 France         svmPoly            0.263         0.939    0.263  0.939
+ 9 Germany        svmPoly            0.282         0.936    0.282  0.936
+10 Greece         svmPoly            0.251         0.954    0.251  0.954
+11 Hungary        brnn               0.398         0.857    0.398  0.857
+12 Italy          svmPoly            0.257         0.939    0.257  0.939
+13 Latvia         svmPoly            0.568         0.669    0.568  0.692
+14 Lithuania      svmRadialSigma     0.381         0.891    0.381  0.891
+15 Luxembourg     svmPoly            0.314         0.855    0.314  0.855
+16 Malta          svmPoly            0.260         0.929    0.260  0.929
+17 Netherlands    svmPoly            0.362         0.879    0.362  0.879
+18 Poland         brnn               0.352         0.879    0.352  0.879
+19 Portugal       svmPoly            0.220         0.960    0.220  0.960
+20 Romania        gbm                0.440         0.821    0.440  0.821
+21 Slovakia       gbm                0.535         0.698    0.535  0.717
+22 Slovenia       svmPoly            0.315         0.899    0.315  0.899
+23 Spain          svmPoly            0.246         0.942    0.246  0.942
+24 Sweden         brnn               0.422         0.826    0.422  0.826</code></pre>
+</div>
+<div id="best-fits-r2-2" class="section level2 unnumbered">
+<h2 class="unnumbered">Best fits R2</h2>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;RAI&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared,</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_R2 =</span> <span class="fu">max</span>(TrainRsquared)) <span class="sc">%&gt;%</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainRsquared <span class="sc">==</span> max_R2)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(r2, <span class="at">n=</span><span class="fu">nrow</span>(r2))</span></code></pre></div>
+<pre><code># A tibble: 24 × 5
+# Groups:   country [24]
+   country        method         TrainRMSE TrainRsquared max_R2
+   &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Austria        svmPoly            0.419         0.842  0.842
+ 2 Belgium        svmPoly            0.393         0.820  0.820
+ 3 Croatia        svmPoly            0.206         0.965  0.965
+ 4 Cyprus         svmPoly            0.230         0.952  0.952
+ 5 Czech Republic gbm                0.603         0.648  0.648
+ 6 Denmark        svmPoly            0.330         0.900  0.900
+ 7 Finland        svmPoly            0.508         0.728  0.728
+ 8 France         svmPoly            0.263         0.939  0.939
+ 9 Germany        svmPoly            0.282         0.936  0.936
+10 Greece         svmPoly            0.251         0.954  0.954
+11 Hungary        brnn               0.398         0.857  0.857
+12 Italy          svmPoly            0.257         0.939  0.939
+13 Latvia         svmRadialSigma     0.571         0.692  0.692
+14 Lithuania      svmRadialSigma     0.381         0.891  0.891
+15 Luxembourg     svmPoly            0.314         0.855  0.855
+16 Malta          svmPoly            0.260         0.929  0.929
+17 Netherlands    svmPoly            0.362         0.879  0.879
+18 Poland         brnn               0.352         0.879  0.879
+19 Portugal       svmPoly            0.220         0.960  0.960
+20 Romania        gbm                0.440         0.821  0.821
+21 Slovakia       svmLinear3         0.552         0.717  0.717
+22 Slovenia       svmPoly            0.315         0.899  0.899
+23 Spain          svmPoly            0.246         0.942  0.942
+24 Sweden         brnn               0.422         0.826  0.826</code></pre>
+</div>
+<div id="best-fits-mae-2" class="section level2 unnumbered">
+<h2 class="unnumbered">Best fits MAE</h2>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>mae <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared, TrainMAE,</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_MAE =</span> <span class="fu">min</span>(TrainMAE)) <span class="sc">%&gt;%</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainMAE <span class="sc">==</span> min_MAE)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mae, <span class="at">n=</span><span class="fu">nrow</span>(mae))</span></code></pre></div>
+<pre><code># A tibble: 24 × 6
+# Groups:   country [24]
+   country        method         TrainRMSE TrainRsquared TrainMAE min_MAE
+   &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+ 1 Austria        RAI                0.392         0.860    0.311   0.311
+ 2 Belgium        svmPoly            0.393         0.820    0.308   0.308
+ 3 Croatia        xgbTree            0.253         0.951    0.150   0.150
+ 4 Cyprus         svmPoly            0.230         0.952    0.183   0.183
+ 5 Czech Republic gbm                0.603         0.648    0.446   0.446
+ 6 Denmark        svmPoly            0.330         0.900    0.236   0.236
+ 7 Finland        svmPoly            0.508         0.728    0.397   0.397
+ 8 France         svmPoly            0.263         0.939    0.201   0.201
+ 9 Germany        svmPoly            0.282         0.936    0.209   0.209
+10 Greece         xgbTree            0.266         0.947    0.185   0.185
+11 Hungary        RAI                0.330         0.896    0.259   0.259
+12 Italy          svmPoly            0.257         0.939    0.188   0.188
+13 Latvia         svmRadialSigma     0.571         0.692    0.431   0.431
+14 Lithuania      svmRadialSigma     0.381         0.891    0.302   0.302
+15 Luxembourg     svmPoly            0.314         0.855    0.240   0.240
+16 Malta          svmPoly            0.260         0.929    0.191   0.191
+17 Netherlands    svmPoly            0.362         0.879    0.281   0.281
+18 Poland         RAI                0.345         0.881    0.280   0.280
+19 Portugal       svmPoly            0.220         0.960    0.171   0.171
+20 Romania        RAI                0.397         0.844    0.318   0.318
+21 Slovakia       RAI                0.521         0.735    0.402   0.402
+22 Slovenia       svmPoly            0.315         0.899    0.241   0.241
+23 Spain          svmPoly            0.246         0.942    0.176   0.176
+24 Sweden         gbm                0.466         0.795    0.321   0.321</code></pre>
+</div>
+</div>
+<div id="results-for-lagged-normalised-regressors" class="section level1 tabset tabset-fade" number="7">
+<h1 class="tabset tabset-fade"><span class="header-section-number">7</span> Results for lagged normalised
+regressors</h1>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">&quot;stats_alltrends_norm_lag.csv&quot;</span>)</span></code></pre></div>
+<div id="overview-3" class="section level2 unnumbered">
+<h2 class="unnumbered">Overview</h2>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(stats, <span class="at">n=</span><span class="fu">nrow</span>(stats))</span></code></pre></div>
+<pre><code># A tibble: 192 × 5
+    country        TrainRMSE TrainRsquared TrainMAE method        
+    &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
+  1 Austria            0.374         0.872    0.296 RAI           
+  2 Austria            0.552         0.773    0.431 svmRadialSigma
+  3 Austria            0.497         0.775    0.393 gbm           
+  4 Austria            0.602         0.763    0.488 rf            
+  5 Austria            0.563         0.756    0.422 brnn          
+  6 Austria            0.565         0.734    0.439 xgbTree       
+  7 Austria            0.412         0.853    0.318 svmPoly       
+  8 Austria            0.633         0.718    0.471 svmLinear3    
+  9 Belgium            0.455         0.751    0.360 RAI           
+ 10 Belgium            0.500         0.737    0.367 svmRadialSigma
+ 11 Belgium            0.407         0.806    0.318 gbm           
+ 12 Belgium            0.481         0.760    0.370 rf            
+ 13 Belgium            0.483         0.752    0.367 brnn          
+ 14 Belgium            0.441         0.765    0.327 xgbTree       
+ 15 Belgium            0.393         0.820    0.307 svmPoly       
+ 16 Belgium            0.678         0.568    0.523 svmLinear3    
+ 17 Cyprus             0.308         0.906    0.226 RAI           
+ 18 Cyprus             0.376         0.873    0.284 svmRadialSigma
+ 19 Cyprus             0.292         0.923    0.228 gbm           
+ 20 Cyprus             0.354         0.910    0.289 rf            
+ 21 Cyprus             0.348         0.899    0.255 brnn          
+ 22 Cyprus             0.307         0.915    0.240 xgbTree       
+ 23 Cyprus             0.230         0.953    0.183 svmPoly       
+ 24 Cyprus             0.556         0.775    0.429 svmLinear3    
+ 25 Czech Republic     0.657         0.594    0.480 RAI           
+ 26 Czech Republic     0.753         0.523    0.501 svmRadialSigma
+ 27 Czech Republic     0.609         0.638    0.447 gbm           
+ 28 Czech Republic     0.677         0.624    0.492 rf            
+ 29 Czech Republic     0.730         0.583    0.540 brnn          
+ 30 Czech Republic     0.722         0.499    0.504 xgbTree       
+ 31 Czech Republic     0.708         0.565    0.503 svmPoly       
+ 32 Czech Republic     0.667         0.619    0.515 svmLinear3    
+ 33 Germany            0.280         0.931    0.224 RAI           
+ 34 Germany            0.414         0.866    0.298 svmRadialSigma
+ 35 Germany            0.319         0.911    0.242 gbm           
+ 36 Germany            0.376         0.897    0.282 rf            
+ 37 Germany            0.355         0.900    0.278 brnn          
+ 38 Germany            0.339         0.903    0.241 xgbTree       
+ 39 Germany            0.286         0.929    0.211 svmPoly       
+ 40 Germany            0.457         0.854    0.351 svmLinear3    
+ 41 Denmark            0.312         0.891    0.234 RAI           
+ 42 Denmark            0.423         0.855    0.276 svmRadialSigma
+ 43 Denmark            0.357         0.851    0.256 gbm           
+ 44 Denmark            0.386         0.838    0.271 rf            
+ 45 Denmark            0.434         0.816    0.314 brnn          
+ 46 Denmark            0.393         0.831    0.268 xgbTree       
+ 47 Denmark            0.330         0.900    0.235 svmPoly       
+ 48 Denmark            0.484         0.741    0.346 svmLinear3    
+ 49 Greece             0.264         0.948    0.210 RAI           
+ 50 Greece             0.274         0.952    0.207 svmRadialSigma
+ 51 Greece             0.267         0.950    0.195 gbm           
+ 52 Greece             0.302         0.944    0.220 rf            
+ 53 Greece             0.373         0.908    0.268 brnn          
+ 54 Greece             0.275         0.949    0.187 xgbTree       
+ 55 Greece             0.251         0.952    0.191 svmPoly       
+ 56 Greece             0.635         0.791    0.471 svmLinear3    
+ 57 Spain              0.221         0.954    0.182 RAI           
+ 58 Spain              0.331         0.914    0.227 svmRadialSigma
+ 59 Spain              0.300         0.919    0.224 gbm           
+ 60 Spain              0.367         0.891    0.266 rf            
+ 61 Spain              0.332         0.906    0.244 brnn          
+ 62 Spain              0.352         0.888    0.250 xgbTree       
+ 63 Spain              0.246         0.943    0.177 svmPoly       
+ 64 Spain              0.389         0.870    0.294 svmLinear3    
+ 65 Finland            0.490         0.741    0.389 RAI           
+ 66 Finland            0.658         0.624    0.462 svmRadialSigma
+ 67 Finland            0.591         0.623    0.437 gbm           
+ 68 Finland            0.682         0.566    0.499 rf            
+ 69 Finland            0.692         0.631    0.524 brnn          
+ 70 Finland            0.644         0.574    0.465 xgbTree       
+ 71 Finland            0.510         0.725    0.398 svmPoly       
+ 72 Finland            0.779         0.525    0.570 svmLinear3    
+ 73 France             0.273         0.928    0.199 RAI           
+ 74 France             0.336         0.927    0.238 svmRadialSigma
+ 75 France             0.291         0.919    0.209 gbm           
+ 76 France             0.308         0.903    0.207 rf            
+ 77 France             0.290         0.924    0.214 brnn          
+ 78 France             0.319         0.910    0.207 xgbTree       
+ 79 France             0.264         0.938    0.199 svmPoly       
+ 80 France             0.343         0.894    0.271 svmLinear3    
+ 81 Croatia            0.242         0.945    0.172 RAI           
+ 82 Croatia            0.228         0.957    0.162 svmRadialSigma
+ 83 Croatia            0.258         0.941    0.169 gbm           
+ 84 Croatia            0.297         0.923    0.189 rf            
+ 85 Croatia            0.345         0.895    0.244 brnn          
+ 86 Croatia            0.251         0.948    0.141 xgbTree       
+ 87 Croatia            0.205         0.964    0.150 svmPoly       
+ 88 Croatia            0.546         0.776    0.402 svmLinear3    
+ 89 Hungary            0.340         0.889    0.266 RAI           
+ 90 Hungary            0.483         0.791    0.362 svmRadialSigma
+ 91 Hungary            0.463         0.785    0.351 gbm           
+ 92 Hungary            0.552         0.737    0.418 rf            
+ 93 Hungary            0.403         0.858    0.311 brnn          
+ 94 Hungary            0.522         0.749    0.380 xgbTree       
+ 95 Hungary            0.454         0.806    0.350 svmPoly       
+ 96 Hungary            0.511         0.804    0.387 svmLinear3    
+ 97 Italy              0.299         0.922    0.224 RAI           
+ 98 Italy              0.379         0.899    0.254 svmRadialSigma
+ 99 Italy              0.314         0.921    0.220 gbm           
+100 Italy              0.341         0.915    0.233 rf            
+101 Italy              0.274         0.937    0.200 brnn          
+102 Italy              0.334         0.904    0.224 xgbTree       
+103 Italy              0.255         0.940    0.188 svmPoly       
+104 Italy              0.383         0.888    0.297 svmLinear3    
+105 Lithuania          0.399         0.839    0.306 RAI           
+106 Lithuania          0.389         0.885    0.303 svmRadialSigma
+107 Lithuania          0.427         0.824    0.333 gbm           
+108 Lithuania          0.505         0.824    0.401 rf            
+109 Lithuania          0.525         0.736    0.397 brnn          
+110 Lithuania          0.477         0.787    0.370 xgbTree       
+111 Lithuania          0.434         0.844    0.336 svmPoly       
+112 Lithuania          0.784         0.594    0.559 svmLinear3    
+113 Luxembourg         0.272         0.882    0.212 RAI           
+114 Luxembourg         0.443         0.707    0.303 svmRadialSigma
+115 Luxembourg         0.368         0.802    0.274 gbm           
+116 Luxembourg         0.433         0.734    0.316 rf            
+117 Luxembourg         0.334         0.826    0.253 brnn          
+118 Luxembourg         0.393         0.771    0.279 xgbTree       
+119 Luxembourg         0.314         0.856    0.240 svmPoly       
+120 Luxembourg         0.410         0.781    0.314 svmLinear3    
+121 Latvia             0.935         0.114    0.710 RAI           
+122 Latvia             0.570         0.706    0.433 svmRadialSigma
+123 Latvia             0.601         0.620    0.466 gbm           
+124 Latvia             0.652         0.640    0.512 rf            
+125 Latvia             0.869         0.487    0.636 brnn          
+126 Latvia             0.601         0.644    0.463 xgbTree       
+127 Latvia             0.574         0.659    0.442 svmPoly       
+128 Latvia             1.15          0.341    0.812 svmLinear3    
+129 Malta              0.255         0.934    0.204 RAI           
+130 Malta              0.284         0.923    0.213 svmRadialSigma
+131 Malta              0.299         0.910    0.230 gbm           
+132 Malta              0.344         0.899    0.262 rf            
+133 Malta              0.334         0.888    0.249 brnn          
+134 Malta              0.321         0.896    0.247 xgbTree       
+135 Malta              0.262         0.926    0.193 svmPoly       
+136 Malta              0.450         0.822    0.324 svmLinear3    
+137 Netherlands        0.403         0.839    0.318 RAI           
+138 Netherlands        0.495         0.789    0.359 svmRadialSigma
+139 Netherlands        0.437         0.821    0.335 gbm           
+140 Netherlands        0.493         0.800    0.375 rf            
+141 Netherlands        0.447         0.814    0.347 brnn          
+142 Netherlands        0.438         0.824    0.334 xgbTree       
+143 Netherlands        0.361         0.876    0.282 svmPoly       
+144 Netherlands        0.516         0.763    0.396 svmLinear3    
+145 Poland             0.305         0.907    0.237 RAI           
+146 Poland             0.508         0.760    0.366 svmRadialSigma
+147 Poland             0.382         0.859    0.290 gbm           
+148 Poland             0.501         0.808    0.363 rf            
+149 Poland             0.364         0.875    0.285 brnn          
+150 Poland             0.435         0.825    0.310 xgbTree       
+151 Poland             0.369         0.861    0.286 svmPoly       
+152 Poland             0.422         0.848    0.333 svmLinear3    
+153 Portugal           0.250         0.948    0.186 RAI           
+154 Portugal           0.264         0.951    0.192 svmRadialSigma
+155 Portugal           0.277         0.935    0.205 gbm           
+156 Portugal           0.351         0.906    0.263 rf            
+157 Portugal           0.244         0.954    0.188 brnn          
+158 Portugal           0.330         0.916    0.228 xgbTree       
+159 Portugal           0.216         0.964    0.168 svmPoly       
+160 Portugal           0.290         0.937    0.237 svmLinear3    
+161 Romania            0.382         0.856    0.292 RAI           
+162 Romania            0.504         0.776    0.356 svmRadialSigma
+163 Romania            0.442         0.822    0.342 gbm           
+164 Romania            0.555         0.751    0.420 rf            
+165 Romania            0.468         0.823    0.355 brnn          
+166 Romania            0.509         0.763    0.380 xgbTree       
+167 Romania            0.445         0.828    0.334 svmPoly       
+168 Romania            0.493         0.775    0.384 svmLinear3    
+169 Sweden             0.461         0.817    0.310 RAI           
+170 Sweden             0.617         0.741    0.393 svmRadialSigma
+171 Sweden             0.473         0.802    0.327 gbm           
+172 Sweden             0.551         0.756    0.357 rf            
+173 Sweden             0.435         0.807    0.330 brnn          
+174 Sweden             0.501         0.798    0.331 xgbTree       
+175 Sweden             0.466         0.810    0.334 svmPoly       
+176 Sweden             0.475         0.795    0.370 svmLinear3    
+177 Slovenia           0.397         0.861    0.309 RAI           
+178 Slovenia           0.380         0.894    0.271 svmRadialSigma
+179 Slovenia           0.387         0.851    0.292 gbm           
+180 Slovenia           0.425         0.864    0.315 rf            
+181 Slovenia           0.488         0.795    0.338 brnn          
+182 Slovenia           0.388         0.884    0.286 xgbTree       
+183 Slovenia           0.317         0.898    0.243 svmPoly       
+184 Slovenia           0.556         0.758    0.410 svmLinear3    
+185 Slovakia           0.521         0.735    0.402 RAI           
+186 Slovakia           0.605         0.665    0.435 svmRadialSigma
+187 Slovakia           0.541         0.704    0.408 gbm           
+188 Slovakia           0.629         0.653    0.475 rf            
+189 Slovakia           0.676         0.611    0.502 brnn          
+190 Slovakia           0.586         0.666    0.424 xgbTree       
+191 Slovakia           0.642         0.640    0.487 svmPoly       
+192 Slovakia           0.647         0.630    0.496 svmLinear3    </code></pre>
+</div>
+<div id="rai-1" class="section level2 unnumbered">
+<h2 class="unnumbered">RAI</h2>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>a  <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">==</span> <span class="st">&quot;RAI&quot;</span>)</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(a, <span class="at">n=</span><span class="fu">nrow</span>(a))</span></code></pre></div>
+<pre><code># A tibble: 24 × 5
+   country        TrainRMSE TrainRsquared TrainMAE method
+   &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; 
+ 1 Austria            0.374         0.872    0.296 RAI   
+ 2 Belgium            0.455         0.751    0.360 RAI   
+ 3 Cyprus             0.308         0.906    0.226 RAI   
+ 4 Czech Republic     0.657         0.594    0.480 RAI   
+ 5 Germany            0.280         0.931    0.224 RAI   
+ 6 Denmark            0.312         0.891    0.234 RAI   
+ 7 Greece             0.264         0.948    0.210 RAI   
+ 8 Spain              0.221         0.954    0.182 RAI   
+ 9 Finland            0.490         0.741    0.389 RAI   
+10 France             0.273         0.928    0.199 RAI   
+11 Croatia            0.242         0.945    0.172 RAI   
+12 Hungary            0.340         0.889    0.266 RAI   
+13 Italy              0.299         0.922    0.224 RAI   
+14 Lithuania          0.399         0.839    0.306 RAI   
+15 Luxembourg         0.272         0.882    0.212 RAI   
+16 Latvia             0.935         0.114    0.710 RAI   
+17 Malta              0.255         0.934    0.204 RAI   
+18 Netherlands        0.403         0.839    0.318 RAI   
+19 Poland             0.305         0.907    0.237 RAI   
+20 Portugal           0.250         0.948    0.186 RAI   
+21 Romania            0.382         0.856    0.292 RAI   
+22 Sweden             0.461         0.817    0.310 RAI   
+23 Slovenia           0.397         0.861    0.309 RAI   
+24 Slovakia           0.521         0.735    0.402 RAI   </code></pre>
+</div>
+<div id="best-fits-rmse-3" class="section level2 unnumbered">
+<h2 class="unnumbered">Best fits RMSE</h2>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;RAI&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared,</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_RMSE =</span> <span class="fu">min</span>(TrainRMSE),</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_R2 =</span> <span class="fu">max</span>(TrainRsquared)) <span class="sc">%&gt;%</span></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainRMSE<span class="sc">==</span>min_RMSE)</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse, <span class="at">n=</span><span class="fu">nrow</span>(rmse))</span></code></pre></div>
+<pre><code># A tibble: 24 × 6
+# Groups:   country [24]
+   country        method         TrainRMSE TrainRsquared min_RMSE max_R2
+   &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Austria        svmPoly            0.412         0.853    0.412  0.853
+ 2 Belgium        svmPoly            0.393         0.820    0.393  0.820
+ 3 Croatia        svmPoly            0.205         0.964    0.205  0.964
+ 4 Cyprus         svmPoly            0.230         0.953    0.230  0.953
+ 5 Czech Republic gbm                0.609         0.638    0.609  0.638
+ 6 Denmark        svmPoly            0.330         0.900    0.330  0.900
+ 7 Finland        svmPoly            0.510         0.725    0.510  0.725
+ 8 France         svmPoly            0.264         0.938    0.264  0.938
+ 9 Germany        svmPoly            0.286         0.929    0.286  0.929
+10 Greece         svmPoly            0.251         0.952    0.251  0.952
+11 Hungary        brnn               0.403         0.858    0.403  0.858
+12 Italy          svmPoly            0.255         0.940    0.255  0.940
+13 Latvia         svmRadialSigma     0.570         0.706    0.570  0.706
+14 Lithuania      svmRadialSigma     0.389         0.885    0.389  0.885
+15 Luxembourg     svmPoly            0.314         0.856    0.314  0.856
+16 Malta          svmPoly            0.262         0.926    0.262  0.926
+17 Netherlands    svmPoly            0.361         0.876    0.361  0.876
+18 Poland         brnn               0.364         0.875    0.364  0.875
+19 Portugal       svmPoly            0.216         0.964    0.216  0.964
+20 Romania        gbm                0.442         0.822    0.442  0.828
+21 Slovakia       gbm                0.541         0.704    0.541  0.704
+22 Slovenia       svmPoly            0.317         0.898    0.317  0.898
+23 Spain          svmPoly            0.246         0.943    0.246  0.943
+24 Sweden         brnn               0.435         0.807    0.435  0.810</code></pre>
+</div>
+<div id="best-fits-r2-3" class="section level2 unnumbered">
+<h2 class="unnumbered">Best fits R2</h2>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;RAI&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared,</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_R2 =</span> <span class="fu">max</span>(TrainRsquared)) <span class="sc">%&gt;%</span></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainRsquared <span class="sc">==</span> max_R2)</span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(r2, <span class="at">n=</span><span class="fu">nrow</span>(r2))</span></code></pre></div>
+<pre><code># A tibble: 24 × 5
+# Groups:   country [24]
+   country        method         TrainRMSE TrainRsquared max_R2
+   &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Austria        svmPoly            0.412         0.853  0.853
+ 2 Belgium        svmPoly            0.393         0.820  0.820
+ 3 Croatia        svmPoly            0.205         0.964  0.964
+ 4 Cyprus         svmPoly            0.230         0.953  0.953
+ 5 Czech Republic gbm                0.609         0.638  0.638
+ 6 Denmark        svmPoly            0.330         0.900  0.900
+ 7 Finland        svmPoly            0.510         0.725  0.725
+ 8 France         svmPoly            0.264         0.938  0.938
+ 9 Germany        svmPoly            0.286         0.929  0.929
+10 Greece         svmRadialSigma     0.274         0.952  0.952
+11 Hungary        brnn               0.403         0.858  0.858
+12 Italy          svmPoly            0.255         0.940  0.940
+13 Latvia         svmRadialSigma     0.570         0.706  0.706
+14 Lithuania      svmRadialSigma     0.389         0.885  0.885
+15 Luxembourg     svmPoly            0.314         0.856  0.856
+16 Malta          svmPoly            0.262         0.926  0.926
+17 Netherlands    svmPoly            0.361         0.876  0.876
+18 Poland         brnn               0.364         0.875  0.875
+19 Portugal       svmPoly            0.216         0.964  0.964
+20 Romania        svmPoly            0.445         0.828  0.828
+21 Slovakia       gbm                0.541         0.704  0.704
+22 Slovenia       svmPoly            0.317         0.898  0.898
+23 Spain          svmPoly            0.246         0.943  0.943
+24 Sweden         svmPoly            0.466         0.810  0.810</code></pre>
+</div>
+<div id="best-fits-mae-3" class="section level2 unnumbered">
+<h2 class="unnumbered">Best fits MAE</h2>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>mae <span class="ot">=</span> stats <span class="sc">%&gt;%</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(method <span class="sc">!=</span> <span class="st">&quot;RAI&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(method, TrainRMSE, TrainRsquared, TrainMAE,</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_MAE =</span> <span class="fu">min</span>(TrainMAE)) <span class="sc">%&gt;%</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TrainMAE <span class="sc">==</span> min_MAE)</span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mae, <span class="at">n=</span><span class="fu">nrow</span>(mae))</span></code></pre></div>
+<pre><code># A tibble: 24 × 6
+# Groups:   country [24]
+   country        method         TrainRMSE TrainRsquared TrainMAE min_MAE
+   &lt;chr&gt;          &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+ 1 Austria        svmPoly            0.412         0.853    0.318   0.318
+ 2 Belgium        svmPoly            0.393         0.820    0.307   0.307
+ 3 Croatia        xgbTree            0.251         0.948    0.141   0.141
+ 4 Cyprus         svmPoly            0.230         0.953    0.183   0.183
+ 5 Czech Republic gbm                0.609         0.638    0.447   0.447
+ 6 Denmark        svmPoly            0.330         0.900    0.235   0.235
+ 7 Finland        svmPoly            0.510         0.725    0.398   0.398
+ 8 France         svmPoly            0.264         0.938    0.199   0.199
+ 9 Germany        svmPoly            0.286         0.929    0.211   0.211
+10 Greece         xgbTree            0.275         0.949    0.187   0.187
+11 Hungary        brnn               0.403         0.858    0.311   0.311
+12 Italy          svmPoly            0.255         0.940    0.188   0.188
+13 Latvia         svmRadialSigma     0.570         0.706    0.433   0.433
+14 Lithuania      svmRadialSigma     0.389         0.885    0.303   0.303
+15 Luxembourg     svmPoly            0.314         0.856    0.240   0.240
+16 Malta          svmPoly            0.262         0.926    0.193   0.193
+17 Netherlands    svmPoly            0.361         0.876    0.282   0.282
+18 Poland         brnn               0.364         0.875    0.285   0.285
+19 Portugal       svmPoly            0.216         0.964    0.168   0.168
+20 Romania        svmPoly            0.445         0.828    0.334   0.334
+21 Slovakia       gbm                0.541         0.704    0.408   0.408
+22 Slovenia       svmPoly            0.317         0.898    0.243   0.243
+23 Spain          svmPoly            0.246         0.943    0.177   0.177
+24 Sweden         gbm                0.473         0.802    0.327   0.327</code></pre>
+</div>
+</div>
+<div id="arimax-modelling" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> ARIMAX Modelling</h1>
+<p><strong>See extra file!</strong></p>
 <p>Idea: Test variables in a stepwise procedure s.t. only the relevant
 terms are included in final model Also use the hints discussed here: <a href="https://math.unm.edu/~lil/Stat581/10-dynamic-regression.pdf" class="uri">https://math.unm.edu/~lil/Stat581/10-dynamic-regression.pdf</a>
 and <a href="https://www.r-bloggers.com/2021/10/dynamic-regression-with-arima-errors-the-students-on-the-streets/" class="uri">https://www.r-bloggers.com/2021/10/dynamic-regression-with-arima-errors-the-students-on-the-streets/</a></p>

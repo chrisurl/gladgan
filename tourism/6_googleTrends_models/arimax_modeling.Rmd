@@ -440,6 +440,64 @@ i=1
 #res_df
 ```
 
+
+## Using external regressors without lags {-}
+
+No Preds here. need to calculate X_reg matrix for the months ahead fist. Then, use these as input to NN. Maybe try this in python!
+```{r}
+i = 1
+c_code = country_code_list[i]
+ctry = country_list[i]
+
+trends = trends_100 %>%
+  select(!resid_TOTAL_STD) %>%
+  filter(country_code == c_code) %>%
+  zoo::na.locf()
+
+indicator = ind_wide %>%
+  filter(geo == c_code) %>%
+  rename(country_code = geo, date=month_end) %>%
+  zoo::na.locf() %>%
+  select(date, country_code, resid_TOTAL)
+
+ts_set = trends %>%
+  summarise(year_min = year(min(date)), month_min = month(min(date)), max_date = max(date))
+
+trends2 = indicator %>%
+  mutate(resid_TOTAL = sqrt(resid_TOTAL)) %>%
+  inner_join(trends, by=c("date", "country_code")) %>%
+  select(-c(date, country_code)) %>%
+  ts(start=c(ts_set$year_min, ts_set$month_min), frequency=12)
+
+#cl = detectCores()-1
+#registerDoParallel(cl)
+
+#res_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","forecast", "lubridate"), .multicombine = T, .combine = rbind) %dopar% {
+  
+  # Data
+  
+    
+  # NNETAR models
+  mod = nnetar(trends2[,1], repeats = 20, xreg = trends2[,2:12])
+  accuracy(mod)
+ # pred = forecast(mod, h=4)
+  # Predictions
+  #yhat = pred$mean^2
+    
+  # Final export
+  yhat_list = tibble(month_end = zoo::as.Date(pred$mean),geo=c_code,# yhat = yhat,
+                          bic = mod$bic, aicc = mod$aicc, sigma2 = mod$sigma2, loglik  = mod$loglik,
+                          rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7])
+  yhat_list
+#}
+
+#res_df = do.call(bind_rows, res_list)
+# 
+# stopImplicitCluster()
+# 
+# res_df
+```
+
 ## Using external regressors from RAI {-}
 
 No Preds here. need to calculate X_reg matrix for the months ahead fist. Then, use these as input to NN. Maybe try this in python!

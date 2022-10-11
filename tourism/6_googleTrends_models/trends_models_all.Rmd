@@ -315,9 +315,13 @@ write_csv(stats, "modelling_stats_all.csv")
 
 # Results for div100 regressors {.tabset .tabset-fade}
 
+```{r}
+knitr::opts_chunk$set(cache = FALSE)
+```
+
 
 ```{r, cache=FALSE}
-stats = readr::read_csv("modelling_stats_all.csv")
+stats = readr::read_csv("stats_alltrends_100.csv")
 a  = stats %>%
   filter(method == "ARIMAX")
 
@@ -371,7 +375,7 @@ print(mae, n=nrow(mae))
 
 
 ```{r, cache=FALSE}
-stats = readr::read_csv("modelling_stats_all.csv")
+stats = readr::read_csv("stats_alltrends_norm.csv")
 a  = stats %>%
   filter(method == "ARIMAX")
 
@@ -422,7 +426,127 @@ print(mae, n=nrow(mae))
 ```
 
 
+# Results for lagged div100 regressors {.tabset .tabset-fade}
+
+
+```{r, cache=FALSE}
+stats = readr::read_csv("stats_alltrends_100_lag.csv")
+```
+
+
+## Overview {-}
+```{r, cache=FALSE}
+print(stats, n=nrow(stats))
+```
+
+## RAI {-}
+```{r}
+a  = stats %>%
+  filter(method == "RAI")
+
+print(a, n=nrow(a))
+```
+
+## Best fits RMSE {-}
+```{r, cache=FALSE}
+rmse = stats %>%
+  filter(method != "RAI") %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared,
+            min_RMSE = min(TrainRMSE),
+            max_R2 = max(TrainRsquared)) %>%
+  filter(TrainRMSE==min_RMSE)
+print(rmse, n=nrow(rmse))
+```
+
+## Best fits R2 {-}
+```{r}
+r2 = stats %>%
+  filter(method != "RAI") %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared,
+            max_R2 = max(TrainRsquared)) %>%
+  filter(TrainRsquared == max_R2)
+
+print(r2, n=nrow(r2))
+```
+
+## Best fits MAE {-}
+
+```{r}
+mae = stats %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared, TrainMAE,
+            min_MAE = min(TrainMAE)) %>%
+  filter(TrainMAE == min_MAE)
+  
+print(mae, n=nrow(mae))
+```
+
+
+# Results for lagged normalised regressors {.tabset .tabset-fade}
+
+
+```{r, cache=FALSE}
+stats = readr::read_csv("stats_alltrends_norm_lag.csv")
+```
+
+
+## Overview {-}
+```{r, cache=FALSE}
+print(stats, n=nrow(stats))
+```
+
+## RAI {-}
+```{r}
+a  = stats %>%
+  filter(method == "RAI")
+
+print(a, n=nrow(a))
+```
+
+## Best fits RMSE {-}
+```{r, cache=FALSE}
+rmse = stats %>%
+  filter(method != "RAI") %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared,
+            min_RMSE = min(TrainRMSE),
+            max_R2 = max(TrainRsquared)) %>%
+  filter(TrainRMSE==min_RMSE)
+print(rmse, n=nrow(rmse))
+```
+
+## Best fits R2 {-}
+```{r}
+r2 = stats %>%
+  filter(method != "RAI") %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared,
+            max_R2 = max(TrainRsquared)) %>%
+  filter(TrainRsquared == max_R2)
+
+print(r2, n=nrow(r2))
+```
+
+## Best fits MAE {-}
+
+```{r}
+mae = stats %>%
+  filter(method != "RAI") %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared, TrainMAE,
+            min_MAE = min(TrainMAE)) %>%
+  filter(TrainMAE == min_MAE)
+  
+print(mae, n=nrow(mae))
+```
+
+
+
 # ARIMAX Modelling
+
+__See extra file!__
 
 Idea: Test variables in a stepwise procedure s.t. only the relevant terms are included in final model
 Also use the hints discussed here: https://math.unm.edu/~lil/Stat581/10-dynamic-regression.pdf and https://www.r-bloggers.com/2021/10/dynamic-regression-with-arima-errors-the-students-on-the-streets/
