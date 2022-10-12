@@ -264,25 +264,25 @@ res_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","for
                           arima_order)
 }
 
-res_df = do.call(bind_rows, res_list[,1])
-coefs_df = do.call(bind_rows, res_list[,2])
-arima_order_df = do.call(bind_rows, res_list[,3])
+res_df_fourier = do.call(bind_rows, res_list[,1])
+coefs_df_fourier = do.call(bind_rows, res_list[,2])
+arima_order_df_fourier = do.call(bind_rows, res_list[,3])
 
 stopImplicitCluster()
 
-res_df
+res_df_fourier
 ```
 
 Export:
 ```{r, cache=FALSE}
-write_csv(res_df, file=paste0(datapath,"results/arimax_fourier_forecasts.csv"))
-write_csv(coefs_df, file=paste0(datapath,"results/arimax_fourier_forecasts_coefs.csv"))
-write_csv(arima_order_df, file=paste0(datapath,"results/arimax_fourier_forecasts_order.csv"))
+write_csv(res_df_fourier, file=paste0(datapath,"results/arimax_fourier_forecasts.csv"))
+write_csv(coefs_df_fourier, file=paste0(datapath,"results/arimax_fourier_forecasts_coefs.csv"))
+write_csv(arima_order_df_fourier, file=paste0(datapath,"results/arimax_fourier_forecasts_order.csv"))
 ```
 
 ## Results {-}
 ```{r, cache=FALSE}
-overview = res_df %>%
+overview = res_df_fourier %>%
   group_by(geo) %>%
   summarise(min_date = min(month_end), max_date = max(month_end), bic = min(bic), rmse = min(rmse), mae = min(mae), acf = min(acf))
 
@@ -292,7 +292,7 @@ print(overview, n = nrow(overview))
 
 coefficients: 
 ```{r, results='asis'}
-print(xtable::xtable(coefs_df), type="html")
+print(xtable::xtable(coefs_df_fourier), type="html")
 ```
 
 
@@ -374,19 +374,26 @@ rai_out = rai(theData = theData, theResponse = theResponse)
 summary(rai_out$model)
 f_rai = formula(rai_out$formula)
 
-auto.arima(y=theResponse, xreg = rai_out$X[,-1])
+mod = auto.arima(y=theResponse, xreg = rai_out$X[,-1])
+mod
+accuracy(mod)
 
 Y = ts(theResponse, start=c(ts_set$year_min+1, ts_set$month_min), frequency = 12)
 X_reg = ts(rai_out$X[,-1], start=c(ts_set$year_min+1, ts_set$month_min), frequency = 12)
 X_full = ts(theData, start=c(ts_set$year_min+1, ts_set$month_min), frequency = 12)
-auto.arima(y=Y, xreg = X_reg)
+mod2 = auto.arima(y=Y, xreg = X_reg)
+mod2
+accuracy(mod2)
 
 ```
 
 We can see that the RAI model has a good training fit. Thus, we'll need to cross validate this result.
 
-# Neuronal nets from forecasting book {.tabset .tabset-fade}
-Testing only for Austria.
+# Neuronal nets from forecasting book for AT {.tabset .tabset-fade}
+Testing only for Austria. No Preds here. need to calculate X_reg matrix for the months ahead fist. Then, use these as input to NN. Maybe try this in python!
+https://towardsdatascience.com/temporal-loops-intro-to-recurrent-neural-networks-for-time-series-forecasting-in-python-b0398963dc1f
+https://towardsdatascience.com/a-quick-deep-learning-recipe-time-series-forecasting-with-keras-in-python-f759923ba64
+https://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/
 
 ## Without external regressors {-}
 
@@ -420,7 +427,7 @@ i=1
     ts(start=c(ts_set$year_min, ts_set$month_min), frequency=12)
     
   # NNETAR models
-  mod = nnetar(ind_ts, repeats = 50)
+  mod = nnetar(ind_ts, repeats = 50, size = 20)
   pred = forecast(mod, h=4)
   
   # Predictions
@@ -498,9 +505,52 @@ trends2 = indicator %>%
 # res_df
 ```
 
+## Using external regressors {-}
+
+Runtime is an issue, will try this in python.
+```{r at_nnext_1}
+i = 1
+goo = read_csv(paste0(trends_path, "trends_full.csv"))
+trends_100 = goo %>%
+  mutate(across(3:13, ~.x/100))
+
+ts_set = indicator %>%
+  summarise(max_date = max(date))
+
+trends_ts_lag = lag_trends_ts(lags=c(0:11),input_ts=trends2,col_pos = c(2:12))
+theData = trends_ts_lag[13:221,]
+theResponse = trends2[13:221,1]
+
+#cl = detectCores()-1
+#registerDoParallel(cl)
+
+#res_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","forecast", "lubridate"), .multicombine = T, .combine = rbind) %dopar% {
+  
+  # Data
+  
+    
+  # NNETAR models
+  mod = nnetar(theResponse, repeats = 5, xreg = theData, MaxNWts=11000, trace=T)
+ # pred = forecast(mod, h=4)
+  # Predictions
+  #yhat = pred$mean^2
+    
+  # Final export
+  yhat_list = tibble(month_end = zoo::as.Date(pred$mean),geo=c_code,# yhat = yhat,
+                          bic = mod$bic, aicc = mod$aicc, sigma2 = mod$sigma2, loglik  = mod$loglik,
+                          rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7])
+  yhat_list
+#}
+
+#res_df = do.call(bind_rows, res_list)
+# 
+# stopImplicitCluster()
+# 
+# res_df
+```
+
 ## Using external regressors from RAI {-}
 
-No Preds here. need to calculate X_reg matrix for the months ahead fist. Then, use these as input to NN. Maybe try this in python!
 ```{r}
 i = 1
 goo = read_csv(paste0(trends_path, "trends_full.csv"))
@@ -591,6 +641,7 @@ i = 1
 ```
 
 # Check model quality using rolling window out-of-sample predictions
+
 ```{r}
 
 ```

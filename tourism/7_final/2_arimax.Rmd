@@ -1,0 +1,472 @@
+---
+title: "Arimax/Time Series Forecasts"
+author: Christian Url
+date: 'Last Compiled `r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    
+    code_folding: show
+    highlight: tango
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+               collapse = FALSE,
+               comment = "",
+               strip.white = TRUE,
+               warning = FALSE,
+               message = FALSE,
+               cache = TRUE,
+               out.width = "100%",
+               fig.align = "center")
+
+```
+
+
+## load Packages
+```{r,  cache=FALSE}
+library(data.table)
+library(lubridate)
+library(caret)
+library(rai)
+library(forecast)
+library(parallel)
+library(doParallel)
+library(tidyverse)
+```
+
+## Paths
+```{r}
+datapath = "../data/"
+res_path = paste0(datapath,"results/")
+```
+
+
+# Load Data {.tabset .tabset-fade}
+
+## Volatility Index {-}
+```{r}
+
+vol_ind = read_delim(paste0(datapath,"country_volatility_index.csv")) %>%
+  mutate(geo = str_split(Countries, " ", simplify = T)[,1], .before = 1,
+         country = str_remove(Countries, ".*\\("), 
+         country = str_extract(country, ".*(?=\\))"))
+
+country_code_list = unlist(vol_ind$geo)
+country_list = unlist(vol_ind$country)
+country_code_list[country_list=="Greece"] <- "GR"
+```
+
+## Indicators {-}
+
+```{r}
+indicator = read_csv(paste0(datapath, "indicator.csv"))
+
+ind_stats = indicator %>%
+  select(country_code, mean, sd) %>%
+  distinct()
+
+indicator %>%
+  group_by(country_code) %>%
+  summarise(min_date = min(date), max_date = max(date)) %>%
+  filter(max_date < as_date("2022-06-01"))
+```
+Check: ok! All time series range until either June or July.
+
+## Trends {-}
+
+# ARIMAX - Performance
+
+To do - function: 
+
+  * $n$ step ahead forecasts on rolling windows
+  * select starting point
+  
+## Forecast functions {.tabset .tabset-fade}
+
+### Arima {-}
+```{r}
+arima_models = function(input_ds, country_code_list, response_pos, n_ahead, ind_stats, transformation = "std", cl = detectCores()-1){
+  
+  registerDoParallel(cl)
+
+    res_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","forecast", "lubridate"), .multicombine = T, .combine = rbind) %dopar% {
+    
+      # Select country
+      c_code = country_code_list[i]
+      #ctry = country_list[i]
+      
+      ind_stats_act = ind_stats %>%
+        filter(country_code == c_code)
+      
+      # Define time-series
+      ts_def = input_ds %>%
+        filter(country_code == c_code) %>%
+        summarise(min_month = month(min(date)), 
+                  min_year = year(min(date)))
+    
+      ind_ts = input_ds %>%
+        filter(country_code == c_code) %>%
+        .[,response_pos] %>%
+        ts(frequency = 12, start = c(ts_def$min_year, ts_def$min_month))
+    
+      mod = auto.arima(ind_ts, max.d = 4, max.D = 4, max.order = 24, max.p = 12, max.q = 12)
+      pred = forecast(mod, h = n_ahead)
+      
+      if(transformation=="std"){
+        yhat = pred$mean * ind_stats_act$sd + ind_stats_act$mean
+      }
+      if(transformation=="log"){
+        yhat = exp(pred$mean)
+      }
+      if(transformation=="sqrt"){
+        yhat = pred$mean^2
+      }
+      
+      coefs = as.data.frame(coef(mod)) %>% 
+        rownames_to_column(var = "coef") %>%
+        rename(val = `coef(mod)`) %>%
+        pivot_wider(names_from = coef, values_from = val) %>%
+        add_column(country_code = c_code, .before = 1) %>%
+        add_column(sigma = mod$sigma2)
+      
+      arima_order = as.data.frame(arimaorder(mod)) %>% 
+        rownames_to_column(var = "coef") %>%
+        rename(val = `arimaorder(mod)`) %>%
+        pivot_wider(names_from = coef, values_from = val) %>%
+        add_column(country_code = c_code, .before = 1)
+        
+      
+      yhat_list = list(tibble(date = zoo::as.Date(pred$mean),country_code = c_code, yhat = yhat, bic = mod$bic, aicc = mod$aicc,
+                     rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7]),
+                     coefs,
+                     arima_order)
+  }
+  stopImplicitCluster()
+  res_df = do.call(bind_rows, res_list[,1])
+  coefs_df = do.call(bind_rows, res_list[,2])
+  arima_order_df = do.call(bind_rows, res_list[,3])
+  
+  out_list = list(res_df, coefs_df, arima_order_df)
+}
+```
+
+### ARIMAX with Fourier regression {-}
+
+```{r}
+arimax_fourier_models = function(input_ds, country_code_list, response_pos, n_ahead, ind_stats, 
+                                 transformation = "std", cl = detectCores()-1, select_fourier = "bic"){
+  
+  registerDoParallel(cl)
+
+    res_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","forecast", "lubridate"), 
+                       .multicombine = T, .combine = rbind) %dopar% {
+    
+      # Select country
+      c_code = country_code_list[i]
+      #ctry = country_list[i]
+      
+      ind_stats_act = ind_stats %>%
+        filter(country_code == c_code)
+      
+      # Define time-series
+      ts_def = input_ds %>%
+        filter(country_code == c_code) %>%
+        summarise(min_month = month(min(date)), 
+                  min_year = year(min(date)))
+    
+      ind_ts = input_ds %>%
+        filter(country_code == c_code) %>%
+        .[,response_pos] %>%
+        ts(frequency = 12, start = c(ts_def$min_year, ts_def$min_month))
+    
+      # Fourier models
+      mod_out = list()
+      stats_list = list()
+      
+      for (j in seq(6)) {
+        mod_out[[j]] <- auto.arima(ind_ts, xreg = fourier(ind_ts, K = j), seasonal = FALSE, lambda = 0)
+        stats_list[[j]] = tibble(bic=mod_out[[j]]$bic, aicc=mod_out[[j]]$aicc, sigma2=mod_out[[j]]$sigma2, loglik=mod_out[[j]]$loglik)
+      }
+      stats = do.call(rbind, stats_list)
+      acc = do.call(rbind, map(mod_out, forecast::accuracy))
+      
+      # Determine best Fourier mod
+      if(select_fourier == "aicc"){
+        f_ord = which(stats$aicc == min(stats$aicc))
+      }
+      if(select_fourier == "aic"){
+        f_ord = which(stats$aic == min(stats$aic))
+      }
+      if(select_fourier == "bic"){
+        f_ord = which(stats$bic == min(stats$bic))
+      }
+      
+      mod = mod_out[[f_ord]]
+      pred = forecast(mod_out[[f_ord]], xreg=fourier(ind_ts, K=f_ord, h=n_ahead))
+      
+      if(transformation=="std"){
+        yhat = pred$mean * ind_stats_act$sd + ind_stats_act$mean
+      }
+      if(transformation=="log"){
+        yhat = exp(pred$mean)
+      }
+      if(transformation=="sqrt"){
+        yhat = pred$mean^2
+      }
+      
+      coefs = as.data.frame(coef(mod)) %>% 
+        rownames_to_column(var = "coef") %>%
+        rename(val = `coef(mod)`) %>%
+        pivot_wider(names_from = coef, values_from = val) %>%
+        add_column(country_code = c_code, .before = 1) %>%
+        add_column(sigma = mod$sigma2)
+      
+      arima_order = as.data.frame(arimaorder(mod)) %>% 
+        rownames_to_column(var = "coef") %>%
+        rename(val = `arimaorder(mod)`) %>%
+        pivot_wider(names_from = coef, values_from = val) %>%
+        add_column(country_code = c_code, .before = 1)
+        
+      
+      yhat_list = list(tibble(date = zoo::as.Date(pred$mean),country_code = c_code, yhat = yhat, bic = mod$bic, aicc = mod$aicc,
+                     rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7]),
+                     coefs,
+                     arima_order)
+  }
+  stopImplicitCluster()
+  res_df = do.call(bind_rows, res_list[,1])
+  coefs_df = do.call(bind_rows, res_list[,2])
+  arima_order_df = do.call(bind_rows, res_list[,3])
+  
+  out_list = list(res_df, coefs_df, arima_order_df)
+}
+```
+
+### Rolling window wrapper {-}
+
+```{r}
+rolling_forecast = function(rolling_start = "2022-01-01", window_size = 2, input_ds = indicator, country_code_list, 
+                           response_pos, ind_stats, transformation = "std", cl = detectCores()-1, 
+                           model = "arima", select_fourier = "bic"){
+  
+  
+  #Split data
+  train = input_ds %>%
+    filter(date < rolling_start)
+  
+  test = input_ds %>%
+    filter(date >= rolling_start)
+
+
+  ## for different window sizes - depricated
+  # t1 = test %>%
+  #   group_by(country_code) %>%
+  #   summarise(nrow = n(),
+  #             start_date = min(date),
+  #             end_date = max(date)) %>%
+  #   ungroup()
+  # 
+  # t2 = t1 %>%
+  #   group_by(nrow) %>%
+  #   group_map(~.x)
+  # 
+  # t3 = t2 %>% map(~left_join(.,t1))
+  
+  ## use only one window-size: 
+  windows = test %>%
+    group_by(country_code) %>%
+    summarise(nrow = n(),
+              start_date = min(date),
+              end_date = max(date)) %>%
+    ungroup() %>%
+    filter(nrow == min(nrow)) %>%
+    pull(nrow) %>%
+    unique()
+  
+  train_control = train %>%
+    group_by(country_code) %>%
+    summarise(end_date = max(date))
+  
+  # create data set
+  test_control = test %>%
+    group_by(country_code) %>%
+    summarise(nrow = n(),
+              start_date = min(date),
+              end_date = min(date) + months(1))  
+
+  ########### RUNS ############
+  out = list()
+  
+  runs = windows - window_size + 1
+  
+  for (i in seq(runs)){
+    
+    print(paste0("Run: ",i, "/",runs))
+    
+    train_filtered = train_control %>%
+      inner_join(input_ds) %>%
+      filter(date <= end_date) %>%
+      select(!end_date)
+  
+    test_filtered = test_control %>%
+      inner_join(test) %>%
+      filter(date <= end_date & date >= start_date) %>%
+      select(-c(nrow, end_date, start_date))
+    
+    
+    if(model=="arima"){
+      res = arima_models(input_ds = train_filtered, country_code_list = country_code_list, ind_stats = ind_stats , 
+                         response_pos = response_pos, n_ahead = window_size, transformation = transformation)
+    }
+    if(model=="arimax_fourier"){
+      res = arimax_fourier_models(input_ds = train_filtered, country_code_list = country_code_list, ind_stats = ind_stats , 
+                         response_pos = response_pos, n_ahead = window_size, transformation = transformation,
+                         select_fourier = select_fourier)
+    }
+    y_hat = do.call(bind_rows, res[[1]])
+
+   stats = test_filtered %>%
+    select(date, country_code, resid_total) %>%
+    left_join(y_hat) %>%
+    group_by(country_code) %>%
+    summarise(rmse = caret::RMSE(yhat, resid_total),
+              mae = caret::MAE(yhat, resid_total),
+              window = i)
+    
+    out$results[[i]] = stats
+    out$trace[[i]] = res
+    
+    train_control = train_control %>%
+      mutate(end_date = end_date + months(1))
+    
+    test_control = test_control %>%
+      mutate(start_date = start_date + months(1),
+             end_date = end_date + months(1))
+    
+  }
+  
+  result = list()
+  result$results = do.call(rbind,out$results)
+  result$trace = out$trace
+  
+  return(result)
+}
+
+
+
+```
+
+## Forecasts {.tabset .tabset-fade}
+
+### Arima {-}
+```{r arima_roll}
+arima_std = rolling_forecast(rolling_start = "2021-12-01", window_size = 2, input_ds = indicator, 
+                             country_code_list = country_code_list, response_pos = 6, ind_stats = ind_stats, 
+                             transformation = "std", model = "arima")
+
+arima_res = arima_std$results %>%
+  group_by(country_code) %>%
+  summarise(rmse_mean = mean(rmse),
+            mae_mean = mean(mae))
+
+arima_res
+```
+
+Plots:
+
+```{r}
+preds = list()
+
+for (i in 1:6){
+  preds[[i]] = arima_std$trace[[i]][[1]]
+}
+preds_out = do.call(rbind,preds)
+
+id = tibble(id = rep(1:2,144))
+
+h1 = preds_out %>%
+  arrange(country_code, date) %>%
+  bind_cols(id) %>%
+  filter(id == 1) %>%
+  inner_join(indicator)
+
+h2 = preds_out %>%
+  arrange(country_code, date) %>%
+  bind_cols(id) %>%
+  filter(id == 2) %>%
+  inner_join(indicator)
+
+h1 %>%
+  ggplot(mapping = aes(x = date, group = country_code)) +
+  geom_line(aes(y = resid_total,color="Value")) + 
+  geom_line(aes(y = yhat, color = "Pred")) + 
+  facet_wrap(~country_code, ncol = 4, scales = "free_y")
+
+h2 %>%
+  ggplot(mapping = aes(x = date, group = country_code)) +
+  geom_line(aes(y = resid_total,color="Value")) + 
+  geom_line(aes(y = yhat, color = "Pred")) + 
+  facet_wrap(~country_code, ncol = 4, scales = "free_y")
+```
+
+
+### Arimax with fourier regressor {-}
+
+```{r fourier_roll}
+arimax_fourier = rolling_forecast(rolling_start = "2021-12-01", window_size = 2, input_ds = indicator, 
+                             country_code_list = country_code_list, response_pos = 5, ind_stats = ind_stats, 
+                             transformation = "log", model = "arimax_fourier")
+```
+
+```{r}
+arima_fourier_res = arimax_fourier$results %>%
+  group_by(country_code) %>%
+  summarise(rmse_mean = mean(rmse),
+            mae_mean = mean(mae))
+
+arima_fourier_res
+```
+
+
+Plots:
+
+```{r}
+preds = list()
+
+for (i in 1:6){
+  preds[[i]] = arimax_fourier$trace[[i]][[1]]
+}
+preds_out = do.call(rbind,preds)
+
+id = tibble(id = rep(1:2,144))
+
+h1 = preds_out %>%
+  arrange(country_code, date) %>%
+  bind_cols(id) %>%
+  filter(id == 1) %>%
+  inner_join(indicator)
+
+h2 = preds_out %>%
+  arrange(country_code, date) %>%
+  bind_cols(id) %>%
+  filter(id == 2) %>%
+  inner_join(indicator)
+
+h1 %>%
+  ggplot(mapping = aes(x = date, group = country_code)) +
+  geom_line(aes(y = resid_total,color="Value")) + 
+  geom_line(aes(y = yhat, color = "Pred")) + 
+  facet_wrap(~country_code, ncol = 4, scales = "free_y")
+
+h2 %>%
+  ggplot(mapping = aes(x = date, group = country_code)) +
+  geom_line(aes(y = resid_total,color="Value")) + 
+  geom_line(aes(y = yhat, color = "Pred")) + 
+  facet_wrap(~country_code, ncol = 4, scales = "free_y")
+```

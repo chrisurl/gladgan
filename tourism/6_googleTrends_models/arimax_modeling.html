@@ -570,13 +570,14 @@ RAI</a>
 <ul>
 <li><a href="#example-1-at" id="toc-example-1-at"><span class="toc-section-number">6.1</span> Example 1 (AT)</a></li>
 </ul></li>
-<li><a href="#neuronal-nets-from-forecasting-book" id="toc-neuronal-nets-from-forecasting-book"><span class="toc-section-number">7</span> Neuronal nets from forecasting
-book</a>
+<li><a href="#neuronal-nets-from-forecasting-book-for-at" id="toc-neuronal-nets-from-forecasting-book-for-at"><span class="toc-section-number">7</span> Neuronal nets from forecasting book
+for AT</a>
 <ul>
 <li><a href="#without-external-regressors" id="toc-without-external-regressors">Without external
 regressors</a></li>
 <li><a href="#using-external-regressors-without-lags" id="toc-using-external-regressors-without-lags">Using external
 regressors without lags</a></li>
+<li><a href="#using-external-regressors" id="toc-using-external-regressors">Using external regressors</a></li>
 <li><a href="#using-external-regressors-from-rai" id="toc-using-external-regressors-from-rai">Using external regressors
 from RAI</a></li>
 <li><a href="#using-external-regressors-from-rai-no-ts" id="toc-using-external-regressors-from-rai-no-ts">Using external
@@ -936,13 +937,13 @@ Training set 0.005969128</code></pre>
 <span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a>                          arima_order)</span>
 <span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb24-66"><a href="#cb24-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-67"><a href="#cb24-67" aria-hidden="true" tabindex="-1"></a>res_df <span class="ot">=</span> <span class="fu">do.call</span>(bind_rows, res_list[,<span class="dv">1</span>])</span>
-<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a>coefs_df <span class="ot">=</span> <span class="fu">do.call</span>(bind_rows, res_list[,<span class="dv">2</span>])</span>
-<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a>arima_order_df <span class="ot">=</span> <span class="fu">do.call</span>(bind_rows, res_list[,<span class="dv">3</span>])</span>
+<span id="cb24-67"><a href="#cb24-67" aria-hidden="true" tabindex="-1"></a>res_df_fourier <span class="ot">=</span> <span class="fu">do.call</span>(bind_rows, res_list[,<span class="dv">1</span>])</span>
+<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a>coefs_df_fourier <span class="ot">=</span> <span class="fu">do.call</span>(bind_rows, res_list[,<span class="dv">2</span>])</span>
+<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a>arima_order_df_fourier <span class="ot">=</span> <span class="fu">do.call</span>(bind_rows, res_list[,<span class="dv">3</span>])</span>
 <span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-71"><a href="#cb24-71" aria-hidden="true" tabindex="-1"></a><span class="fu">stopImplicitCluster</span>()</span>
 <span id="cb24-72"><a href="#cb24-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-73"><a href="#cb24-73" aria-hidden="true" tabindex="-1"></a>res_df</span></code></pre></div>
+<span id="cb24-73"><a href="#cb24-73" aria-hidden="true" tabindex="-1"></a>res_df_fourier</span></code></pre></div>
 <pre><code># A tibble: 96 × 11
    month_end  geo        yhat fourier…¹    bic   aicc  sigma2 loglik  rmse   mae
    &lt;date&gt;     &lt;chr&gt;     &lt;dbl&gt;     &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -959,13 +960,13 @@ Training set 0.005969128</code></pre>
 # … with 86 more rows, 1 more variable: acf &lt;dbl&gt;, and abbreviated variable
 #   name ¹​fourier_order</code></pre>
 <p>Export:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(res_df, <span class="at">file=</span><span class="fu">paste0</span>(datapath,<span class="st">&quot;results/arimax_fourier_forecasts.csv&quot;</span>))</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(coefs_df, <span class="at">file=</span><span class="fu">paste0</span>(datapath,<span class="st">&quot;results/arimax_fourier_forecasts_coefs.csv&quot;</span>))</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(arima_order_df, <span class="at">file=</span><span class="fu">paste0</span>(datapath,<span class="st">&quot;results/arimax_fourier_forecasts_order.csv&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(res_df_fourier, <span class="at">file=</span><span class="fu">paste0</span>(datapath,<span class="st">&quot;results/arimax_fourier_forecasts.csv&quot;</span>))</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(coefs_df_fourier, <span class="at">file=</span><span class="fu">paste0</span>(datapath,<span class="st">&quot;results/arimax_fourier_forecasts_coefs.csv&quot;</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(arima_order_df_fourier, <span class="at">file=</span><span class="fu">paste0</span>(datapath,<span class="st">&quot;results/arimax_fourier_forecasts_order.csv&quot;</span>))</span></code></pre></div>
 </div>
 <div id="results" class="section level2 unnumbered">
 <h2 class="unnumbered">Results</h2>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>overview <span class="ot">=</span> res_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>overview <span class="ot">=</span> res_df_fourier <span class="sc">%&gt;%</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(geo) <span class="sc">%&gt;%</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">min_date =</span> <span class="fu">min</span>(month_end), <span class="at">max_date =</span> <span class="fu">max</span>(month_end), <span class="at">bic =</span> <span class="fu">min</span>(bic), <span class="at">rmse =</span> <span class="fu">min</span>(rmse), <span class="at">mae =</span> <span class="fu">min</span>(mae), <span class="at">acf =</span> <span class="fu">min</span>(acf))</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -998,9 +999,9 @@ Training set 0.005969128</code></pre>
 23 SI    2022-08-01 2022-11-01 -1224. 0.248 0.126   0.0458 
 24 SK    2022-08-01 2022-11-01 -1130. 0.222 0.102   0.0633 </code></pre>
 <p>coefficients:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(xtable<span class="sc">::</span><span class="fu">xtable</span>(coefs_df), <span class="at">type=</span><span class="st">&quot;html&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(xtable<span class="sc">::</span><span class="fu">xtable</span>(coefs_df_fourier), <span class="at">type=</span><span class="st">&quot;html&quot;</span>)</span></code></pre></div>
 <!-- html table generated in R 4.2.1 by xtable 1.8-4 package -->
-<!-- Mon Oct 10 14:57:17 2022 -->
+<!-- Tue Oct 11 16:28:37 2022 -->
 <table border="1">
 <tr>
 <th>
@@ -2931,7 +2932,8 @@ Multiple R-squared:  0.8471,    Adjusted R-squared:  0.8309
 F-statistic:  52.1 on 20 and 188 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>f_rai <span class="ot">=</span> <span class="fu">formula</span>(rai_out<span class="sc">$</span>formula)</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">auto.arima</span>(<span class="at">y=</span>theResponse, <span class="at">xreg =</span> rai_out<span class="sc">$</span>X[,<span class="sc">-</span><span class="dv">1</span>])</span></code></pre></div>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">=</span> <span class="fu">auto.arima</span>(<span class="at">y=</span>theResponse, <span class="at">xreg =</span> rai_out<span class="sc">$</span>X[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>mod</span></code></pre></div>
 <pre><code>Series: theResponse 
 Regression with ARIMA(3,0,1) errors 
 
@@ -2963,10 +2965,16 @@ s.e.                                  0.6074                0.4053
 
 sigma^2 = 0.06154:  log likelihood = 7.75
 AIC=36.5   AICc=44.21   BIC=123.4</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> <span class="fu">ts</span>(theResponse, <span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min<span class="sc">+</span><span class="dv">1</span>, ts_set<span class="sc">$</span>month_min), <span class="at">frequency =</span> <span class="dv">12</span>)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>X_reg <span class="ot">=</span> <span class="fu">ts</span>(rai_out<span class="sc">$</span>X[,<span class="sc">-</span><span class="dv">1</span>], <span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min<span class="sc">+</span><span class="dv">1</span>, ts_set<span class="sc">$</span>month_min), <span class="at">frequency =</span> <span class="dv">12</span>)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>X_full <span class="ot">=</span> <span class="fu">ts</span>(theData, <span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min<span class="sc">+</span><span class="dv">1</span>, ts_set<span class="sc">$</span>month_min), <span class="at">frequency =</span> <span class="dv">12</span>)</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">auto.arima</span>(<span class="at">y=</span>Y, <span class="at">xreg =</span> X_reg)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">accuracy</span>(mod)</span></code></pre></div>
+<pre><code>                       ME      RMSE       MAE         MPE     MAPE      MASE
+Training set 0.0003026205 0.2327705 0.1800534 -0.02566154 1.153003 0.4444828
+                     ACF1
+Training set -0.004314617</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> <span class="fu">ts</span>(theResponse, <span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min<span class="sc">+</span><span class="dv">1</span>, ts_set<span class="sc">$</span>month_min), <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>X_reg <span class="ot">=</span> <span class="fu">ts</span>(rai_out<span class="sc">$</span>X[,<span class="sc">-</span><span class="dv">1</span>], <span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min<span class="sc">+</span><span class="dv">1</span>, ts_set<span class="sc">$</span>month_min), <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>X_full <span class="ot">=</span> <span class="fu">ts</span>(theData, <span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min<span class="sc">+</span><span class="dv">1</span>, ts_set<span class="sc">$</span>month_min), <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">=</span> <span class="fu">auto.arima</span>(<span class="at">y=</span>Y, <span class="at">xreg =</span> X_reg)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>mod2</span></code></pre></div>
 <pre><code>Series: Y 
 Regression with ARIMA(3,0,0)(2,0,0)[12] errors 
 
@@ -3001,123 +3009,132 @@ s.e.                                  0.6383                0.4210
 
 sigma^2 = 0.06108:  log likelihood = 8.29
 AIC=37.41   AICc=45.77   BIC=127.66</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">accuracy</span>(mod2)</span></code></pre></div>
+<pre><code>                        ME      RMSE       MAE         MPE     MAPE      MASE
+Training set -0.0009171067 0.2312544 0.1785987 -0.03282782 1.145678 0.6576557
+                    ACF1
+Training set 0.009228095</code></pre>
 <p>We can see that the RAI model has a good training fit. Thus, we’ll
 need to cross validate this result.</p>
 </div>
 </div>
-<div id="neuronal-nets-from-forecasting-book" class="section level1 tabset tabset-fade" number="7">
+<div id="neuronal-nets-from-forecasting-book-for-at" class="section level1 tabset tabset-fade" number="7">
 <h1 class="tabset tabset-fade"><span class="header-section-number">7</span> Neuronal nets from forecasting
-book</h1>
-<p>Testing only for Austria.</p>
+book for AT</h1>
+<p>Testing only for Austria. No Preds here. need to calculate X_reg
+matrix for the months ahead fist. Then, use these as input to NN. Maybe
+try this in python! <a href="https://towardsdatascience.com/temporal-loops-intro-to-recurrent-neural-networks-for-time-series-forecasting-in-python-b0398963dc1f" class="uri">https://towardsdatascience.com/temporal-loops-intro-to-recurrent-neural-networks-for-time-series-forecasting-in-python-b0398963dc1f</a>
+<a href="https://towardsdatascience.com/a-quick-deep-learning-recipe-time-series-forecasting-with-keras-in-python-f759923ba64" class="uri">https://towardsdatascience.com/a-quick-deep-learning-recipe-time-series-forecasting-with-keras-in-python-f759923ba64</a>
+<a href="https://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/" class="uri">https://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/</a></p>
 <div id="without-external-regressors" class="section level2 unnumbered">
 <h2 class="unnumbered">Without external regressors</h2>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>i<span class="ot">=</span><span class="dv">1</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co">#cl = detectCores()-1</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co">#registerDoParallel(cl)</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co"># res_list = foreach(i = 1:length(country_code_list), .packages=c(&quot;tidyverse&quot;,&quot;forecast&quot;, &quot;lubridate&quot;), .multicombine = T, .combine = rbind) %dopar% {</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  c_code <span class="ot">=</span> country_code_list[i]</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  ctry <span class="ot">=</span> country_list[i]</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  ts_set <span class="ot">=</span> ind_wide <span class="sc">%&gt;%</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(geo <span class="sc">==</span> c_code) <span class="sc">%&gt;%</span></span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>    zoo<span class="sc">::</span><span class="fu">na.locf</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">year_min =</span> <span class="fu">year</span>(<span class="fu">min</span>(month_end)), <span class="at">month_min =</span> <span class="fu">month</span>(<span class="fu">min</span>(month_end)))</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;FR&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2010</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;CY&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2000</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;DK&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2007</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;MT&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2010</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>  ind_ts <span class="ot">=</span> ind_wide <span class="sc">%&gt;%</span></span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(geo <span class="sc">==</span> c_code <span class="sc">&amp;</span> year <span class="sc">&gt;=</span> ts_set<span class="sc">$</span>year_min) <span class="sc">%&gt;%</span></span>
-<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>    zoo<span class="sc">::</span><span class="fu">na.locf</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(resid_TOTAL) <span class="sc">%&gt;%</span></span>
-<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">resid_TOTAL =</span> <span class="fu">sqrt</span>(resid_TOTAL)) <span class="sc">%&gt;%</span></span>
-<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ts</span>(<span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min, ts_set<span class="sc">$</span>month_min), <span class="at">frequency=</span><span class="dv">12</span>)</span>
-<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># NNETAR models</span></span>
-<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">=</span> <span class="fu">nnetar</span>(ind_ts, <span class="at">repeats =</span> <span class="dv">50</span>)</span>
-<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">=</span> <span class="fu">forecast</span>(mod, <span class="at">h=</span><span class="dv">4</span>)</span>
-<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
-<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">=</span> pred<span class="sc">$</span>mean<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final export</span></span>
-<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a>  yhat_list <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">month_end =</span> zoo<span class="sc">::</span><span class="fu">as.Date</span>(pred<span class="sc">$</span>mean),<span class="at">geo=</span>c_code, <span class="at">yhat =</span> yhat,</span>
-<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a>                          <span class="at">bic =</span> mod<span class="sc">$</span>bic, <span class="at">aicc =</span> mod<span class="sc">$</span>aicc, <span class="at">sigma2 =</span> mod<span class="sc">$</span>sigma2, <span class="at">loglik  =</span> mod<span class="sc">$</span>loglik,</span>
-<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rmse =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">2</span>], <span class="at">mae =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">3</span>], <span class="at">acf =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">7</span>])</span>
-<span id="cb37-40"><a href="#cb37-40" aria-hidden="true" tabindex="-1"></a>  yhat_list</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>i<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">#cl = detectCores()-1</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co">#registerDoParallel(cl)</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co"># res_list = foreach(i = 1:length(country_code_list), .packages=c(&quot;tidyverse&quot;,&quot;forecast&quot;, &quot;lubridate&quot;), .multicombine = T, .combine = rbind) %dopar% {</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  c_code <span class="ot">=</span> country_code_list[i]</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  ctry <span class="ot">=</span> country_list[i]</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>  ts_set <span class="ot">=</span> ind_wide <span class="sc">%&gt;%</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(geo <span class="sc">==</span> c_code) <span class="sc">%&gt;%</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>    zoo<span class="sc">::</span><span class="fu">na.locf</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">year_min =</span> <span class="fu">year</span>(<span class="fu">min</span>(month_end)), <span class="at">month_min =</span> <span class="fu">month</span>(<span class="fu">min</span>(month_end)))</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;FR&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2010</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;CY&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2000</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;DK&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2007</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;MT&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2010</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>  ind_ts <span class="ot">=</span> ind_wide <span class="sc">%&gt;%</span></span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(geo <span class="sc">==</span> c_code <span class="sc">&amp;</span> year <span class="sc">&gt;=</span> ts_set<span class="sc">$</span>year_min) <span class="sc">%&gt;%</span></span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>    zoo<span class="sc">::</span><span class="fu">na.locf</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(resid_TOTAL) <span class="sc">%&gt;%</span></span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">resid_TOTAL =</span> <span class="fu">sqrt</span>(resid_TOTAL)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ts</span>(<span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min, ts_set<span class="sc">$</span>month_min), <span class="at">frequency=</span><span class="dv">12</span>)</span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># NNETAR models</span></span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">=</span> <span class="fu">nnetar</span>(ind_ts, <span class="at">repeats =</span> <span class="dv">50</span>, <span class="at">size =</span> <span class="dv">20</span>)</span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">=</span> <span class="fu">forecast</span>(mod, <span class="at">h=</span><span class="dv">4</span>)</span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
+<span id="cb41-34"><a href="#cb41-34" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">=</span> pred<span class="sc">$</span>mean<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb41-35"><a href="#cb41-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-36"><a href="#cb41-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final export</span></span>
+<span id="cb41-37"><a href="#cb41-37" aria-hidden="true" tabindex="-1"></a>  yhat_list <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">month_end =</span> zoo<span class="sc">::</span><span class="fu">as.Date</span>(pred<span class="sc">$</span>mean),<span class="at">geo=</span>c_code, <span class="at">yhat =</span> yhat,</span>
+<span id="cb41-38"><a href="#cb41-38" aria-hidden="true" tabindex="-1"></a>                          <span class="at">bic =</span> mod<span class="sc">$</span>bic, <span class="at">aicc =</span> mod<span class="sc">$</span>aicc, <span class="at">sigma2 =</span> mod<span class="sc">$</span>sigma2, <span class="at">loglik  =</span> mod<span class="sc">$</span>loglik,</span>
+<span id="cb41-39"><a href="#cb41-39" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rmse =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">2</span>], <span class="at">mae =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">3</span>], <span class="at">acf =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">7</span>])</span>
+<span id="cb41-40"><a href="#cb41-40" aria-hidden="true" tabindex="-1"></a>  yhat_list</span></code></pre></div>
 <pre><code># A tibble: 4 × 6
   month_end  geo        yhat  rmse   mae     acf
   &lt;date&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
-1 2022-06-01 AT    18141086.  31.6  20.3 -0.0885
-2 2022-07-01 AT    20069809.  31.6  20.3 -0.0885
-3 2022-08-01 AT    16107603.  31.6  20.3 -0.0885
-4 2022-09-01 AT    11207435.  31.6  20.3 -0.0885</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df = do.call(bind_rows, res_list)</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co">#stopImplicitCluster()</span></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df</span></span></code></pre></div>
+1 2022-06-01 AT    18641353.  25.0  16.7 -0.0613
+2 2022-07-01 AT    18299188.  25.0  16.7 -0.0613
+3 2022-08-01 AT    14264503.  25.0  16.7 -0.0613
+4 2022-09-01 AT     9987093.  25.0  16.7 -0.0613</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df = do.call(bind_rows, res_list)</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="co">#stopImplicitCluster()</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df</span></span></code></pre></div>
 </div>
 <div id="using-external-regressors-without-lags" class="section level2 unnumbered">
 <h2 class="unnumbered">Using external regressors without lags</h2>
 <p>No Preds here. need to calculate X_reg matrix for the months ahead
 fist. Then, use these as input to NN. Maybe try this in python!</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>c_code <span class="ot">=</span> country_code_list[i]</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>ctry <span class="ot">=</span> country_list[i]</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>trends <span class="ot">=</span> trends_100 <span class="sc">%&gt;%</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>resid_TOTAL_STD) <span class="sc">%&gt;%</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country_code <span class="sc">==</span> c_code) <span class="sc">%&gt;%</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  zoo<span class="sc">::</span><span class="fu">na.locf</span>()</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>indicator <span class="ot">=</span> ind_wide <span class="sc">%&gt;%</span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(geo <span class="sc">==</span> c_code) <span class="sc">%&gt;%</span></span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">country_code =</span> geo, <span class="at">date=</span>month_end) <span class="sc">%&gt;%</span></span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  zoo<span class="sc">::</span><span class="fu">na.locf</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, country_code, resid_TOTAL)</span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>ts_set <span class="ot">=</span> trends <span class="sc">%&gt;%</span></span>
-<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">year_min =</span> <span class="fu">year</span>(<span class="fu">min</span>(date)), <span class="at">month_min =</span> <span class="fu">month</span>(<span class="fu">min</span>(date)), <span class="at">max_date =</span> <span class="fu">max</span>(date))</span>
-<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>trends2 <span class="ot">=</span> indicator <span class="sc">%&gt;%</span></span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">resid_TOTAL =</span> <span class="fu">sqrt</span>(resid_TOTAL)) <span class="sc">%&gt;%</span></span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(trends, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;date&quot;</span>, <span class="st">&quot;country_code&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(date, country_code)) <span class="sc">%&gt;%</span></span>
-<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ts</span>(<span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min, ts_set<span class="sc">$</span>month_min), <span class="at">frequency=</span><span class="dv">12</span>)</span>
-<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a><span class="co">#cl = detectCores()-1</span></span>
-<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a><span class="co">#registerDoParallel(cl)</span></span>
-<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a><span class="co">#res_list = foreach(i = 1:length(country_code_list), .packages=c(&quot;tidyverse&quot;,&quot;forecast&quot;, &quot;lubridate&quot;), .multicombine = T, .combine = rbind) %dopar% {</span></span>
-<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data</span></span>
-<span id="cb40-31"><a href="#cb40-31" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb40-32"><a href="#cb40-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb40-33"><a href="#cb40-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># NNETAR models</span></span>
-<span id="cb40-34"><a href="#cb40-34" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">=</span> <span class="fu">nnetar</span>(trends2[,<span class="dv">1</span>], <span class="at">repeats =</span> <span class="dv">20</span>, <span class="at">xreg =</span> trends2[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>])</span>
-<span id="cb40-35"><a href="#cb40-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">accuracy</span>(mod)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>c_code <span class="ot">=</span> country_code_list[i]</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>ctry <span class="ot">=</span> country_list[i]</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>trends <span class="ot">=</span> trends_100 <span class="sc">%&gt;%</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>resid_TOTAL_STD) <span class="sc">%&gt;%</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country_code <span class="sc">==</span> c_code) <span class="sc">%&gt;%</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  zoo<span class="sc">::</span><span class="fu">na.locf</span>()</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>indicator <span class="ot">=</span> ind_wide <span class="sc">%&gt;%</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(geo <span class="sc">==</span> c_code) <span class="sc">%&gt;%</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">country_code =</span> geo, <span class="at">date=</span>month_end) <span class="sc">%&gt;%</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  zoo<span class="sc">::</span><span class="fu">na.locf</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, country_code, resid_TOTAL)</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>ts_set <span class="ot">=</span> trends <span class="sc">%&gt;%</span></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">year_min =</span> <span class="fu">year</span>(<span class="fu">min</span>(date)), <span class="at">month_min =</span> <span class="fu">month</span>(<span class="fu">min</span>(date)), <span class="at">max_date =</span> <span class="fu">max</span>(date))</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>trends2 <span class="ot">=</span> indicator <span class="sc">%&gt;%</span></span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">resid_TOTAL =</span> <span class="fu">sqrt</span>(resid_TOTAL)) <span class="sc">%&gt;%</span></span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(trends, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;date&quot;</span>, <span class="st">&quot;country_code&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(date, country_code)) <span class="sc">%&gt;%</span></span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ts</span>(<span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min, ts_set<span class="sc">$</span>month_min), <span class="at">frequency=</span><span class="dv">12</span>)</span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a><span class="co">#cl = detectCores()-1</span></span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a><span class="co">#registerDoParallel(cl)</span></span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a><span class="co">#res_list = foreach(i = 1:length(country_code_list), .packages=c(&quot;tidyverse&quot;,&quot;forecast&quot;, &quot;lubridate&quot;), .multicombine = T, .combine = rbind) %dopar% {</span></span>
+<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data</span></span>
+<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-32"><a href="#cb44-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb44-33"><a href="#cb44-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># NNETAR models</span></span>
+<span id="cb44-34"><a href="#cb44-34" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">=</span> <span class="fu">nnetar</span>(trends2[,<span class="dv">1</span>], <span class="at">repeats =</span> <span class="dv">20</span>, <span class="at">xreg =</span> trends2[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>])</span>
+<span id="cb44-35"><a href="#cb44-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">accuracy</span>(mod)</span></code></pre></div>
 <pre><code>                      ME     RMSE      MAE          MPE       MAPE        MASE
 Training set -0.01359156 2.410154 1.756289 -0.002141871 0.06482202 0.006651407
                     ACF1
 Training set -0.03521381</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># pred = forecast(mod, h=4)</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#yhat = pred$mean^2</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final export</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  yhat_list <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">month_end =</span> zoo<span class="sc">::</span><span class="fu">as.Date</span>(pred<span class="sc">$</span>mean),<span class="at">geo=</span>c_code,<span class="co"># yhat = yhat,</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">bic =</span> mod<span class="sc">$</span>bic, <span class="at">aicc =</span> mod<span class="sc">$</span>aicc, <span class="at">sigma2 =</span> mod<span class="sc">$</span>sigma2, <span class="at">loglik  =</span> mod<span class="sc">$</span>loglik,</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rmse =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">2</span>], <span class="at">mae =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">3</span>], <span class="at">acf =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">7</span>])</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  yhat_list</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># pred = forecast(mod, h=4)</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#yhat = pred$mean^2</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final export</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  yhat_list <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">month_end =</span> zoo<span class="sc">::</span><span class="fu">as.Date</span>(pred<span class="sc">$</span>mean),<span class="at">geo=</span>c_code,<span class="co"># yhat = yhat,</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">bic =</span> mod<span class="sc">$</span>bic, <span class="at">aicc =</span> mod<span class="sc">$</span>aicc, <span class="at">sigma2 =</span> mod<span class="sc">$</span>sigma2, <span class="at">loglik  =</span> mod<span class="sc">$</span>loglik,</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rmse =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">2</span>], <span class="at">mae =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">3</span>], <span class="at">acf =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">7</span>])</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  yhat_list</span></code></pre></div>
 <pre><code># A tibble: 4 × 5
   month_end  geo    rmse   mae     acf
   &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
@@ -3125,45 +3142,136 @@ Training set -0.03521381</code></pre>
 2 2022-07-01 AT     2.41  1.76 -0.0352
 3 2022-08-01 AT     2.41  1.76 -0.0352
 4 2022-09-01 AT     2.41  1.76 -0.0352</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df = do.call(bind_rows, res_list)</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># stopImplicitCluster()</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="co"># res_df</span></span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df = do.call(bind_rows, res_list)</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co"># stopImplicitCluster()</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co"># res_df</span></span></code></pre></div>
+</div>
+<div id="using-external-regressors" class="section level2 unnumbered">
+<h2 class="unnumbered">Using external regressors</h2>
+<p>Runtime is an issue, will try this in python.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>goo <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="fu">paste0</span>(trends_path, <span class="st">&quot;trends_full.csv&quot;</span>))</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>trends_100 <span class="ot">=</span> goo <span class="sc">%&gt;%</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>, <span class="sc">~</span>.x<span class="sc">/</span><span class="dv">100</span>))</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>ts_set <span class="ot">=</span> indicator <span class="sc">%&gt;%</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">max_date =</span> <span class="fu">max</span>(date))</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>trends_ts_lag <span class="ot">=</span> <span class="fu">lag_trends_ts</span>(<span class="at">lags=</span><span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>),<span class="at">input_ts=</span>trends2,<span class="at">col_pos =</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>))</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>theData <span class="ot">=</span> trends_ts_lag[<span class="dv">13</span><span class="sc">:</span><span class="dv">221</span>,]</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>theResponse <span class="ot">=</span> trends2[<span class="dv">13</span><span class="sc">:</span><span class="dv">221</span>,<span class="dv">1</span>]</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a><span class="co">#cl = detectCores()-1</span></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a><span class="co">#registerDoParallel(cl)</span></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a><span class="co">#res_list = foreach(i = 1:length(country_code_list), .packages=c(&quot;tidyverse&quot;,&quot;forecast&quot;, &quot;lubridate&quot;), .multicombine = T, .combine = rbind) %dopar% {</span></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data</span></span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># NNETAR models</span></span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">=</span> <span class="fu">nnetar</span>(theResponse, <span class="at">repeats =</span> <span class="dv">5</span>, <span class="at">xreg =</span> theData, <span class="at">MaxNWts=</span><span class="dv">11000</span>, <span class="at">trace=</span>T)</span></code></pre></div>
+<pre><code># weights:  10732
+initial  value 1587.320483 
+iter  10 value 66.477716
+iter  20 value 4.073679
+iter  30 value 0.462582
+iter  40 value 0.021682
+iter  50 value 0.000494
+final  value 0.000079 
+converged
+# weights:  10732
+initial  value 637.258791 
+iter  10 value 43.009913
+iter  20 value 2.725587
+iter  30 value 0.315056
+iter  40 value 0.010578
+iter  50 value 0.000229
+final  value 0.000098 
+converged
+# weights:  10732
+initial  value 598.232737 
+iter  10 value 25.838255
+iter  20 value 2.432732
+iter  30 value 0.120238
+iter  40 value 0.002482
+final  value 0.000077 
+converged
+# weights:  10732
+initial  value 429.875258 
+iter  10 value 59.246276
+iter  20 value 4.725038
+iter  30 value 0.373173
+iter  40 value 0.009534
+iter  50 value 0.000233
+final  value 0.000083 
+converged
+# weights:  10732
+initial  value 1297.254403 
+iter  10 value 61.102457
+iter  20 value 3.202193
+iter  30 value 0.766074
+iter  40 value 0.016928
+iter  50 value 0.000312
+final  value 0.000072 
+converged</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># pred = forecast(mod, h=4)</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#yhat = pred$mean^2</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final export</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  yhat_list <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">month_end =</span> zoo<span class="sc">::</span><span class="fu">as.Date</span>(pred<span class="sc">$</span>mean),<span class="at">geo=</span>c_code,<span class="co"># yhat = yhat,</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">bic =</span> mod<span class="sc">$</span>bic, <span class="at">aicc =</span> mod<span class="sc">$</span>aicc, <span class="at">sigma2 =</span> mod<span class="sc">$</span>sigma2, <span class="at">loglik  =</span> mod<span class="sc">$</span>loglik,</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rmse =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">2</span>], <span class="at">mae =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">3</span>], <span class="at">acf =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">7</span>])</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  yhat_list</span></code></pre></div>
+<pre><code># A tibble: 4 × 5
+  month_end  geo    rmse   mae    acf
+  &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+1 2022-06-01 AT    0.190 0.155 0.0783
+2 2022-07-01 AT    0.190 0.155 0.0783
+3 2022-08-01 AT    0.190 0.155 0.0783
+4 2022-09-01 AT    0.190 0.155 0.0783</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df = do.call(bind_rows, res_list)</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="co"># stopImplicitCluster()</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="co"># res_df</span></span></code></pre></div>
 </div>
 <div id="using-external-regressors-from-rai" class="section level2 unnumbered">
 <h2 class="unnumbered">Using external regressors from RAI</h2>
-<p>No Preds here. need to calculate X_reg matrix for the months ahead
-fist. Then, use these as input to NN. Maybe try this in python!</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>goo <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="fu">paste0</span>(trends_path, <span class="st">&quot;trends_full.csv&quot;</span>))</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>trends_100 <span class="ot">=</span> goo <span class="sc">%&gt;%</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>, <span class="sc">~</span>.x<span class="sc">/</span><span class="dv">100</span>))</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>ts_set <span class="ot">=</span> indicator <span class="sc">%&gt;%</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">max_date =</span> <span class="fu">max</span>(date))</span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="co">#cl = detectCores()-1</span></span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="co">#registerDoParallel(cl)</span></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="co">#res_list = foreach(i = 1:length(country_code_list), .packages=c(&quot;tidyverse&quot;,&quot;forecast&quot;, &quot;lubridate&quot;), .multicombine = T, .combine = rbind) %dopar% {</span></span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data</span></span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># NNETAR models</span></span>
-<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">=</span> <span class="fu">nnetar</span>(Y, <span class="at">repeats =</span> <span class="dv">20</span>, <span class="at">xreg =</span> X_reg)</span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a> <span class="co"># pred = forecast(mod, h=4)</span></span>
-<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
-<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>  <span class="co">#yhat = pred$mean^2</span></span>
-<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final export</span></span>
-<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>  yhat_list <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">month_end =</span> zoo<span class="sc">::</span><span class="fu">as.Date</span>(pred<span class="sc">$</span>mean),<span class="at">geo=</span>c_code,<span class="co"># yhat = yhat,</span></span>
-<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>                          <span class="at">bic =</span> mod<span class="sc">$</span>bic, <span class="at">aicc =</span> mod<span class="sc">$</span>aicc, <span class="at">sigma2 =</span> mod<span class="sc">$</span>sigma2, <span class="at">loglik  =</span> mod<span class="sc">$</span>loglik,</span>
-<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rmse =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">2</span>], <span class="at">mae =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">3</span>], <span class="at">acf =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">7</span>])</span>
-<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>  yhat_list</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>goo <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="fu">paste0</span>(trends_path, <span class="st">&quot;trends_full.csv&quot;</span>))</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>trends_100 <span class="ot">=</span> goo <span class="sc">%&gt;%</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>, <span class="sc">~</span>.x<span class="sc">/</span><span class="dv">100</span>))</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>ts_set <span class="ot">=</span> indicator <span class="sc">%&gt;%</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">max_date =</span> <span class="fu">max</span>(date))</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a><span class="co">#cl = detectCores()-1</span></span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a><span class="co">#registerDoParallel(cl)</span></span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a><span class="co">#res_list = foreach(i = 1:length(country_code_list), .packages=c(&quot;tidyverse&quot;,&quot;forecast&quot;, &quot;lubridate&quot;), .multicombine = T, .combine = rbind) %dopar% {</span></span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data</span></span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># NNETAR models</span></span>
+<span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">=</span> <span class="fu">nnetar</span>(Y, <span class="at">repeats =</span> <span class="dv">20</span>, <span class="at">xreg =</span> X_reg)</span>
+<span id="cb54-19"><a href="#cb54-19" aria-hidden="true" tabindex="-1"></a> <span class="co"># pred = forecast(mod, h=4)</span></span>
+<span id="cb54-20"><a href="#cb54-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
+<span id="cb54-21"><a href="#cb54-21" aria-hidden="true" tabindex="-1"></a>  <span class="co">#yhat = pred$mean^2</span></span>
+<span id="cb54-22"><a href="#cb54-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb54-23"><a href="#cb54-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final export</span></span>
+<span id="cb54-24"><a href="#cb54-24" aria-hidden="true" tabindex="-1"></a>  yhat_list <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">month_end =</span> zoo<span class="sc">::</span><span class="fu">as.Date</span>(pred<span class="sc">$</span>mean),<span class="at">geo=</span>c_code,<span class="co"># yhat = yhat,</span></span>
+<span id="cb54-25"><a href="#cb54-25" aria-hidden="true" tabindex="-1"></a>                          <span class="at">bic =</span> mod<span class="sc">$</span>bic, <span class="at">aicc =</span> mod<span class="sc">$</span>aicc, <span class="at">sigma2 =</span> mod<span class="sc">$</span>sigma2, <span class="at">loglik  =</span> mod<span class="sc">$</span>loglik,</span>
+<span id="cb54-26"><a href="#cb54-26" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rmse =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">2</span>], <span class="at">mae =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">3</span>], <span class="at">acf =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">7</span>])</span>
+<span id="cb54-27"><a href="#cb54-27" aria-hidden="true" tabindex="-1"></a>  yhat_list</span></code></pre></div>
 <pre><code># A tibble: 4 × 5
   month_end  geo       rmse      mae    acf
   &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
@@ -3171,56 +3279,56 @@ fist. Then, use these as input to NN. Maybe try this in python!</p>
 2 2022-07-01 AT    0.000522 0.000333 -0.260
 3 2022-08-01 AT    0.000522 0.000333 -0.260
 4 2022-09-01 AT    0.000522 0.000333 -0.260</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df = do.call(bind_rows, res_list)</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co"># stopImplicitCluster()</span></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="co"># res_df</span></span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df = do.call(bind_rows, res_list)</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="co"># stopImplicitCluster()</span></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a><span class="co"># res_df</span></span></code></pre></div>
 </div>
 <div id="using-external-regressors-from-rai-no-ts" class="section level2 unnumbered">
 <h2 class="unnumbered">Using external regressors from RAI no TS</h2>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co">#cl = detectCores()-1</span></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co">#registerDoParallel(cl)</span></span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co">#res_list = foreach(i = 1:length(country_code_list), .packages=c(&quot;tidyverse&quot;,&quot;forecast&quot;, &quot;lubridate&quot;), .multicombine = T, .combine = rbind) %dopar% {</span></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data</span></span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  c_code <span class="ot">=</span> country_code_list[i]</span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  ctry <span class="ot">=</span> country_list[i]</span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>  ts_set <span class="ot">=</span> ind_wide <span class="sc">%&gt;%</span></span>
-<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(geo <span class="sc">==</span> c_code) <span class="sc">%&gt;%</span></span>
-<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>    zoo<span class="sc">::</span><span class="fu">na.locf</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">year_min =</span> <span class="fu">year</span>(<span class="fu">min</span>(month_end)), <span class="at">month_min =</span> <span class="fu">month</span>(<span class="fu">min</span>(month_end)))</span>
-<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;FR&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2010</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
-<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;CY&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2000</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
-<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;DK&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2007</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
-<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;MT&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2010</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
-<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>  ind_ts <span class="ot">=</span> ind_wide <span class="sc">%&gt;%</span></span>
-<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(geo <span class="sc">==</span> c_code <span class="sc">&amp;</span> year <span class="sc">&gt;=</span> ts_set<span class="sc">$</span>year_min) <span class="sc">%&gt;%</span></span>
-<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>    zoo<span class="sc">::</span><span class="fu">na.locf</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(resid_TOTAL) <span class="sc">%&gt;%</span></span>
-<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">resid_TOTAL =</span> <span class="fu">sqrt</span>(resid_TOTAL)) <span class="sc">%&gt;%</span></span>
-<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ts</span>(<span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min, ts_set<span class="sc">$</span>month_min), <span class="at">frequency=</span><span class="dv">12</span>)</span>
-<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># NNETAR models</span></span>
-<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">=</span> <span class="fu">nnetar</span>(theResponse, <span class="at">repeats =</span> <span class="dv">20</span>, <span class="at">xreg =</span> rai_out<span class="sc">$</span>X[,<span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a>  <span class="co">#pred = forecast(mod, h=4)</span></span>
-<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
-<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a>  <span class="co">#yhat = pred$mean^2</span></span>
-<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final export</span></span>
-<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a>  yhat_list <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">month_end =</span> zoo<span class="sc">::</span><span class="fu">as.Date</span>(pred<span class="sc">$</span>mean),<span class="at">geo=</span>c_code, <span class="co">#yhat = yhat,</span></span>
-<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a>                          <span class="at">bic =</span> mod<span class="sc">$</span>bic, <span class="at">aicc =</span> mod<span class="sc">$</span>aicc, <span class="at">sigma2 =</span> mod<span class="sc">$</span>sigma2, <span class="at">loglik  =</span> mod<span class="sc">$</span>loglik,</span>
-<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rmse =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">2</span>], <span class="at">mae =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">3</span>], <span class="at">acf =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">7</span>])</span>
-<span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a>  yhat_list</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="co">#cl = detectCores()-1</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co">#registerDoParallel(cl)</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="co">#res_list = foreach(i = 1:length(country_code_list), .packages=c(&quot;tidyverse&quot;,&quot;forecast&quot;, &quot;lubridate&quot;), .multicombine = T, .combine = rbind) %dopar% {</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data</span></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  c_code <span class="ot">=</span> country_code_list[i]</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>  ctry <span class="ot">=</span> country_list[i]</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>  ts_set <span class="ot">=</span> ind_wide <span class="sc">%&gt;%</span></span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(geo <span class="sc">==</span> c_code) <span class="sc">%&gt;%</span></span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>    zoo<span class="sc">::</span><span class="fu">na.locf</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">year_min =</span> <span class="fu">year</span>(<span class="fu">min</span>(month_end)), <span class="at">month_min =</span> <span class="fu">month</span>(<span class="fu">min</span>(month_end)))</span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;FR&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2010</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;CY&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2000</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;DK&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2007</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (c_code <span class="sc">==</span> <span class="st">&quot;MT&quot;</span>){ts_set <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">year_min =</span> <span class="dv">2010</span>, <span class="at">month_min =</span> <span class="dv">1</span>)}</span>
+<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a>  ind_ts <span class="ot">=</span> ind_wide <span class="sc">%&gt;%</span></span>
+<span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(geo <span class="sc">==</span> c_code <span class="sc">&amp;</span> year <span class="sc">&gt;=</span> ts_set<span class="sc">$</span>year_min) <span class="sc">%&gt;%</span></span>
+<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a>    zoo<span class="sc">::</span><span class="fu">na.locf</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb57-25"><a href="#cb57-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(resid_TOTAL) <span class="sc">%&gt;%</span></span>
+<span id="cb57-26"><a href="#cb57-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">resid_TOTAL =</span> <span class="fu">sqrt</span>(resid_TOTAL)) <span class="sc">%&gt;%</span></span>
+<span id="cb57-27"><a href="#cb57-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ts</span>(<span class="at">start=</span><span class="fu">c</span>(ts_set<span class="sc">$</span>year_min, ts_set<span class="sc">$</span>month_min), <span class="at">frequency=</span><span class="dv">12</span>)</span>
+<span id="cb57-28"><a href="#cb57-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb57-29"><a href="#cb57-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># NNETAR models</span></span>
+<span id="cb57-30"><a href="#cb57-30" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">=</span> <span class="fu">nnetar</span>(theResponse, <span class="at">repeats =</span> <span class="dv">20</span>, <span class="at">xreg =</span> rai_out<span class="sc">$</span>X[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb57-31"><a href="#cb57-31" aria-hidden="true" tabindex="-1"></a>  <span class="co">#pred = forecast(mod, h=4)</span></span>
+<span id="cb57-32"><a href="#cb57-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-33"><a href="#cb57-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
+<span id="cb57-34"><a href="#cb57-34" aria-hidden="true" tabindex="-1"></a>  <span class="co">#yhat = pred$mean^2</span></span>
+<span id="cb57-35"><a href="#cb57-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb57-36"><a href="#cb57-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Final export</span></span>
+<span id="cb57-37"><a href="#cb57-37" aria-hidden="true" tabindex="-1"></a>  yhat_list <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">month_end =</span> zoo<span class="sc">::</span><span class="fu">as.Date</span>(pred<span class="sc">$</span>mean),<span class="at">geo=</span>c_code, <span class="co">#yhat = yhat,</span></span>
+<span id="cb57-38"><a href="#cb57-38" aria-hidden="true" tabindex="-1"></a>                          <span class="at">bic =</span> mod<span class="sc">$</span>bic, <span class="at">aicc =</span> mod<span class="sc">$</span>aicc, <span class="at">sigma2 =</span> mod<span class="sc">$</span>sigma2, <span class="at">loglik  =</span> mod<span class="sc">$</span>loglik,</span>
+<span id="cb57-39"><a href="#cb57-39" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rmse =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">2</span>], <span class="at">mae =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">3</span>], <span class="at">acf =</span> forecast<span class="sc">::</span><span class="fu">accuracy</span>(mod)[<span class="dv">7</span>])</span>
+<span id="cb57-40"><a href="#cb57-40" aria-hidden="true" tabindex="-1"></a>  yhat_list</span></code></pre></div>
 <pre><code># A tibble: 4 × 5
   month_end  geo       rmse      mae    acf
   &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
@@ -3228,13 +3336,13 @@ fist. Then, use these as input to NN. Maybe try this in python!</p>
 2 2022-07-01 AT    0.000668 0.000394 0.0284
 3 2022-08-01 AT    0.000668 0.000394 0.0284
 4 2022-09-01 AT    0.000668 0.000394 0.0284</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df = do.call(bind_rows, res_list)</span></span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="co"># stopImplicitCluster()</span></span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="co"># res_df</span></span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="co">#res_df = do.call(bind_rows, res_list)</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="co"># stopImplicitCluster()</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a><span class="co"># res_df</span></span></code></pre></div>
 </div>
 </div>
 <div id="check-model-quality-using-rolling-window-out-of-sample-predictions" class="section level1" number="8">

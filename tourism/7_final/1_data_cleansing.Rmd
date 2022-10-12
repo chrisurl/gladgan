@@ -1,0 +1,219 @@
+---
+title: "Google trends ARIMAX models"
+author: Christian Url
+date: 'Last Compiled `r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    
+    code_folding: show
+    highlight: tango
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+               collapse = FALSE,
+               comment = "",
+               strip.white = TRUE,
+               warning = FALSE,
+               message = FALSE,
+               cache = TRUE,
+               out.width = "100%",
+               fig.align = "center")
+
+```
+
+## load Packages
+```{r, cache=FALSE}
+library(data.table)
+library(lubridate)
+library(tidyverse)
+#library(fable) #also  has a forecast and accuracy method!!
+```
+
+## Paths
+```{r}
+datapath = "../data/"
+trends_path = paste0(datapath, "googleTrendsAuto/")
+ind_path = paste0(datapath, "indicators/")
+```
+
+## Functions
+```{r}
+scale2 <- function(x, na.rm = TRUE) (x - mean(x, na.rm = na.rm)) / sd(x, na.rm)
+
+lag_trends = function(lags, input_ds, col_pos){
+  
+  out = list()
+  for(i in seq_along(col_pos)){
+    col_sel = col_pos[i]
+    t_out = list()
+    for(j in seq_along(lags)){
+      t_out[[j]] = dplyr::lag(input_ds[,col_sel],lags[j])
+    }
+    out[[i]] = do.call(cbind,t_out)
+    if(ncol(out[[i]]) > 1){
+      colnames(out[[i]]) = paste0(colnames(input_ds)[col_sel], "_lag", lags) 
+    }
+  }
+  res = do.call(cbind,out)
+  return(res)
+}
+
+lag_trends_ts = function(lags, input_ts, col_pos){
+  stopifnot(is.ts(input_ts))
+  
+  out = list()
+  lags_neg = -1*lags
+  
+  for(i in seq_along(col_pos)){
+    col_sel = col_pos[i]
+    t_out = list()
+    for(j in seq_along(lags)){
+      t_out[[j]] = stats::lag(input_ts[,col_sel],lags_neg[j])
+    }
+    out[[i]] = do.call(cbind,t_out)
+    if(ncol(out[[i]]) > 1){
+      colnames(out[[i]]) = paste0(colnames(input_ts)[col_sel], "_lag", lags) 
+    }
+    out[[i]] = fable::as_tsibble(out[[i]]) #need this for binding the data accurately
+  }
+  res = as.ts(do.call(bind_rows,out))
+  return(res)
+}
+```
+
+
+# Volatility Index
+```{r vol_ind}
+vol_ind = read_delim(paste0(datapath,"country_volatility_index.csv")) %>%
+  mutate(geo = str_split(Countries, " ", simplify = T)[,1], .before = 1,
+         country = str_remove(Countries, ".*\\("), 
+         country = str_extract(country, ".*(?=\\))"))
+
+country_code_list = unlist(vol_ind$geo)
+country_list = unlist(vol_ind$country)
+country_code_list[country_list=="Greece"] <- "GR"
+```
+
+# Indicator
+Clean data, use "GR" instead of "EL" for Greece, start 4 time series where consistent data was found!
+Previously identified the following missing data:
+
+```{r}
+addMissings = tibble(country_code = c("AT","GR","GR"),
+        date = as_date(c("2008-10-01","1995-02-01", "1997-12-01")),
+        resid_total = c(NA,NA,NA))
+```
+
+
+```{r}
+ind_in = fread(paste0(ind_path,"tour_occ_nim_linear_all.csv"))
+
+ind_df = ind_in[,-c(1:3)] %>% 
+  as_tibble() %>%
+  mutate(country_code = case_when(
+    geo == "EL" ~ "GR",
+    TRUE ~ geo
+  )) %>%
+  mutate(date = as_date(paste0(TIME_PERIOD,"-01")),.before=1) %>%
+  filter(country_code %in% country_code_list & nace_r2 == "I551-I553" & unit=="NR" & c_resid == "TOTAL") %>%
+  rename(resid_total = OBS_VALUE) %>%
+  select(country_code, date, resid_total) %>%
+  add_row(addMissings) %>%
+  arrange(country_code, date) %>%
+  filter(country_code == "FR" & date >= as_date("2010-01-01") | 
+           country_code == "CY" & date >= as_date("2000-01-01") | 
+           country_code == "DK" & date >= as_date("2007-01-01") | 
+           country_code == "MT" & date >= as_date("2010-01-01") |
+           !country_code %in% c("FR","CY","DK","MT")) %>%
+  group_by(country_code) %>%
+  mutate(resid_total= zoo::na.locf(resid_total, na.rm = FALSE)) %>%
+  mutate(resid_total_sqrt = sqrt(resid_total),
+         resid_total_log = log(resid_total),
+         resid_total_std = scale2(resid_total),
+         mean = mean(resid_total),
+         sd = sd(resid_total)) %>%
+  ungroup() %>%
+  arrange(country_code,date)
+
+ind_df
+```
+
+After adding the missing rows, no more missing dates are identified:
+
+```{r}
+ind_df %>%
+  group_by(country_code) %>%
+  mutate(dt2 = dplyr::lag(date)) %>%
+  select(country_code, date, dt2) %>%
+  mutate(month_1 = month(date), month_2 = month(dt2),
+         diff = month_1-month_2) %>%
+  filter(!diff %in% c(1,-11, NA))
+```
+
+
+# Trends
+
+```{r}
+list.files(trends_path)
+goo = read_csv(paste0(trends_path, "trends_full.csv"))
+trends_100 = goo %>%
+  mutate(across(3:13, ~.x/100))
+trends_norm = goo %>%
+  mutate(across(3:13, scale2))
+
+
+lt100 = lag_trends(lags = 0:11,input_ds = trends_100, col_pos = 3:13)
+ltnorm = lag_trends(lags = 0:11,input_ds = trends_norm, col_pos = 3:13)
+
+c_filter = trends_100 %>%
+  group_by(country_code) %>%
+  summarise(min_date = min(date) + years(1)) %>%
+  select(country_code, min_date)
+
+trends_100_lag = cbind(trends_100[,1:2],lt100) %>%
+  as_tibble() %>%
+  left_join(c_filter) %>%
+  filter(date >= min_date) %>%
+  select(!min_date)
+
+trends_norm_lag = cbind(trends_norm[,1:2],ltnorm) %>%
+  as_tibble() %>%
+  left_join(c_filter) %>%
+  filter(date >= min_date)%>%
+  select(!min_date)
+
+trends100 = ind_df %>%
+  inner_join(trends_100, by=c("date", "country_code"))
+
+trendsnorm = ind_df %>%
+  inner_join(trends_norm, by=c("date", "country_code"))
+
+trends100_lag = ind_df %>%
+  inner_join(trends_100_lag, by=c("date", "country_code"))
+
+trendsnorm_lag = ind_df %>%
+  inner_join(trends_norm_lag, by=c("date", "country_code"))
+
+
+write_csv(ind_df, paste0(datapath, "indicator.csv"))
+write_csv(trends100, paste0(datapath,"trends_100.csv"))
+write_csv(trendsnorm, paste0(datapath,"trends_norm.csv"))
+write_csv(trends100_lag, paste0(datapath,"trends_100_lag.csv"))
+write_csv(trendsnorm_lag, paste0(datapath,"trends_norm_lag.csv"))
+```
+
+
+# Time Series
+```{r}
+ind_dates = ind_df %>%
+  group_by(country_code) %>%
+  summarise(min_year = year(min(date)), max_year = year(max(date)), 
+            min_month = month(min(date)), min_date_trends = min(date)+years(x=1))
+```
+
