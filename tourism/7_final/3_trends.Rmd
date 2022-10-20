@@ -1,0 +1,101 @@
+---
+title: "Google trends forecasts"
+author: Christian Url
+date: 'Last Compiled `r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    
+    code_folding: show
+    highlight: tango
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+               collapse = FALSE,
+               comment = "",
+               strip.white = TRUE,
+               warning = FALSE,
+               message = FALSE,
+               cache = TRUE,
+               out.width = "100%",
+               fig.align = "center")
+
+```
+
+
+## load Packages
+```{r,  cache=FALSE}
+library(data.table)
+library(lubridate)
+library(caret)
+library(rai)
+library(forecast)
+library(parallel)
+library(doParallel)
+library(tidyverse)
+```
+
+## Paths
+```{r}
+datapath = "../data/"
+res_path = paste0(datapath,"results/")
+```
+
+
+# Load Data {.tabset .tabset-fade}
+
+## Volatility Index {-}
+```{r}
+
+vol_ind = read_delim(paste0(datapath,"country_volatility_index.csv")) %>%
+  mutate(geo = str_split(Countries, " ", simplify = T)[,1], .before = 1,
+         country = str_remove(Countries, ".*\\("), 
+         country = str_extract(country, ".*(?=\\))"))
+
+country_code_list = unlist(vol_ind$geo)
+country_list = unlist(vol_ind$country)
+country_code_list[country_list=="Greece"] <- "GR"
+```
+
+## Trends {-}
+
+```{r}
+in_list = list()
+in_list[[1]] = read_csv(paste0(datapath,"trends_100.csv")) %>%
+  add_column(transform = "100")
+in_list[[2]] = read_csv(paste0(datapath,"trends_norm.csv"))%>%
+  add_column(transform = "100_lag")
+in_list[[3]] = read_csv(paste0(datapath,"trends_100_lag.csv"))%>%
+  add_column(transform = "norm")
+in_list[[4]] = read_csv(paste0(datapath,"trends_norm_lag.csv"))%>%
+  add_column(transform = "norm_lag")
+
+trends_ds = do.call(bind_rows, in_list)
+trends_ds
+```
+
+## Best fits {-}
+
+```{r}
+best_fits = read_csv(paste0(datapath, "best_fits.csv")) %>%
+  mutate(lagged_data = case_when(
+    str_detect(transform, "_lag") ~ 1,
+    TRUE ~ 0))
+
+best_fits_rai = read_csv(paste0(datapath, "best_fits_RAI.csv"))  %>%
+  mutate(lagged_data = case_when(
+    str_detect(transform, "_lag") ~ 1,
+    TRUE ~ 0))
+best_fits
+best_fits_rai
+```
+
+# Function for modelling
+
+Needs to load data accordingly to the specification from `best_fits` and `best_fits_rai`. There, all parameters are stored. Furthermore, stats are already columns in the `trends_ds` data. Also be aware of different columns in lagged and non-lagged data, as indicated by the column `lagged_data`.
+

@@ -188,127 +188,9 @@ trends %>%
 ```
 
 # Modelling for all countries {.tabset .tabset-fade}
-
+Not evaluated.
 ```{r model data, eval = F}
-
-cl = detectCores()-1
-registerDoParallel(cl)
-
-out_list = list()
-
-out_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","forecast", "rai", "caret")) %dopar% {
-  
-  print(paste0("Country ", i,"/24"))
-  
-  c_code = country_code_list[i]
-  ctry = country_list[i]
-  
-  trends_cty = trends %>%
-    filter(country_code == c_code) %>%
-    zoo::na.locf() #carry last obs forward
-  
-  trends_ts = trends_cty %>%
-    select(!c(country_code,date)) %>%
-    ts(start=c(2004,1), frequency=12)
-  
-  theData = trends_cty %>%
-    .[,-c(1:3)]
-  
-  theResponse = trends_cty %>% 
-    .$resid_TOTAL_STD
-  
-  stats_list = list()
-  
-  mod_rai = rai(theData = theData, theResponse = theResponse)
-  (rai_sum = summary(mod_rai$model))
-  
-  sig_sq = (rai_sum$sigma)^2
-  
-  stats_list[[1]] = data.frame(country = country_list[i],
-                               TrainRMSE = RMSE(predict(mod_rai, theData),theResponse),
-                               TrainRsquared  = rai_sum$r.squared,
-                               TrainMAE = MAE(predict(mod_rai, theData),theResponse),
-                               method = "RAI")
-  
-  X = as.matrix(theData)
-  mod1 = auto.arima(y = theResponse, max.order = 12, xreg = X,  max.D = 2)
-  ar_sum = summary(mod1)
-  
-  stats_list[[2]] = data.frame(country = country_list[i],
-                               TrainRMSE = RMSE(ar_sum$fitted, ar_sum$x),
-                               TrainRsquared  = NA,
-                               TrainMAE = MAE(ar_sum$fitted, ar_sum$x),
-                               method = "ARIMAX")
-  
-  fitControl <- caret::trainControl(method = "repeatedcv",
-                                    number = 20, ## 20-fold CV..., only want to predict small amounts of data
-                                    repeats = 10)  ## repeated 10 times
-  mod_svn =caret::train(x=theData, y=theResponse, method="svmRadialSigma", trControl = fitControl, verbose=F)
-  stats_list[[3]] = getTrainPerf(mod_svn) %>% 
-    add_column(country = country_list[i], .before = 1)
-  
-  theData = as.data.frame(theData)
-  
-  gbmGrid <-  expand.grid(interaction.depth = c(1:4), 
-                          n.trees = c(20,50,75,100, 150, 200,350,500), 
-                          shrinkage = 0.1,
-                          n.minobsinnode = 5)
-  mod_gbm =caret::train(x=theData, y=theResponse, method="gbm", trControl = fitControl, tuneGrid=gbmGrid, verbose=F)
-  
-  stats_list[[4]] = getTrainPerf(mod_gbm) %>% 
-    add_column(country = country_list[i], .before = 1)
-  
-  mod_rf =caret::train(x=theData, y=theResponse, method="rf", trControl = fitControl, verbose=F)
-  stats_list[[5]] = getTrainPerf(mod_rf) %>% 
-    add_column(country = country_list[i], .before = 1)
-  
-  mod_brnn =caret::train(x=theData, y=theResponse, method="brnn", trControl = fitControl, verbose=F)
-  stats_list[[6]] = getTrainPerf(mod_brnn) %>% 
-    add_column(country = country_list[i], .before = 1)
-  
-  xgb_trcontrol = trainControl(
-    method = "cv",
-    number = 5,  
-    allowParallel = FALSE,
-    verboseIter = FALSE,
-    returnData = FALSE
-  )
-  
-  xgbGrid <- expand.grid(nrounds = c(50,100,200,250),  # this is n_estimators in the python code above
-                         max_depth = c(1:4, 10, 15, 20, 25),
-                         colsample_bytree = seq(0.5, 0.9, length.out = 5),
-                         ## The values below are default values in the sklearn-api. 
-                         eta = 0.1,
-                         gamma=0,
-                         min_child_weight = 1,
-                         subsample = 1
-  )
-  xgb_model = caret::train(x=theData, y=theResponse,  
-    trControl = xgb_trcontrol,
-    tuneGrid = xgbGrid,
-    method = "xgbTree"
-  )
-  
-  stats_list[[7]] = getTrainPerf(xgb_model) %>% 
-    add_column(country = country_list[i], .before = 1)
-  
-  mod_svn2 =caret::train(x=theData, y=theResponse, method="svmPoly", trControl = fitControl, verbose=F)
-  stats_list[[8]] = getTrainPerf(mod_svn2) %>% 
-    add_column(country = country_list[i], .before = 1)
-  
-  
-  mod_svn3 =caret::train(x=theData, y=theResponse, method="svmLinear3", trControl = fitControl, verbose=F)
-  stats_list[[9]] = getTrainPerf(mod_svn3) %>% 
-    add_column(country = country_list[i], .before = 1)
-  
-  
-  res_df = do.call(rbind, stats_list)
-}
-
-stopImplicitCluster()
-stats = do.call(bind_rows, out_list)
-
-write_csv(stats, "modelling_stats_all.csv")
+source("trends_models_all.R")
 ```
 
 
@@ -542,6 +424,110 @@ mae = stats %>%
 print(mae, n=nrow(mae))
 ```
 
+# Determine the best fit for google trends {.tabset .tabset-fade}
+Will export a file containing all information using R2 as criterion.
+
+## Load data (again)
+```{r}
+in_list = list()
+in_list[[1]] = readr::read_csv("stats_alltrends_100.csv") %>%
+  add_column(transform = "100")
+in_list[[2]] = readr::read_csv("stats_alltrends_100_lag.csv") %>%
+  add_column(transform = "100_lag")
+in_list[[3]] = readr::read_csv("stats_alltrends_norm.csv") %>%
+  add_column(transform = "norm")
+in_list[[4]] = readr::read_csv("stats_alltrends_norm_lag.csv") %>%
+  add_column(transform = "norm_lag")
+
+stats_df = do.call(bind_rows, in_list)
+```
+
+## without RAI {.tabset .tabset-fade}
+
+### Best fits RMSE {-}
+```{r, stats_df=FALSE}
+rmse = stats_df %>%
+  filter(method != "RAI") %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared, transform,
+            min_RMSE = min(TrainRMSE),
+            max_R2 = max(TrainRsquared)) %>%
+  filter(TrainRMSE==min_RMSE)
+print(rmse, n=nrow(rmse))
+```
+
+### Best fits R2 {-}
+```{r}
+r2 = stats_df %>%
+  filter(method != "RAI") %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared, transform,
+            max_R2 = max(TrainRsquared)) %>%
+  filter(TrainRsquared == max_R2)
+
+print(r2, n=nrow(r2))
+```
+
+Export:
+```{r}
+write_csv(r2, file=paste0(datapath,"best_fits.csv"))
+```
+
+
+### Best fits MAE {-}
+
+```{r}
+mae = stats_df %>%
+  filter(method != "RAI") %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared, TrainMAE, transform,
+            min_MAE = min(TrainMAE)) %>%
+  filter(TrainMAE == min_MAE)
+  
+print(mae, n=nrow(mae))
+```
+
+
+## add RAI {.tabset .tabset-fade}
+
+### Best fits RMSE {-}
+```{r, stats_df=FALSE}
+rmse = stats_df %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared, transform,
+            min_RMSE = min(TrainRMSE),
+            max_R2 = max(TrainRsquared)) %>%
+  filter(TrainRMSE==min_RMSE)
+print(rmse, n=nrow(rmse))
+```
+
+### Best fits R2 {-}
+```{r}
+r2 = stats_df %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared, transform,
+            max_R2 = max(TrainRsquared)) %>%
+  filter(TrainRsquared == max_R2)
+
+print(r2, n=nrow(r2))
+```
+
+Export:
+```{r}
+write_csv(r2, file=paste0(datapath,"best_fits_RAI.csv"))
+```
+
+### Best fits MAE {-}
+
+```{r}
+mae = stats_df %>%
+  group_by(country) %>%
+  summarise(method, TrainRMSE, TrainRsquared, TrainMAE, transform,
+            min_MAE = min(TrainMAE)) %>%
+  filter(TrainMAE == min_MAE)
+  
+print(mae, n=nrow(mae))
+```
 
 
 # ARIMAX Modelling

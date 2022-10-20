@@ -142,10 +142,11 @@ arima_models = function(input_ds, country_code_list, response_pos, n_ahead, ind_
         add_column(country_code = c_code, .before = 1)
         
       
-      yhat_list = list(tibble(date = zoo::as.Date(pred$mean),country_code = c_code, yhat = yhat, bic = mod$bic, aicc = mod$aicc,
-                     rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7]),
-                     coefs,
-                     arima_order)
+      yhat_list = list(tibble(date = zoo::as.Date(pred$mean),country_code = c_code, yhat = yhat, h=1:n_ahead, bic = mod$bic, 
+                              aicc = mod$aicc, rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], 
+                              acf = forecast::accuracy(mod)[7]),
+                      coefs,
+                      arima_order)
   }
   stopImplicitCluster()
   res_df = do.call(bind_rows, res_list[,1])
@@ -234,10 +235,11 @@ arimax_fourier_models = function(input_ds, country_code_list, response_pos, n_ah
         add_column(country_code = c_code, .before = 1)
         
       
-      yhat_list = list(tibble(date = zoo::as.Date(pred$mean),country_code = c_code, yhat = yhat, bic = mod$bic, aicc = mod$aicc,
-                     rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], acf = forecast::accuracy(mod)[7]),
-                     coefs,
-                     arima_order)
+      yhat_list = list(tibble(date = zoo::as.Date(pred$mean),country_code = c_code, yhat = yhat, h=1:n_ahead, bic = mod$bic, 
+                              aicc = mod$aicc, rmse = forecast::accuracy(mod)[2], mae = forecast::accuracy(mod)[3], 
+                              acf = forecast::accuracy(mod)[7]),
+                      coefs,
+                      arima_order)
   }
   stopImplicitCluster()
   res_df = do.call(bind_rows, res_list[,1])
@@ -388,31 +390,27 @@ for (i in 1:6){
 }
 preds_out = do.call(rbind,preds)
 
-id = tibble(id = rep(1:2,144))
-
 h1 = preds_out %>%
   arrange(country_code, date) %>%
-  bind_cols(id) %>%
-  filter(id == 1) %>%
+  filter(h == 1) %>%
   inner_join(indicator)
 
 h2 = preds_out %>%
   arrange(country_code, date) %>%
-  bind_cols(id) %>%
-  filter(id == 2) %>%
+  filter(h == 2) %>%
   inner_join(indicator)
 
 h1 %>%
   ggplot(mapping = aes(x = date, group = country_code)) +
   geom_line(aes(y = resid_total,color="Value")) + 
   geom_line(aes(y = yhat, color = "Pred")) + 
-  facet_wrap(~country_code, ncol = 4, scales = "free_y")
+  facet_wrap(~country_code, ncol = 3, scales = "free_y")
 
 h2 %>%
   ggplot(mapping = aes(x = date, group = country_code)) +
   geom_line(aes(y = resid_total,color="Value")) + 
   geom_line(aes(y = yhat, color = "Pred")) + 
-  facet_wrap(~country_code, ncol = 4, scales = "free_y")
+  facet_wrap(~country_code, ncol = 3, scales = "free_y")
 ```
 
 
@@ -448,25 +446,23 @@ id = tibble(id = rep(1:2,144))
 
 h1 = preds_out %>%
   arrange(country_code, date) %>%
-  bind_cols(id) %>%
-  filter(id == 1) %>%
+  filter(h == 1) %>%
   inner_join(indicator)
 
 h2 = preds_out %>%
   arrange(country_code, date) %>%
-  bind_cols(id) %>%
-  filter(id == 2) %>%
+  filter(h == 2) %>%
   inner_join(indicator)
 
 h1 %>%
   ggplot(mapping = aes(x = date, group = country_code)) +
   geom_line(aes(y = resid_total,color="Value")) + 
   geom_line(aes(y = yhat, color = "Pred")) + 
-  facet_wrap(~country_code, ncol = 4, scales = "free_y")
+  facet_wrap(~country_code, ncol = 3, scales = "free_y")
 
 h2 %>%
   ggplot(mapping = aes(x = date, group = country_code)) +
   geom_line(aes(y = resid_total,color="Value")) + 
   geom_line(aes(y = yhat, color = "Pred")) + 
-  facet_wrap(~country_code, ncol = 4, scales = "free_y")
+  facet_wrap(~country_code, ncol = 3, scales = "free_y")
 ```
