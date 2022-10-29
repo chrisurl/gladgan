@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE,
                strip.white = TRUE,
                warning = FALSE,
                message = FALSE,
-               cache = TRUE,
+               cache = FALSE,
                out.width = "100%",
                fig.align = "center")
 
@@ -207,6 +207,53 @@ write_csv(trendsnorm, paste0(datapath,"trends_norm.csv"))
 write_csv(trends100_lag, paste0(datapath,"trends_100_lag.csv"))
 write_csv(trendsnorm_lag, paste0(datapath,"trends_norm_lag.csv"))
 ```
+
+# New data
+
+```{r}
+mdate = trends100 %>%
+  group_by(country_code) %>%
+  summarise(max_date = max(date))
+
+trends100_newdata = trends_100 %>%
+  left_join(mdate, by=c("country_code")) %>%
+  filter(date > max_date) %>%
+  select(!max_date)
+##########
+mdate = trendsnorm %>%
+  group_by(country_code) %>%
+  summarise(max_date = max(date))
+
+trendsnorm_newdata = trends_norm %>%
+  left_join(mdate, by=c("country_code")) %>%
+  filter(date > max_date) %>%
+  select(!max_date)
+############
+mdate = trends100_lag %>%
+  group_by(country_code) %>%
+  summarise(max_date = max(date))
+
+trends100_lag_newdata = trends_100_lag %>%
+  left_join(mdate, by=c("country_code")) %>%
+  filter(date > max_date) %>%
+  select(!max_date)
+##############
+mdate = trendsnorm_lag %>%
+  group_by(country_code) %>%
+  summarise(max_date = max(date))
+
+trendsnorm_lag_newdata = trends_norm_lag %>%
+  left_join(mdate, by=c("country_code")) %>%
+  filter(date > max_date) %>%
+  select(!max_date)
+
+write_csv(trends100_newdata, paste0(datapath,"trends_100_newdata.csv"))
+write_csv(trendsnorm_newdata, paste0(datapath,"trends_norm_newdata.csv"))
+write_csv(trends100_lag_newdata, paste0(datapath,"trends_100_lag_newdata.csv"))
+write_csv(trendsnorm_lag_newdata, paste0(datapath,"trends_norm_lag_newdata.csv"))
+
+```
+
 
 
 # Time Series

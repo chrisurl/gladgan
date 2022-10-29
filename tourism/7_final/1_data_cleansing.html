@@ -537,7 +537,7 @@ display: none;
 
 <h1 class="title toc-ignore">Google trends ARIMAX models</h1>
 <h4 class="author">Christian Url</h4>
-<h4 class="date">Last Compiled Oktober 11, 2022</h4>
+<h4 class="date">Last Compiled Oktober 28, 2022</h4>
 
 </div>
 
@@ -549,7 +549,8 @@ display: none;
 <li><a href="#volatility-index" id="toc-volatility-index"><span class="toc-section-number">1</span> Volatility Index</a></li>
 <li><a href="#indicator" id="toc-indicator"><span class="toc-section-number">2</span> Indicator</a></li>
 <li><a href="#trends" id="toc-trends"><span class="toc-section-number">3</span> Trends</a></li>
-<li><a href="#time-series" id="toc-time-series"><span class="toc-section-number">4</span> Time Series</a></li>
+<li><a href="#new-data" id="toc-new-data"><span class="toc-section-number">4</span> New data</a></li>
+<li><a href="#time-series" id="toc-time-series"><span class="toc-section-number">5</span> Time Series</a></li>
 </ul>
 </div>
 
@@ -742,12 +743,55 @@ identified:</p>
 <span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(trends100_lag, <span class="fu">paste0</span>(datapath,<span class="st">&quot;trends_100_lag.csv&quot;</span>))</span>
 <span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(trendsnorm_lag, <span class="fu">paste0</span>(datapath,<span class="st">&quot;trends_norm_lag.csv&quot;</span>))</span></code></pre></div>
 </div>
-<div id="time-series" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> Time Series</h1>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ind_dates <span class="ot">=</span> ind_df <span class="sc">%&gt;%</span></span>
+<div id="new-data" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> New data</h1>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mdate <span class="ot">=</span> trends100 <span class="sc">%&gt;%</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country_code) <span class="sc">%&gt;%</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">min_year =</span> <span class="fu">year</span>(<span class="fu">min</span>(date)), <span class="at">max_year =</span> <span class="fu">year</span>(<span class="fu">max</span>(date)), </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_month =</span> <span class="fu">month</span>(<span class="fu">min</span>(date)), <span class="at">min_date_trends =</span> <span class="fu">min</span>(date)<span class="sc">+</span><span class="fu">years</span>(<span class="at">x=</span><span class="dv">1</span>))</span></code></pre></div>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">max_date =</span> <span class="fu">max</span>(date))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>trends100_newdata <span class="ot">=</span> trends_100 <span class="sc">%&gt;%</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(mdate, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;country_code&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">&gt;</span> max_date) <span class="sc">%&gt;%</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>max_date)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="do">##########</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>mdate <span class="ot">=</span> trendsnorm <span class="sc">%&gt;%</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country_code) <span class="sc">%&gt;%</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">max_date =</span> <span class="fu">max</span>(date))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>trendsnorm_newdata <span class="ot">=</span> trends_norm <span class="sc">%&gt;%</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(mdate, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;country_code&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">&gt;</span> max_date) <span class="sc">%&gt;%</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>max_date)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="do">############</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>mdate <span class="ot">=</span> trends100_lag <span class="sc">%&gt;%</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country_code) <span class="sc">%&gt;%</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">max_date =</span> <span class="fu">max</span>(date))</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>trends100_lag_newdata <span class="ot">=</span> trends_100_lag <span class="sc">%&gt;%</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(mdate, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;country_code&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">&gt;</span> max_date) <span class="sc">%&gt;%</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>max_date)</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="do">##############</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>mdate <span class="ot">=</span> trendsnorm_lag <span class="sc">%&gt;%</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country_code) <span class="sc">%&gt;%</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">max_date =</span> <span class="fu">max</span>(date))</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>trendsnorm_lag_newdata <span class="ot">=</span> trends_norm_lag <span class="sc">%&gt;%</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(mdate, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;country_code&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">&gt;</span> max_date) <span class="sc">%&gt;%</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>max_date)</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(trends100_newdata, <span class="fu">paste0</span>(datapath,<span class="st">&quot;trends_100_newdata.csv&quot;</span>))</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(trendsnorm_newdata, <span class="fu">paste0</span>(datapath,<span class="st">&quot;trends_norm_newdata.csv&quot;</span>))</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(trends100_lag_newdata, <span class="fu">paste0</span>(datapath,<span class="st">&quot;trends_100_lag_newdata.csv&quot;</span>))</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(trendsnorm_lag_newdata, <span class="fu">paste0</span>(datapath,<span class="st">&quot;trends_norm_lag_newdata.csv&quot;</span>))</span></code></pre></div>
+</div>
+<div id="time-series" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Time Series</h1>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ind_dates <span class="ot">=</span> ind_df <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country_code) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">min_year =</span> <span class="fu">year</span>(<span class="fu">min</span>(date)), <span class="at">max_year =</span> <span class="fu">year</span>(<span class="fu">max</span>(date)), </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_month =</span> <span class="fu">month</span>(<span class="fu">min</span>(date)), <span class="at">min_date_trends =</span> <span class="fu">min</span>(date)<span class="sc">+</span><span class="fu">years</span>(<span class="at">x=</span><span class="dv">1</span>))</span></code></pre></div>
 </div>
 
 

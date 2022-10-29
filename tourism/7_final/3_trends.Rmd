@@ -53,13 +53,17 @@ res_path = paste0(datapath,"results/")
 ```{r}
 
 vol_ind = read_delim(paste0(datapath,"country_volatility_index.csv")) %>%
-  mutate(geo = str_split(Countries, " ", simplify = T)[,1], .before = 1,
+  mutate(country_code = str_split(Countries, " ", simplify = T)[,1], .before = 1,
          country = str_remove(Countries, ".*\\("), 
-         country = str_extract(country, ".*(?=\\))"))
+         country = str_extract(country, ".*(?=\\))"),
+         country_code = case_when(
+           country=="Greece" ~ "GR",
+           TRUE ~ country_code)
+         )
 
-country_code_list = unlist(vol_ind$geo)
+country_code_list = unlist(vol_ind$country_code)
 country_list = unlist(vol_ind$country)
-country_code_list[country_list=="Greece"] <- "GR"
+
 ```
 
 ## Trends {-}
@@ -69,9 +73,9 @@ in_list = list()
 in_list[[1]] = read_csv(paste0(datapath,"trends_100.csv")) %>%
   add_column(transform = "100")
 in_list[[2]] = read_csv(paste0(datapath,"trends_norm.csv"))%>%
-  add_column(transform = "100_lag")
-in_list[[3]] = read_csv(paste0(datapath,"trends_100_lag.csv"))%>%
   add_column(transform = "norm")
+in_list[[3]] = read_csv(paste0(datapath,"trends_100_lag.csv"))%>%
+  add_column(transform = "100_lag")
 in_list[[4]] = read_csv(paste0(datapath,"trends_norm_lag.csv"))%>%
   add_column(transform = "norm_lag")
 
@@ -79,23 +83,309 @@ trends_ds = do.call(bind_rows, in_list)
 trends_ds
 ```
 
+## Trends new data {-}
+
+```{r}
+in_list = list()
+in_list[[1]] = read_csv(paste0(datapath,"trends_100_newdata.csv")) %>%
+  add_column(transform = "100")
+in_list[[2]] = read_csv(paste0(datapath,"trends_norm_newdata.csv"))%>%
+  add_column(transform = "norm")
+in_list[[3]] = read_csv(paste0(datapath,"trends_100_lag_newdata.csv"))%>%
+  add_column(transform = "100_lag")
+in_list[[4]] = read_csv(paste0(datapath,"trends_norm_lag_newdata.csv"))%>%
+  add_column(transform = "norm_lag")
+
+trends_ds_newdata = do.call(bind_rows, in_list)
+trends_ds_newdata
+```
+
 ## Best fits {-}
 
 ```{r}
+ccode = vol_ind %>% select(country_code, country)
+
 best_fits = read_csv(paste0(datapath, "best_fits.csv")) %>%
   mutate(lagged_data = case_when(
     str_detect(transform, "_lag") ~ 1,
-    TRUE ~ 0))
+    TRUE ~ 0)) %>%
+  left_join(ccode)
 
 best_fits_rai = read_csv(paste0(datapath, "best_fits_RAI.csv"))  %>%
   mutate(lagged_data = case_when(
     str_detect(transform, "_lag") ~ 1,
-    TRUE ~ 0))
+    TRUE ~ 0))%>%
+  left_join(ccode)
 best_fits
 best_fits_rai
 ```
 
-# Function for modelling
+# Function for modelling {.tabset .tabset-fade}
 
 Needs to load data accordingly to the specification from `best_fits` and `best_fits_rai`. There, all parameters are stored. Furthermore, stats are already columns in the `trends_ds` data. Also be aware of different columns in lagged and non-lagged data, as indicated by the column `lagged_data`.
+
+## Parts of function {.tabset .tabset-fade}
+
+### Identify columns {-}
+
+```{r}
+df_out = list()
+
+for (i in 1:nrow(best_fits)){
+ df1 = trends_ds %>%
+  filter(country_code==best_fits$country_code[i] & transform==best_fits$transform[i])
+
+  if (best_fits$lagged_data[i]==1){
+   df_out[[i]] = df1[,-c(9:19)]
+  } else {
+    df_out[[i]] = df1[,-c(21:152)]
+  } 
+}
+# no list, we need only not-na cols for models
+```
+
+### Identify model {-}
+
+```{r identify1, eval=F}
+#from Caret package:
+cl <- makePSOCKcluster(8)
+registerDoParallel(cl)
+
+mod_out = list()
+
+for (i in 1:nrow(best_fits)){
+  print(paste0("Step=",i))
+  
+  theData=df_out[[i]][,-c(1:9)]
+  theResponse = df_out[[i]]$resid_total_std
+
+  fitControl <- caret::trainControl(method = "repeatedcv",
+                                      number = 20, ## 20-fold CV..., only want to predict small amounts of data
+                                      repeats = 10)
+  gbmGrid <-  expand.grid(interaction.depth = c(1:4), 
+                            n.trees = c(20,50,75,100, 150, 200,350,500), 
+                            shrinkage = 0.1,
+                            n.minobsinnode = 5)
+  xgbGrid <- expand.grid(nrounds = c(50,100,200,250),  # this is n_estimators in the python code above
+                           max_depth = c(1:4, 10, 15, 20, 25),
+                           colsample_bytree = seq(0.5, 0.9, length.out = 5),
+                           ## The values below are default values in the sklearn-api. 
+                           eta = 0.1,
+                           gamma=0,
+                           min_child_weight = 1,
+                           subsample = 1
+    )
+  xgb_trcontrol = trainControl(
+      method = "cv",
+      number = 5,  
+      allowParallel = FALSE,
+      verboseIter = FALSE,
+      returnData = FALSE
+    )
+    
+  
+  if(best_fits$method[[i]]=="gbm"){
+    mod_out[[i]] =caret::train(x=theData, y=theResponse, method="gbm", 
+                               trControl = fitControl, tuneGrid=gbmGrid, verbose=F)
+  } else if(best_fits$method[[i]]=="xgbTree") {
+      mod_out[[i]] = caret::train(x=theData, y=theResponse, 
+                                  trControl = xgb_trcontrol, tuneGrid = xgbGrid, method = "xgbTree")
+  } else {
+     mod_out[[i]] = caret::train(x=theData, y=theResponse, method=best_fits$method[i], trControl = fitControl) 
+  }
+}
+  
+stopCluster(cl)
+```
+
+
+## Final functions {.tabset .tabset-fade}
+### Train {-}
+
+```{r train2021}
+estimate_models = function(input_ds, best_fits, n_cores=8, message=T){
+  df_out = list()
+  mod_out = list()
+
+  for (i in 1:nrow(best_fits)){
+   df1 = input_ds %>%
+    filter(country_code==best_fits$country_code[i] & transform==best_fits$transform[i])
+  
+    if (best_fits$lagged_data[i]==1){
+     df_out[[i]] = df1[,-c(9:19)]
+    } else {
+      df_out[[i]] = df1[,-c(21:152)]
+    } 
+  }
+
+  if(n_cores>1){
+    cl <- makePSOCKcluster(8)
+    registerDoParallel(cl)
+  }
+  
+    
+  for (i in 1:nrow(best_fits)){
+    if(message) print(paste0("Step=",i))
+    
+    theData=df_out[[i]][,-c(1:9)]
+    theResponse = df_out[[i]]$resid_total_std
+  
+    fitControl <- caret::trainControl(method = "repeatedcv",
+                                        number = 20, ## 20-fold CV..., only want to predict small amounts of data
+                                        repeats = 10)
+    gbmGrid <-  expand.grid(interaction.depth = c(1:4), 
+                              n.trees = c(20,50,75,100, 150, 200,350,500), 
+                              shrinkage = 0.1,
+                              n.minobsinnode = 5)
+    xgbGrid <- expand.grid(nrounds = c(50,100,200,250),  # this is n_estimators in the python code above
+                             max_depth = c(1:4, 10, 15, 20, 25),
+                             colsample_bytree = seq(0.5, 0.9, length.out = 5),
+                             ## The values below are default values in the sklearn-api. 
+                             eta = 0.1,
+                             gamma=0,
+                             min_child_weight = 1,
+                             subsample = 1
+      )
+    xgb_trcontrol = trainControl(
+        method = "cv",
+        number = 5,  
+        allowParallel = FALSE,
+        verboseIter = FALSE,
+        returnData = FALSE
+      )
+      
+    
+    if(best_fits$method[[i]]=="gbm"){
+      mod_out[[i]] =caret::train(x=theData, y=theResponse, method="gbm", 
+                                 trControl = fitControl, tuneGrid=gbmGrid, verbose=F)
+    } else if(best_fits$method[[i]]=="xgbTree") {
+        mod_out[[i]] = caret::train(x=theData, y=theResponse, 
+                                    trControl = xgb_trcontrol, tuneGrid = xgbGrid, method = "xgbTree")
+    } else {
+       mod_out[[i]] = caret::train(x=theData, y=theResponse, method=best_fits$method[i], trControl = fitControl) 
+    }
+  }
+  
+  if(n_cores>1){
+    stopCluster(cl)
+  } 
+  
+  return(mod_out)
+}
+```
+
+### Predict {-}
+not used
+```{r}
+predict_models = function(models, new_data, n_models, n_ahead){
+  pred_out = list()
+  
+  for (i in 1:n_models){
+    pred_out = predict(models[[i]], new_data[[i]])  
+  }
+}
+```
+
+
+## One year forecasts {.tabset .tabset-fade}
+
+### Setting up the data {-}
+```{r}
+train_df = trends_ds %>%
+  filter(date <= '2021-12-01')
+
+test_df = trends_ds %>%
+  filter(date > '2021-12-01')
+
+test_df_out = list()
+
+for (i in 1:nrow(best_fits)){
+ testdf1 = test_df %>%
+  filter(country_code==best_fits$country_code[i] & transform==best_fits$transform[i])
+
+  if (best_fits$lagged_data[i]==1){
+   test_df_out[[i]] = testdf1[,-c(9:19)]
+  } else {
+    test_df_out[[i]] = testdf1[,-c(21:152)]
+  } 
+}
+
+```
+
+### Estimation and prediction {-}
+Estimation:
+```{r est2021}
+mod2021 = estimate_models(input_ds = train_df, best_fits = best_fits, message = F)
+```
+
+Prediction:
+```{r}
+res = list()
+for(i in 1:nrow(best_fits)){
+  mod = mod2021[[i]]
+  newdata=test_df_out[[i]][,-c(1:9)]
+  preds = predict(mod,newdata)
+  
+  res[[i]] = test_df_out[[i]] %>%
+    select(country_code, date, resid_total, mean, sd) %>%
+    add_column(preds) %>%
+    mutate(resid_total_hat = preds*sd + mean)
+}
+
+res_out = do.call(bind_rows, res)
+
+res_out %>%
+  ggplot(aes(x = date, group = country_code)) + 
+  geom_line(aes(y = resid_total), color = "black") + 
+  geom_line(aes(y = resid_total_hat), color = "red") + 
+  facet_wrap(~country_code, ncol = 3, scales = "free_y")
+```
+
+# Predictions using new data
+```{r mod2022}
+mod2022 = estimate_models(input_ds = trends_ds, best_fits = best_fits, message = F)
+```
+
+Predictions:
+```{r}
+newdata_out = list()
+
+stats_info = distinct(trends_ds[,c(1,7,8)])
+
+for (i in 1:nrow(best_fits)){
+ testdf1 = trends_ds_newdata %>%
+  filter(country_code==best_fits$country_code[i] & transform==best_fits$transform[i])
+
+  if (best_fits$lagged_data[i]==1){
+   newdata_out[[i]] = testdf1[,-c(3:13)]
+  } else {
+    newdata_out[[i]] = testdf1[,-c(15:146)]
+  } 
+}
+
+res = list()
+for(i in 1:nrow(best_fits)){
+  mod = mod2022[[i]]
+  newdata=newdata_out[[i]][,-c(1:2)] %>%
+    filter(transform==best_fits$transform[i]) %>%
+    select(!transform)
+  
+  preds = predict(mod,newdata)
+  
+  res[[i]] = newdata_out[[i]] %>%
+    select(country_code, date) %>%
+    left_join(stats_info) %>%
+    add_column(preds) %>%
+    mutate(resid_total_hat = preds*sd + mean)
+}
+
+res_out = do.call(bind_rows, res)
+
+res_out %>%
+  ggplot(aes(x = date, y = resid_total_hat, group = country_code)) + 
+  geom_line() + 
+  facet_wrap(~country_code, ncol = 3, scales = "free_y")
+
+write_csv(res_out, file = paste0(res_path,"trends_results.csv"))
+```
 

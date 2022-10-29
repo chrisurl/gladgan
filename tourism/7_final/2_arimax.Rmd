@@ -364,9 +364,9 @@ rolling_forecast = function(rolling_start = "2022-01-01", window_size = 2, input
 
 ```
 
-## Forecasts {.tabset .tabset-fade}
+## Rolling window forecasts {.tabset .tabset-fade}
 
-### Arima {-}
+### Arima std {-}
 ```{r arima_roll}
 arima_std = rolling_forecast(rolling_start = "2021-12-01", window_size = 2, input_ds = indicator, 
                              country_code_list = country_code_list, response_pos = 6, ind_stats = ind_stats, 
@@ -378,6 +378,54 @@ arima_res = arima_std$results %>%
             mae_mean = mean(mae))
 
 arima_res
+```
+
+Plots:
+
+```{r}
+preds = list()
+
+for (i in 1:6){
+  preds[[i]] = arima_std$trace[[i]][[1]]
+}
+preds_out = do.call(rbind,preds)
+
+h1 = preds_out %>%
+  arrange(country_code, date) %>%
+  filter(h == 1) %>%
+  inner_join(indicator)
+
+h2 = preds_out %>%
+  arrange(country_code, date) %>%
+  filter(h == 2) %>%
+  inner_join(indicator)
+
+h1 %>%
+  ggplot(mapping = aes(x = date, group = country_code)) +
+  geom_line(aes(y = resid_total,color="Value")) + 
+  geom_line(aes(y = yhat, color = "Pred")) + 
+  facet_wrap(~country_code, ncol = 3, scales = "free_y")
+
+h2 %>%
+  ggplot(mapping = aes(x = date, group = country_code)) +
+  geom_line(aes(y = resid_total,color="Value")) + 
+  geom_line(aes(y = yhat, color = "Pred")) + 
+  facet_wrap(~country_code, ncol = 3, scales = "free_y")
+```
+
+
+### Arima sqrt {-}
+```{r arima_roll 2}
+arima_sqrt = rolling_forecast(rolling_start = "2021-12-01", window_size = 2, input_ds = indicator, 
+                             country_code_list = country_code_list, response_pos = 4, ind_stats = ind_stats, 
+                             transformation = "sqrt", model = "arima")
+
+arima_res2 = arima_sqrt$results %>%
+  group_by(country_code) %>%
+  summarise(rmse_mean = mean(rmse),
+            mae_mean = mean(mae))
+
+arima_res2
 ```
 
 Plots:
@@ -440,7 +488,7 @@ preds = list()
 for (i in 1:6){
   preds[[i]] = arimax_fourier$trace[[i]][[1]]
 }
-preds_out = do.call(rbind,preds)
+preds_out = do.call(rbind,preds) 
 
 id = tibble(id = rep(1:2,144))
 
@@ -466,3 +514,54 @@ h2 %>%
   geom_line(aes(y = yhat, color = "Pred")) + 
   facet_wrap(~country_code, ncol = 3, scales = "free_y")
 ```
+
+### Comparing all tables {-}
+```{r}
+a = list()
+a[[1]] = arima_res %>%
+  add_column(transform = "std")
+a[[2]] = arima_res2 %>%
+  add_column(transform = "sqrt")
+a[[3]] = arima_fourier_res %>%
+  add_column(transform = "fourier")
+
+overview = do.call(bind_rows, a) %>%
+  arrange(country_code)
+
+print(overview, n = nrow(overview))
+```
+
+### Select minimum {-}
+```{r}
+selector = overview %>%
+  group_by(country_code) %>%
+  filter(transform != "fourier") %>%
+  summarise(rmse_min = min(rmse_mean),rmse_mean, transform) %>%
+  filter(rmse_min==rmse_mean)
+
+print(selector, n = nrow(selector))
+write_csv(selector, file = paste0(res_path,"arima_selector.csv"))
+```
+
+
+# Forecasts {.tabset .tabset-fade}
+## Arima {-}
+```{r}
+arima_out = list()
+
+arima_out[[1]] = arima_models(input_ds = indicator,country_code_list = country_code_list, n_ahead=4, response_pos = 4, ind_stats = ind_stats, transformation = "sqrt")
+
+arima_out[[2]] = arima_models(input_ds = indicator,country_code_list = country_code_list, n_ahead=4, response_pos = 6, ind_stats = ind_stats, transformation = "std")
+
+write_csv(arima_out[[1]][[1]], file = paste0(res_path,"arima_sqrt.csv"))
+write_csv(arima_out[[2]][[1]], file = paste0(res_path,"arima_std.csv"))
+```
+
+## Arimax Fourier {-}
+
+```{r}
+arimaxf_out = arimax_fourier_models(input_ds = indicator,country_code_list = country_code_list, n_ahead=4, response_pos = 5, ind_stats = ind_stats, transformation = "log")
+
+write_csv(arimaxf_out[[1]], file = paste0(res_path,"arimax_fourier.csv"))
+```
+

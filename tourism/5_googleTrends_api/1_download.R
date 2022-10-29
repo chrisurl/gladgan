@@ -19,8 +19,8 @@ timeout_short_min = 1
 timeout_short_max = 10
 timeout_long_min = 45
 timeout_long_max = 90
-wait_for = 5 # timeout before retry
-tries = 5 # max number of retries
+wait_for = 5+runif(1) # timeout before retry
+tries = 10 # max number of retries
 
 ### valid countries ####
 vol_ind = read_delim(paste0(datapath,"country_volatility_index.csv")) %>%
@@ -78,6 +78,7 @@ for (i in seq_along(country_code_list)){
                    gprop = c("web", "news", "images", "froogle", "youtube"),
                    category = 67,
                    onlyInterest = T
+                   
                   ),
   when = "Status code was not 200. Returned status code:429",
   interval = wait_for, 
