@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE,
                warning = FALSE,
                message = FALSE,
                cache = TRUE,
-               out.width = "70%",
+               out.width = "100%",
                fig.align = "center")
 
 ```
@@ -81,7 +81,7 @@ Build dataset:
 ```{r}
 df_ind = ind_t1 %>%
   .[,c(1,2,4)] %>%
-  filter(date >= as_date("2021-01-01")) %>%
+  filter(date >= as_date("2020-01-01")) %>%
   group_by(geo) %>%
   mutate(obs_value_std = scale2(OBS_VALUE), 
          mean=mean(OBS_VALUE), 
