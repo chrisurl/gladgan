@@ -35,7 +35,9 @@ write_csv(df2, file = paste0(trends_path, "trends_part2.csv"))
 df_full = full_join(df1,df2)
 write_csv(df_full, file = paste0(trends_path, "trends_full.csv"))
 
-### data path trendecon ####
+### data path trendecon - not run ####
+if(FALSE){
+
 datapath = "../data/"
 trends_path = paste0(datapath, "googleTrendsAuto/")
 path_1 = paste0(trends_path,"part1_trendecon/")
@@ -60,3 +62,5 @@ write_csv(df2, file = paste0(trends_path, "trends_part2_trendecon.csv"))
 
 df_full = full_join(df1,df2)
 write_csv(df_full, file = paste0(trends_path, "trends_full_trendecon.csv"))
+
+}

@@ -537,7 +537,7 @@ display: none;
 
 <h1 class="title toc-ignore">Google trends ARIMAX models</h1>
 <h4 class="author">Christian Url</h4>
-<h4 class="date">Last Compiled Oktober 28, 2022</h4>
+<h4 class="date">Last Compiled November 30, 2022</h4>
 
 </div>
 
@@ -660,20 +660,20 @@ missing data:</p>
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(country_code,date)</span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>ind_df</span></code></pre></div>
-<pre><code># A tibble: 7,197 × 8
+<pre><code># A tibble: 7,245 × 8
    country_code date       resid_total resid_tot…¹ resid…² resid…³   mean     sd
    &lt;chr&gt;        &lt;date&gt;           &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 AT           1990-01-01     7517179       2742.    15.8 -0.216  8.29e6 3.56e6
- 2 AT           1990-02-01     9007131       3001.    16.0  0.202  8.29e6 3.56e6
- 3 AT           1990-03-01     8398225       2898.    15.9  0.0312 8.29e6 3.56e6
- 4 AT           1990-04-01     5373056       2318.    15.5 -0.818  8.29e6 3.56e6
- 5 AT           1990-05-01     5016131       2240.    15.4 -0.918  8.29e6 3.56e6
- 6 AT           1990-06-01     8143484       2854.    15.9 -0.0404 8.29e6 3.56e6
- 7 AT           1990-07-01    13931905       3733.    16.4  1.58   8.29e6 3.56e6
- 8 AT           1990-08-01    15261300       3907.    16.5  1.96   8.29e6 3.56e6
- 9 AT           1990-09-01     9103800       3017.    16.0  0.229  8.29e6 3.56e6
-10 AT           1990-10-01     4645632       2155.    15.4 -1.02   8.29e6 3.56e6
-# … with 7,187 more rows, and abbreviated variable names ¹​resid_total_sqrt,
+ 1 AT           1990-01-01     7517179       2742.    15.8 -0.227  8.33e6 3.59e6
+ 2 AT           1990-02-01     9007131       3001.    16.0  0.188  8.33e6 3.59e6
+ 3 AT           1990-03-01     8398225       2898.    15.9  0.0185 8.33e6 3.59e6
+ 4 AT           1990-04-01     5373056       2318.    15.5 -0.823  8.33e6 3.59e6
+ 5 AT           1990-05-01     5016131       2240.    15.4 -0.923  8.33e6 3.59e6
+ 6 AT           1990-06-01     8143484       2854.    15.9 -0.0524 8.33e6 3.59e6
+ 7 AT           1990-07-01    13931905       3733.    16.4  1.56   8.33e6 3.59e6
+ 8 AT           1990-08-01    15261300       3907.    16.5  1.93   8.33e6 3.59e6
+ 9 AT           1990-09-01     9103800       3017.    16.0  0.215  8.33e6 3.59e6
+10 AT           1990-10-01     4645632       2155.    15.4 -1.03   8.33e6 3.59e6
+# … with 7,235 more rows, and abbreviated variable names ¹​resid_total_sqrt,
 #   ²​resid_total_log, ³​resid_total_std</code></pre>
 <p>After adding the missing rows, no more missing dates are
 identified:</p>

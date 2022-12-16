@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE,
                strip.white = TRUE,
                warning = FALSE,
                message = FALSE,
-               cache = TRUE,
+               cache = FALSE,
                out.width = "100%",
                fig.align = "center")
 
@@ -192,19 +192,19 @@ coefficients:
 print(xtable::xtable(coefs_df), type="html")
 ```
 
-*September forecasts:* 
-```{r, results='asis'}
-sept = res_df %>%
-  filter(date == as_date("2022-09-01"))
-
-print(xtable::xtable(sept), type="html")
-```
-
 
 *October forecasts:* 
 ```{r, results='asis'}
 sept = res_df %>%
   filter(date == as_date("2022-10-01"))
+
+print(xtable::xtable(sept), type="html")
+```
+
+*November forecasts:* 
+```{r, results='asis'}
+sept = res_df %>%
+  filter(date == as_date("2022-11-01"))
 
 print(xtable::xtable(sept), type="html")
 ```

@@ -537,7 +537,7 @@ display: none;
 
 <h1 class="title toc-ignore">PVI indicator data</h1>
 <h4 class="author">Christian Url</h4>
-<h4 class="date">Last Compiled Oktober 31, 2022</h4>
+<h4 class="date">Last Compiled November 30, 2022</h4>
 
 </div>
 
@@ -588,12 +588,12 @@ display: none;
 <p>Read indicator data and filter for valid countries. Countries are
 valid if they appear in the country volatility index.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(ind_path)</span></code></pre></div>
-<pre><code>[1] &quot;pvi.csv&quot;         &quot;pvi_09_2022.csv&quot;</code></pre>
+<pre><code>[1] &quot;pvi.csv&quot;         &quot;pvi_09_2022.csv&quot; &quot;pvi_10_2022.csv&quot;</code></pre>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ind_in <span class="ot">=</span> <span class="fu">fread</span>(<span class="fu">paste0</span>(ind_path,<span class="st">&quot;pvi.csv&quot;</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nace_r2 <span class="sc">==</span> <span class="st">&quot;B-D&quot;</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ind_in[,<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>] <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span></code></pre></div>
 <pre><code>                DATAFLOW       LAST UPDATE freq indic_bt nace_r2 s_adj unit
-1: ESTAT:STS_INPR_M(1.0) 28/10/22 11:00:00    M     PROD     B-D   SCA  I15</code></pre>
+1: ESTAT:STS_INPR_M(1.0) 29/11/22 11:00:00    M     PROD     B-D   SCA  I15</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ind_t1 <span class="ot">=</span> ind_in[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)] <span class="sc">%&gt;%</span> </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as_date</span>(<span class="fu">paste0</span>(TIME_PERIOD,<span class="st">&quot;-01&quot;</span>)),<span class="at">.before=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
@@ -629,30 +629,30 @@ valid if they appear in the country volatility index.</p>
 <pre><code># A tibble: 24 × 5
    geo   min_year max_year min_month max_month
    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
- 1 AT        2020     2022         1         8
- 2 BE        2020     2022         1         8
- 3 BG        2020     2022         1         8
- 4 CY        2020     2022         1         8
- 5 CZ        2020     2022         1         8
- 6 DE        2020     2022         1         8
- 7 DK        2020     2022         1         8
- 8 EE        2020     2022         1         8
- 9 EL        2020     2022         1         8
-10 ES        2020     2022         1         8
-11 FI        2020     2022         1         8
-12 FR        2020     2022         1         8
-13 HR        2020     2022         1         8
-14 HU        2020     2022         1         8
-15 IT        2020     2022         1         8
-16 LT        2020     2022         1         8
-17 LV        2020     2022         1         8
-18 MT        2020     2022         1         8
+ 1 AT        2020     2022         1         9
+ 2 BE        2020     2022         1         9
+ 3 BG        2020     2022         1         9
+ 4 CY        2020     2022         1         9
+ 5 CZ        2020     2022         1         9
+ 6 DE        2020     2022         1         9
+ 7 DK        2020     2022         1         9
+ 8 EE        2020     2022         1         9
+ 9 EL        2020     2022         1         9
+10 ES        2020     2022         1         9
+11 FI        2020     2022         1         9
+12 FR        2020     2022         1         9
+13 HR        2020     2022         1         9
+14 HU        2020     2022         1         9
+15 IT        2020     2022         1         9
+16 LT        2020     2022         1         9
+17 LV        2020     2022         1         9
+18 MT        2020     2022         1         9
 19 PL        2020     2022         1         9
-20 PT        2020     2022         1         8
-21 RO        2020     2022         1         8
-22 SE        2020     2022         1         8
-23 SI        2020     2022         1         8
-24 SK        2020     2022         1         8</code></pre>
+20 PT        2020     2022         1         9
+21 RO        2020     2022         1         9
+22 SE        2020     2022         1         9
+23 SI        2020     2022         1         9
+24 SK        2020     2022         1         9</code></pre>
 <p>Plot of 5 years for all countries:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df_ind <span class="sc">%&gt;%</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2016</span>) <span class="sc">%&gt;%</span></span>
@@ -715,18 +715,18 @@ modeling</h1>
 <span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>res_df</span></code></pre></div>
 <pre><code># A tibble: 96 × 7
-   date       geo    yhat   bic  rmse   mae    acf
-   &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
- 1 2022-09-01 AT     126.  44.2 0.460 0.296  0.237
- 2 2022-10-01 AT     126.  44.2 0.460 0.296  0.237
- 3 2022-11-01 AT     126.  44.2 0.460 0.296  0.237
- 4 2022-12-01 AT     126.  44.2 0.460 0.296  0.237
- 5 2022-09-01 BE     118.  50.9 0.512 0.377 -0.317
- 6 2022-10-01 BE     118.  50.9 0.512 0.377 -0.317
- 7 2022-11-01 BE     118.  50.9 0.512 0.377 -0.317
- 8 2022-12-01 BE     118.  50.9 0.512 0.377 -0.317
- 9 2022-09-01 BG     130.  16.5 0.294 0.191  0.228
-10 2022-10-01 BG     130.  16.5 0.294 0.191  0.228
+   date       geo    yhat   bic  rmse   mae     acf
+   &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1 2022-10-01 AT     127.  45.9 0.462 0.300  0.167 
+ 2 2022-11-01 AT     127.  45.9 0.462 0.300  0.167 
+ 3 2022-12-01 AT     127.  45.9 0.462 0.300  0.167 
+ 4 2023-01-01 AT     127.  45.9 0.462 0.300  0.167 
+ 5 2022-10-01 BE     127.  52.6 0.485 0.351 -0.0248
+ 6 2022-11-01 BE     128.  52.6 0.485 0.351 -0.0248
+ 7 2022-12-01 BE     128.  52.6 0.485 0.351 -0.0248
+ 8 2023-01-01 BE     128.  52.6 0.485 0.351 -0.0248
+ 9 2022-10-01 BG     127   15.4 0.287 0.187  0.225 
+10 2022-11-01 BG     127   15.4 0.287 0.187  0.225 
 # … with 86 more rows</code></pre>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(res_df, <span class="at">file=</span><span class="st">&quot;arima_forecasts_short.csv&quot;</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(coefs_df, <span class="at">file=</span><span class="st">&quot;arima_forecasts_coefs_short.csv&quot;</span>)</span>
@@ -740,80 +740,80 @@ modeling</h1>
 <pre><code># A tibble: 24 × 7
    geo   min_date   max_date     bic  rmse   mae      acf
    &lt;chr&gt; &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
- 1 AT    2022-09-01 2022-12-01  44.2 0.460 0.296  0.237  
- 2 BE    2022-09-01 2022-12-01  50.9 0.512 0.377 -0.317  
- 3 BG    2022-09-01 2022-12-01  16.5 0.294 0.191  0.228  
- 4 CY    2022-09-01 2022-12-01  89.7 0.958 0.474 -0.148  
- 5 CZ    2022-09-01 2022-12-01  77.7 0.790 0.486  0.128  
- 6 DE    2022-09-01 2022-12-01  75.6 0.657 0.418 -0.0364 
- 7 DK    2022-09-01 2022-12-01  34.3 0.349 0.277 -0.0496 
- 8 EE    2022-09-01 2022-12-01  78.9 0.804 0.582 -0.106  
- 9 EL    2022-09-01 2022-12-01  57.8 0.540 0.431  0.00640
-10 ES    2022-09-01 2022-12-01  69.1 0.686 0.351  0.266  
-11 FI    2022-09-01 2022-12-01  55.6 0.521 0.439 -0.0105 
-12 FR    2022-09-01 2022-12-01  73.7 0.637 0.423 -0.00903
-13 HR    2022-09-01 2022-12-01  49.8 0.503 0.337  0.213  
-14 HU    2022-09-01 2022-12-01  65.1 0.644 0.353  0.218  
-15 IT    2022-09-01 2022-12-01  76.4 0.772 0.407  0.159  
-16 LT    2022-09-01 2022-12-01  29.1 0.360 0.254 -0.149  
-17 LV    2022-09-01 2022-12-01  62.1 0.613 0.445 -0.178  
-18 MT    2022-09-01 2022-12-01  82.5 0.738 0.597 -0.102  
-19 PL    2022-10-01 2023-01-01  33.3 0.380 0.206  0.155  
-20 PT    2022-09-01 2022-12-01  70.4 0.606 0.415 -0.118  
-21 RO    2022-09-01 2022-12-01  74.0 0.642 0.387  0.0317 
-22 SE    2022-09-01 2022-12-01  67.9 0.673 0.362  0.0157 
-23 SI    2022-09-01 2022-12-01  63.6 0.628 0.394  0.0475 
-24 SK    2022-09-01 2022-12-01  62.9 0.530 0.367 -0.0322 </code></pre>
+ 1 AT    2022-10-01 2023-01-01  45.9 0.462 0.300  0.167  
+ 2 BE    2022-10-01 2023-01-01  52.6 0.485 0.351 -0.0248 
+ 3 BG    2022-10-01 2023-01-01  15.4 0.287 0.187  0.225  
+ 4 CY    2022-10-01 2023-01-01  92.4 0.956 0.463 -0.146  
+ 5 CZ    2022-10-01 2023-01-01  79.6 0.782 0.474  0.127  
+ 6 DE    2022-10-01 2023-01-01  77.9 0.659 0.418 -0.0285 
+ 7 DK    2022-10-01 2023-01-01  32.8 0.337 0.263 -0.0180 
+ 8 EE    2022-10-01 2023-01-01  82.1 0.814 0.597 -0.139  
+ 9 EL    2022-10-01 2023-01-01  61.2 0.588 0.470 -0.268  
+10 ES    2022-10-01 2023-01-01  70.9 0.683 0.345  0.266  
+11 FI    2022-10-01 2023-01-01  54.9 0.474 0.380  0.0774 
+12 FR    2022-10-01 2023-01-01  75.5 0.635 0.417 -0.00978
+13 HR    2022-10-01 2023-01-01  50.8 0.500 0.332  0.211  
+14 HU    2022-10-01 2023-01-01  66.0 0.633 0.348  0.217  
+15 IT    2022-10-01 2023-01-01  78.5 0.770 0.407  0.159  
+16 LT    2022-10-01 2023-01-01  35.6 0.351 0.252  0.130  
+17 LV    2022-10-01 2023-01-01  64.8 0.621 0.455 -0.175  
+18 MT    2022-10-01 2023-01-01  82.3 0.750 0.582  0.122  
+19 PL    2022-10-01 2023-01-01  33.4 0.380 0.207  0.155  
+20 PT    2022-10-01 2023-01-01  72.6 0.608 0.419 -0.121  
+21 RO    2022-10-01 2023-01-01  76.0 0.643 0.382  0.0307 
+22 SE    2022-10-01 2023-01-01  68.7 0.660 0.364 -0.0124 
+23 SI    2022-10-01 2023-01-01  65.7 0.630 0.399  0.0624 
+24 SK    2022-10-01 2023-01-01  65.0 0.534 0.365 -0.0224 </code></pre>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">filter</span>(overview, min_date <span class="sc">&gt;=</span> <span class="fu">as_date</span>(<span class="st">&quot;2022-07-01&quot;</span>)), <span class="at">n =</span> <span class="fu">nrow</span>(<span class="fu">filter</span>(overview, min_date <span class="sc">&gt;=</span> <span class="fu">as_date</span>(<span class="st">&quot;2022-07-01&quot;</span>))))</span></code></pre></div>
 <pre><code># A tibble: 24 × 7
    geo   min_date   max_date     bic  rmse   mae      acf
    &lt;chr&gt; &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
- 1 AT    2022-09-01 2022-12-01  44.2 0.460 0.296  0.237  
- 2 BE    2022-09-01 2022-12-01  50.9 0.512 0.377 -0.317  
- 3 BG    2022-09-01 2022-12-01  16.5 0.294 0.191  0.228  
- 4 CY    2022-09-01 2022-12-01  89.7 0.958 0.474 -0.148  
- 5 CZ    2022-09-01 2022-12-01  77.7 0.790 0.486  0.128  
- 6 DE    2022-09-01 2022-12-01  75.6 0.657 0.418 -0.0364 
- 7 DK    2022-09-01 2022-12-01  34.3 0.349 0.277 -0.0496 
- 8 EE    2022-09-01 2022-12-01  78.9 0.804 0.582 -0.106  
- 9 EL    2022-09-01 2022-12-01  57.8 0.540 0.431  0.00640
-10 ES    2022-09-01 2022-12-01  69.1 0.686 0.351  0.266  
-11 FI    2022-09-01 2022-12-01  55.6 0.521 0.439 -0.0105 
-12 FR    2022-09-01 2022-12-01  73.7 0.637 0.423 -0.00903
-13 HR    2022-09-01 2022-12-01  49.8 0.503 0.337  0.213  
-14 HU    2022-09-01 2022-12-01  65.1 0.644 0.353  0.218  
-15 IT    2022-09-01 2022-12-01  76.4 0.772 0.407  0.159  
-16 LT    2022-09-01 2022-12-01  29.1 0.360 0.254 -0.149  
-17 LV    2022-09-01 2022-12-01  62.1 0.613 0.445 -0.178  
-18 MT    2022-09-01 2022-12-01  82.5 0.738 0.597 -0.102  
-19 PL    2022-10-01 2023-01-01  33.3 0.380 0.206  0.155  
-20 PT    2022-09-01 2022-12-01  70.4 0.606 0.415 -0.118  
-21 RO    2022-09-01 2022-12-01  74.0 0.642 0.387  0.0317 
-22 SE    2022-09-01 2022-12-01  67.9 0.673 0.362  0.0157 
-23 SI    2022-09-01 2022-12-01  63.6 0.628 0.394  0.0475 
-24 SK    2022-09-01 2022-12-01  62.9 0.530 0.367 -0.0322 </code></pre>
+ 1 AT    2022-10-01 2023-01-01  45.9 0.462 0.300  0.167  
+ 2 BE    2022-10-01 2023-01-01  52.6 0.485 0.351 -0.0248 
+ 3 BG    2022-10-01 2023-01-01  15.4 0.287 0.187  0.225  
+ 4 CY    2022-10-01 2023-01-01  92.4 0.956 0.463 -0.146  
+ 5 CZ    2022-10-01 2023-01-01  79.6 0.782 0.474  0.127  
+ 6 DE    2022-10-01 2023-01-01  77.9 0.659 0.418 -0.0285 
+ 7 DK    2022-10-01 2023-01-01  32.8 0.337 0.263 -0.0180 
+ 8 EE    2022-10-01 2023-01-01  82.1 0.814 0.597 -0.139  
+ 9 EL    2022-10-01 2023-01-01  61.2 0.588 0.470 -0.268  
+10 ES    2022-10-01 2023-01-01  70.9 0.683 0.345  0.266  
+11 FI    2022-10-01 2023-01-01  54.9 0.474 0.380  0.0774 
+12 FR    2022-10-01 2023-01-01  75.5 0.635 0.417 -0.00978
+13 HR    2022-10-01 2023-01-01  50.8 0.500 0.332  0.211  
+14 HU    2022-10-01 2023-01-01  66.0 0.633 0.348  0.217  
+15 IT    2022-10-01 2023-01-01  78.5 0.770 0.407  0.159  
+16 LT    2022-10-01 2023-01-01  35.6 0.351 0.252  0.130  
+17 LV    2022-10-01 2023-01-01  64.8 0.621 0.455 -0.175  
+18 MT    2022-10-01 2023-01-01  82.3 0.750 0.582  0.122  
+19 PL    2022-10-01 2023-01-01  33.4 0.380 0.207  0.155  
+20 PT    2022-10-01 2023-01-01  72.6 0.608 0.419 -0.121  
+21 RO    2022-10-01 2023-01-01  76.0 0.643 0.382  0.0307 
+22 SE    2022-10-01 2023-01-01  68.7 0.660 0.364 -0.0124 
+23 SI    2022-10-01 2023-01-01  65.7 0.630 0.399  0.0624 
+24 SK    2022-10-01 2023-01-01  65.0 0.534 0.365 -0.0224 </code></pre>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(arima_order_df, <span class="at">n =</span> <span class="fu">nrow</span>(arima_order_df))</span></code></pre></div>
 <pre><code># A tibble: 24 × 4
    geo       p     d     q
    &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
  1 AT        0     1     0
- 2 BE        0     1     0
+ 2 BE        1     1     0
  3 BG        0     1     0
  4 CY        0     1     0
  5 CZ        0     1     0
  6 DE        0     0     2
  7 DK        0     1     1
  8 EE        0     1     0
- 9 EL        0     1     1
+ 9 EL        0     1     0
 10 ES        0     1     0
 11 FI        0     1     1
 12 FR        0     0     2
 13 HR        0     1     0
 14 HU        0     1     0
 15 IT        0     1     0
-16 LT        0     1     0
+16 LT        0     1     1
 17 LV        0     1     0
-18 MT        2     0     0
+18 MT        1     0     0
 19 PL        0     1     0
 20 PT        2     0     0
 21 RO        1     0     1
@@ -821,22 +821,23 @@ modeling</h1>
 23 SI        0     1     0
 24 SK        0     0     2</code></pre>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>coefs_df</span></code></pre></div>
-<pre><code># A tibble: 9 × 7
-  geo   sigma    ma1    ma2   drift    ar1    ar2
-  &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-1 DE    0.460  1.07   0.504 NA      NA     NA    
-2 DK    0.135 -0.495 NA      0.0913 NA     NA    
-3 EL    0.311 -0.405 NA     NA      NA     NA    
-4 FI    0.289 -0.467 NA     NA      NA     NA    
-5 FR    0.433  1.11   0.369 NA      NA     NA    
-6 MT    0.582 NA     NA     NA       0.813 -0.329
-7 PT    0.392 NA     NA     NA       1.03  -0.539
-8 RO    0.440  0.588 NA     NA       0.429 NA    
-9 SK    0.299  1.40   0.602 NA      NA     NA    </code></pre>
+<pre><code># A tibble: 10 × 7
+   geo   sigma    ar1    ma1    ma2   drift    ar2
+   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+ 1 BE    0.250 -0.360 NA     NA     NA      NA    
+ 2 DE    0.462 NA      1.05   0.488 NA      NA    
+ 3 DK    0.125 NA     -0.506 NA      0.0831 NA    
+ 4 FI    0.247 NA     -0.614 NA      0.0708 NA    
+ 5 FR    0.429 NA      1.10   0.366 NA      NA    
+ 6 LT    0.135 NA     -0.572 NA      0.0786 NA    
+ 7 MT    0.580  0.689 NA     NA     NA      NA    
+ 8 PT    0.394  1.03  NA     NA     NA      -0.535
+ 9 RO    0.440  0.429  0.589 NA     NA      NA    
+10 SK    0.304 NA      1.37   0.582 NA      NA    </code></pre>
 <p>coefficients:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(xtable<span class="sc">::</span><span class="fu">xtable</span>(coefs_df), <span class="at">type=</span><span class="st">&quot;html&quot;</span>)</span></code></pre></div>
 <!-- html table generated in R 4.2.1 by xtable 1.8-4 package -->
-<!-- Mon Oct 31 09:40:50 2022 -->
+<!-- Wed Nov 30 17:26:23 2022 -->
 <table border="1">
 <tr>
 <th>
@@ -848,6 +849,9 @@ geo
 sigma
 </th>
 <th>
+ar1
+</th>
+<th>
 ma1
 </th>
 <th>
@@ -855,9 +859,6 @@ ma2
 </th>
 <th>
 drift
-</th>
-<th>
-ar1
 </th>
 <th>
 ar2
@@ -868,16 +869,15 @@ ar2
 1
 </td>
 <td>
-DE
+BE
 </td>
 <td align="right">
-0.46
+0.25
 </td>
 <td align="right">
-1.07
+-0.36
 </td>
 <td align="right">
-0.50
 </td>
 <td align="right">
 </td>
@@ -891,18 +891,18 @@ DE
 2
 </td>
 <td>
-DK
+DE
 </td>
 <td align="right">
-0.13
-</td>
-<td align="right">
--0.49
+0.46
 </td>
 <td align="right">
 </td>
 <td align="right">
-0.09
+1.05
+</td>
+<td align="right">
+0.49
 </td>
 <td align="right">
 </td>
@@ -914,19 +914,20 @@ DK
 3
 </td>
 <td>
-EL
+DK
 </td>
 <td align="right">
-0.31
-</td>
-<td align="right">
--0.40
+0.12
 </td>
 <td align="right">
 </td>
 <td align="right">
+-0.51
 </td>
 <td align="right">
+</td>
+<td align="right">
+0.08
 </td>
 <td align="right">
 </td>
@@ -939,16 +940,17 @@ EL
 FI
 </td>
 <td align="right">
-0.29
-</td>
-<td align="right">
--0.47
+0.25
 </td>
 <td align="right">
 </td>
 <td align="right">
+-0.61
 </td>
 <td align="right">
+</td>
+<td align="right">
+0.07
 </td>
 <td align="right">
 </td>
@@ -964,12 +966,12 @@ FR
 0.43
 </td>
 <td align="right">
-1.11
+</td>
+<td align="right">
+1.10
 </td>
 <td align="right">
 0.37
-</td>
-<td align="right">
 </td>
 <td align="right">
 </td>
@@ -981,27 +983,49 @@ FR
 6
 </td>
 <td>
+LT
+</td>
+<td align="right">
+0.14
+</td>
+<td align="right">
+</td>
+<td align="right">
+-0.57
+</td>
+<td align="right">
+</td>
+<td align="right">
+0.08
+</td>
+<td align="right">
+</td>
+</tr>
+<tr>
+<td align="right">
+7
+</td>
+<td>
 MT
 </td>
 <td align="right">
 0.58
 </td>
 <td align="right">
+0.69
 </td>
 <td align="right">
 </td>
 <td align="right">
 </td>
 <td align="right">
-0.81
 </td>
 <td align="right">
--0.33
 </td>
 </tr>
 <tr>
 <td align="right">
-7
+8
 </td>
 <td>
 PT
@@ -1010,13 +1034,13 @@ PT
 0.39
 </td>
 <td align="right">
-</td>
-<td align="right">
-</td>
-<td align="right">
-</td>
-<td align="right">
 1.03
+</td>
+<td align="right">
+</td>
+<td align="right">
+</td>
+<td align="right">
 </td>
 <td align="right">
 -0.54
@@ -1024,13 +1048,16 @@ PT
 </tr>
 <tr>
 <td align="right">
-8
+9
 </td>
 <td>
 RO
 </td>
 <td align="right">
 0.44
+</td>
+<td align="right">
+0.43
 </td>
 <td align="right">
 0.59
@@ -1040,14 +1067,11 @@ RO
 <td align="right">
 </td>
 <td align="right">
-0.43
-</td>
-<td align="right">
 </td>
 </tr>
 <tr>
 <td align="right">
-9
+10
 </td>
 <td>
 SK
@@ -1056,12 +1080,12 @@ SK
 0.30
 </td>
 <td align="right">
-1.40
 </td>
 <td align="right">
-0.60
+1.37
 </td>
 <td align="right">
+0.58
 </td>
 <td align="right">
 </td>
@@ -1069,13 +1093,13 @@ SK
 </td>
 </tr>
 </table>
-<p><em>September forecasts:</em></p>
+<p><em>October forecasts:</em></p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sept <span class="ot">=</span> res_df <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">==</span> <span class="fu">as_date</span>(<span class="st">&quot;2022-09-01&quot;</span>))</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">==</span> <span class="fu">as_date</span>(<span class="st">&quot;2022-10-01&quot;</span>))</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(xtable<span class="sc">::</span><span class="fu">xtable</span>(sept), <span class="at">type=</span><span class="st">&quot;html&quot;</span>)</span></code></pre></div>
 <!-- html table generated in R 4.2.1 by xtable 1.8-4 package -->
-<!-- Mon Oct 31 09:40:50 2022 -->
+<!-- Wed Nov 30 17:26:23 2022 -->
 <table border="1">
 <tr>
 <th>
@@ -1107,16 +1131,16 @@ acf
 1
 </td>
 <td align="right">
-19236.00
+19266.00
 </td>
 <td>
 AT
 </td>
 <td align="right">
-126.10
+127.40
 </td>
 <td align="right">
-44.19
+45.89
 </td>
 <td align="right">
 0.46
@@ -1125,7 +1149,7 @@ AT
 0.30
 </td>
 <td align="right">
-0.24
+0.17
 </td>
 </tr>
 <tr>
@@ -1133,25 +1157,25 @@ AT
 2
 </td>
 <td align="right">
-19236.00
+19266.00
 </td>
 <td>
 BE
 </td>
 <td align="right">
-117.70
+127.37
 </td>
 <td align="right">
-50.90
+52.55
 </td>
 <td align="right">
-0.51
+0.48
 </td>
 <td align="right">
-0.38
+0.35
 </td>
 <td align="right">
--0.32
+-0.02
 </td>
 </tr>
 <tr>
@@ -1159,16 +1183,16 @@ BE
 3
 </td>
 <td align="right">
-19236.00
+19266.00
 </td>
 <td>
 BG
 </td>
 <td align="right">
-129.80
+127.00
 </td>
 <td align="right">
-16.54
+15.37
 </td>
 <td align="right">
 0.29
@@ -1177,7 +1201,7 @@ BG
 0.19
 </td>
 <td align="right">
-0.23
+0.22
 </td>
 </tr>
 <tr>
@@ -1185,22 +1209,22 @@ BG
 4
 </td>
 <td align="right">
-19236.00
+19266.00
 </td>
 <td>
 CY
 </td>
 <td align="right">
-132.70
+132.00
 </td>
 <td align="right">
-89.72
+92.39
 </td>
 <td align="right">
 0.96
 </td>
 <td align="right">
-0.47
+0.46
 </td>
 <td align="right">
 -0.15
@@ -1211,22 +1235,22 @@ CY
 5
 </td>
 <td align="right">
-19236.00
+19266.00
 </td>
 <td>
 CZ
 </td>
 <td align="right">
-116.30
+116.10
 </td>
 <td align="right">
-77.75
+79.56
 </td>
 <td align="right">
-0.79
+0.78
 </td>
 <td align="right">
-0.49
+0.47
 </td>
 <td align="right">
 0.13
@@ -1237,659 +1261,27 @@ CZ
 6
 </td>
 <td align="right">
-19236.00
+19266.00
 </td>
 <td>
 DE
 </td>
 <td align="right">
-94.11
+95.85
 </td>
 <td align="right">
-75.56
+77.86
 </td>
 <td align="right">
 0.66
 </td>
 <td align="right">
 0.42
-</td>
-<td align="right">
--0.04
-</td>
-</tr>
-<tr>
-<td align="right">
-7
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-DK
-</td>
-<td align="right">
-136.13
-</td>
-<td align="right">
-34.35
-</td>
-<td align="right">
-0.35
-</td>
-<td align="right">
-0.28
-</td>
-<td align="right">
--0.05
-</td>
-</tr>
-<tr>
-<td align="right">
-8
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-EE
-</td>
-<td align="right">
-123.90
-</td>
-<td align="right">
-78.90
-</td>
-<td align="right">
-0.80
-</td>
-<td align="right">
-0.58
-</td>
-<td align="right">
--0.11
-</td>
-</tr>
-<tr>
-<td align="right">
-9
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-EL
-</td>
-<td align="right">
-122.19
-</td>
-<td align="right">
-57.80
-</td>
-<td align="right">
-0.54
-</td>
-<td align="right">
-0.43
-</td>
-<td align="right">
-0.01
-</td>
-</tr>
-<tr>
-<td align="right">
-10
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-ES
-</td>
-<td align="right">
-107.10
-</td>
-<td align="right">
-69.07
-</td>
-<td align="right">
-0.69
-</td>
-<td align="right">
-0.35
-</td>
-<td align="right">
-0.27
-</td>
-</tr>
-<tr>
-<td align="right">
-11
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-FI
-</td>
-<td align="right">
-117.75
-</td>
-<td align="right">
-55.59
-</td>
-<td align="right">
-0.52
-</td>
-<td align="right">
-0.44
-</td>
-<td align="right">
--0.01
-</td>
-</tr>
-<tr>
-<td align="right">
-12
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-FR
-</td>
-<td align="right">
-100.39
-</td>
-<td align="right">
-73.72
-</td>
-<td align="right">
-0.64
-</td>
-<td align="right">
-0.42
-</td>
-<td align="right">
--0.01
-</td>
-</tr>
-<tr>
-<td align="right">
-13
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-HR
-</td>
-<td align="right">
-111.10
-</td>
-<td align="right">
-49.80
-</td>
-<td align="right">
-0.50
-</td>
-<td align="right">
-0.34
-</td>
-<td align="right">
-0.21
-</td>
-</tr>
-<tr>
-<td align="right">
-14
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-HU
-</td>
-<td align="right">
-127.00
-</td>
-<td align="right">
-65.09
-</td>
-<td align="right">
-0.64
-</td>
-<td align="right">
-0.35
-</td>
-<td align="right">
-0.22
-</td>
-</tr>
-<tr>
-<td align="right">
-15
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-IT
-</td>
-<td align="right">
-107.20
-</td>
-<td align="right">
-76.36
-</td>
-<td align="right">
-0.77
-</td>
-<td align="right">
-0.41
-</td>
-<td align="right">
-0.16
-</td>
-</tr>
-<tr>
-<td align="right">
-16
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-LT
-</td>
-<td align="right">
-162.50
-</td>
-<td align="right">
-29.05
-</td>
-<td align="right">
-0.36
-</td>
-<td align="right">
-0.25
-</td>
-<td align="right">
--0.15
-</td>
-</tr>
-<tr>
-<td align="right">
-17
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-LV
-</td>
-<td align="right">
-122.90
-</td>
-<td align="right">
-62.07
-</td>
-<td align="right">
-0.61
-</td>
-<td align="right">
-0.44
-</td>
-<td align="right">
--0.18
-</td>
-</tr>
-<tr>
-<td align="right">
-18
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-MT
-</td>
-<td align="right">
-107.03
-</td>
-<td align="right">
-82.51
-</td>
-<td align="right">
-0.74
-</td>
-<td align="right">
-0.60
-</td>
-<td align="right">
--0.10
-</td>
-</tr>
-<tr>
-<td align="right">
-19
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-PT
-</td>
-<td align="right">
-101.54
-</td>
-<td align="right">
-70.43
-</td>
-<td align="right">
-0.61
-</td>
-<td align="right">
-0.41
-</td>
-<td align="right">
--0.12
-</td>
-</tr>
-<tr>
-<td align="right">
-20
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-RO
-</td>
-<td align="right">
-108.13
-</td>
-<td align="right">
-73.96
-</td>
-<td align="right">
-0.64
-</td>
-<td align="right">
-0.39
-</td>
-<td align="right">
-0.03
-</td>
-</tr>
-<tr>
-<td align="right">
-21
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-SE
-</td>
-<td align="right">
-116.30
-</td>
-<td align="right">
-67.87
-</td>
-<td align="right">
-0.67
-</td>
-<td align="right">
-0.36
-</td>
-<td align="right">
-0.02
-</td>
-</tr>
-<tr>
-<td align="right">
-22
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-SI
-</td>
-<td align="right">
-134.50
-</td>
-<td align="right">
-63.57
-</td>
-<td align="right">
-0.63
-</td>
-<td align="right">
-0.39
-</td>
-<td align="right">
-0.05
-</td>
-</tr>
-<tr>
-<td align="right">
-23
-</td>
-<td align="right">
-19236.00
-</td>
-<td>
-SK
-</td>
-<td align="right">
-104.73
-</td>
-<td align="right">
-62.91
-</td>
-<td align="right">
-0.53
-</td>
-<td align="right">
-0.37
 </td>
 <td align="right">
 -0.03
 </td>
 </tr>
-</table>
-<p><em>October forecasts:</em></p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sept <span class="ot">=</span> res_df <span class="sc">%&gt;%</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">==</span> <span class="fu">as_date</span>(<span class="st">&quot;2022-10-01&quot;</span>))</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(xtable<span class="sc">::</span><span class="fu">xtable</span>(sept), <span class="at">type=</span><span class="st">&quot;html&quot;</span>)</span></code></pre></div>
-<!-- html table generated in R 4.2.1 by xtable 1.8-4 package -->
-<!-- Mon Oct 31 09:40:50 2022 -->
-<table border="1">
-<tr>
-<th>
-</th>
-<th>
-date
-</th>
-<th>
-geo
-</th>
-<th>
-yhat
-</th>
-<th>
-bic
-</th>
-<th>
-rmse
-</th>
-<th>
-mae
-</th>
-<th>
-acf
-</th>
-</tr>
-<tr>
-<td align="right">
-1
-</td>
-<td align="right">
-19266.00
-</td>
-<td>
-AT
-</td>
-<td align="right">
-126.10
-</td>
-<td align="right">
-44.19
-</td>
-<td align="right">
-0.46
-</td>
-<td align="right">
-0.30
-</td>
-<td align="right">
-0.24
-</td>
-</tr>
-<tr>
-<td align="right">
-2
-</td>
-<td align="right">
-19266.00
-</td>
-<td>
-BE
-</td>
-<td align="right">
-117.70
-</td>
-<td align="right">
-50.90
-</td>
-<td align="right">
-0.51
-</td>
-<td align="right">
-0.38
-</td>
-<td align="right">
--0.32
-</td>
-</tr>
-<tr>
-<td align="right">
-3
-</td>
-<td align="right">
-19266.00
-</td>
-<td>
-BG
-</td>
-<td align="right">
-129.80
-</td>
-<td align="right">
-16.54
-</td>
-<td align="right">
-0.29
-</td>
-<td align="right">
-0.19
-</td>
-<td align="right">
-0.23
-</td>
-</tr>
-<tr>
-<td align="right">
-4
-</td>
-<td align="right">
-19266.00
-</td>
-<td>
-CY
-</td>
-<td align="right">
-132.70
-</td>
-<td align="right">
-89.72
-</td>
-<td align="right">
-0.96
-</td>
-<td align="right">
-0.47
-</td>
-<td align="right">
--0.15
-</td>
-</tr>
-<tr>
-<td align="right">
-5
-</td>
-<td align="right">
-19266.00
-</td>
-<td>
-CZ
-</td>
-<td align="right">
-116.30
-</td>
-<td align="right">
-77.75
-</td>
-<td align="right">
-0.79
-</td>
-<td align="right">
-0.49
-</td>
-<td align="right">
-0.13
-</td>
-</tr>
-<tr>
-<td align="right">
-6
-</td>
-<td align="right">
-19266.00
-</td>
-<td>
-DE
-</td>
-<td align="right">
-94.03
-</td>
-<td align="right">
-75.56
-</td>
-<td align="right">
-0.66
-</td>
-<td align="right">
-0.42
-</td>
-<td align="right">
--0.04
-</td>
-</tr>
 <tr>
 <td align="right">
 7
@@ -1901,19 +1293,19 @@ DE
 DK
 </td>
 <td align="right">
-137.07
+134.61
 </td>
 <td align="right">
-34.35
+32.82
 </td>
 <td align="right">
-0.35
+0.34
 </td>
 <td align="right">
-0.28
+0.26
 </td>
 <td align="right">
--0.05
+-0.02
 </td>
 </tr>
 <tr>
@@ -1927,19 +1319,19 @@ DK
 EE
 </td>
 <td align="right">
-123.90
+119.40
 </td>
 <td align="right">
-78.90
+82.08
 </td>
 <td align="right">
-0.80
+0.81
 </td>
 <td align="right">
-0.58
+0.60
 </td>
 <td align="right">
--0.11
+-0.14
 </td>
 </tr>
 <tr>
@@ -1953,19 +1345,19 @@ EE
 EL
 </td>
 <td align="right">
-122.19
+117.00
 </td>
 <td align="right">
-57.80
+61.25
 </td>
 <td align="right">
-0.54
+0.59
 </td>
 <td align="right">
-0.43
+0.47
 </td>
 <td align="right">
-0.01
+-0.27
 </td>
 </tr>
 <tr>
@@ -1979,16 +1371,16 @@ EL
 ES
 </td>
 <td align="right">
-107.10
+106.40
 </td>
 <td align="right">
-69.07
+70.90
 </td>
 <td align="right">
-0.69
+0.68
 </td>
 <td align="right">
-0.35
+0.34
 </td>
 <td align="right">
 0.27
@@ -2005,19 +1397,19 @@ ES
 FI
 </td>
 <td align="right">
-117.75
+119.32
 </td>
 <td align="right">
-55.59
+54.93
 </td>
 <td align="right">
-0.52
+0.47
 </td>
 <td align="right">
-0.44
+0.38
 </td>
 <td align="right">
--0.01
+0.08
 </td>
 </tr>
 <tr>
@@ -2031,10 +1423,10 @@ FI
 FR
 </td>
 <td align="right">
-97.71
+96.38
 </td>
 <td align="right">
-73.72
+75.52
 </td>
 <td align="right">
 0.64
@@ -2057,16 +1449,16 @@ FR
 HR
 </td>
 <td align="right">
-111.10
+111.50
 </td>
 <td align="right">
-49.80
+50.84
 </td>
 <td align="right">
 0.50
 </td>
 <td align="right">
-0.34
+0.33
 </td>
 <td align="right">
 0.21
@@ -2083,13 +1475,13 @@ HR
 HU
 </td>
 <td align="right">
-127.00
+129.00
 </td>
 <td align="right">
-65.09
+65.99
 </td>
 <td align="right">
-0.64
+0.63
 </td>
 <td align="right">
 0.35
@@ -2109,10 +1501,10 @@ HU
 IT
 </td>
 <td align="right">
-107.20
+105.10
 </td>
 <td align="right">
-76.36
+78.52
 </td>
 <td align="right">
 0.77
@@ -2135,19 +1527,19 @@ IT
 LT
 </td>
 <td align="right">
-162.50
+158.69
 </td>
 <td align="right">
-29.05
+35.58
 </td>
 <td align="right">
-0.36
+0.35
 </td>
 <td align="right">
 0.25
 </td>
 <td align="right">
--0.15
+0.13
 </td>
 </tr>
 <tr>
@@ -2161,19 +1553,19 @@ LT
 LV
 </td>
 <td align="right">
-122.90
+120.80
 </td>
 <td align="right">
-62.07
+64.77
 </td>
 <td align="right">
-0.61
+0.62
 </td>
 <td align="right">
-0.44
+0.45
 </td>
 <td align="right">
--0.18
+-0.17
 </td>
 </tr>
 <tr>
@@ -2187,19 +1579,19 @@ LV
 MT
 </td>
 <td align="right">
-103.70
+109.71
 </td>
 <td align="right">
-82.51
+82.28
 </td>
 <td align="right">
-0.74
+0.75
 </td>
 <td align="right">
-0.60
+0.58
 </td>
 <td align="right">
--0.10
+0.12
 </td>
 </tr>
 <tr>
@@ -2213,10 +1605,10 @@ MT
 PL
 </td>
 <td align="right">
-152.30
+152.00
 </td>
 <td align="right">
-33.31
+33.36
 </td>
 <td align="right">
 0.38
@@ -2239,16 +1631,16 @@ PL
 PT
 </td>
 <td align="right">
-100.13
+97.68
 </td>
 <td align="right">
-70.43
+72.59
 </td>
 <td align="right">
 0.61
 </td>
 <td align="right">
-0.41
+0.42
 </td>
 <td align="right">
 -0.12
@@ -2265,16 +1657,16 @@ PT
 RO
 </td>
 <td align="right">
-108.21
+108.18
 </td>
 <td align="right">
-73.96
+76.03
 </td>
 <td align="right">
 0.64
 </td>
 <td align="right">
-0.39
+0.38
 </td>
 <td align="right">
 0.03
@@ -2291,19 +1683,19 @@ RO
 SE
 </td>
 <td align="right">
-116.30
+118.60
 </td>
 <td align="right">
-67.87
+68.69
 </td>
 <td align="right">
-0.67
+0.66
 </td>
 <td align="right">
 0.36
 </td>
 <td align="right">
-0.02
+-0.01
 </td>
 </tr>
 <tr>
@@ -2317,19 +1709,19 @@ SE
 SI
 </td>
 <td align="right">
-134.50
+129.60
 </td>
 <td align="right">
-63.57
+65.73
 </td>
 <td align="right">
 0.63
 </td>
 <td align="right">
-0.39
+0.40
 </td>
 <td align="right">
-0.05
+0.06
 </td>
 </tr>
 <tr>
@@ -2343,10 +1735,10 @@ SI
 SK
 </td>
 <td align="right">
-106.34
+107.92
 </td>
 <td align="right">
-62.91
+64.98
 </td>
 <td align="right">
 0.53
@@ -2355,7 +1747,665 @@ SK
 0.37
 </td>
 <td align="right">
+-0.02
+</td>
+</tr>
+</table>
+<p><em>November forecasts:</em></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sept <span class="ot">=</span> res_df <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">==</span> <span class="fu">as_date</span>(<span class="st">&quot;2022-11-01&quot;</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(xtable<span class="sc">::</span><span class="fu">xtable</span>(sept), <span class="at">type=</span><span class="st">&quot;html&quot;</span>)</span></code></pre></div>
+<!-- html table generated in R 4.2.1 by xtable 1.8-4 package -->
+<!-- Wed Nov 30 17:26:23 2022 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+date
+</th>
+<th>
+geo
+</th>
+<th>
+yhat
+</th>
+<th>
+bic
+</th>
+<th>
+rmse
+</th>
+<th>
+mae
+</th>
+<th>
+acf
+</th>
+</tr>
+<tr>
+<td align="right">
+1
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+AT
+</td>
+<td align="right">
+127.40
+</td>
+<td align="right">
+45.89
+</td>
+<td align="right">
+0.46
+</td>
+<td align="right">
+0.30
+</td>
+<td align="right">
+0.17
+</td>
+</tr>
+<tr>
+<td align="right">
+2
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+BE
+</td>
+<td align="right">
+128.50
+</td>
+<td align="right">
+52.55
+</td>
+<td align="right">
+0.48
+</td>
+<td align="right">
+0.35
+</td>
+<td align="right">
+-0.02
+</td>
+</tr>
+<tr>
+<td align="right">
+3
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+BG
+</td>
+<td align="right">
+127.00
+</td>
+<td align="right">
+15.37
+</td>
+<td align="right">
+0.29
+</td>
+<td align="right">
+0.19
+</td>
+<td align="right">
+0.22
+</td>
+</tr>
+<tr>
+<td align="right">
+4
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+CY
+</td>
+<td align="right">
+132.00
+</td>
+<td align="right">
+92.39
+</td>
+<td align="right">
+0.96
+</td>
+<td align="right">
+0.46
+</td>
+<td align="right">
+-0.15
+</td>
+</tr>
+<tr>
+<td align="right">
+5
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+CZ
+</td>
+<td align="right">
+116.10
+</td>
+<td align="right">
+79.56
+</td>
+<td align="right">
+0.78
+</td>
+<td align="right">
+0.47
+</td>
+<td align="right">
+0.13
+</td>
+</tr>
+<tr>
+<td align="right">
+6
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+DE
+</td>
+<td align="right">
+95.07
+</td>
+<td align="right">
+77.86
+</td>
+<td align="right">
+0.66
+</td>
+<td align="right">
+0.42
+</td>
+<td align="right">
 -0.03
+</td>
+</tr>
+<tr>
+<td align="right">
+7
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+DK
+</td>
+<td align="right">
+135.48
+</td>
+<td align="right">
+32.82
+</td>
+<td align="right">
+0.34
+</td>
+<td align="right">
+0.26
+</td>
+<td align="right">
+-0.02
+</td>
+</tr>
+<tr>
+<td align="right">
+8
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+EE
+</td>
+<td align="right">
+119.40
+</td>
+<td align="right">
+82.08
+</td>
+<td align="right">
+0.81
+</td>
+<td align="right">
+0.60
+</td>
+<td align="right">
+-0.14
+</td>
+</tr>
+<tr>
+<td align="right">
+9
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+EL
+</td>
+<td align="right">
+117.00
+</td>
+<td align="right">
+61.25
+</td>
+<td align="right">
+0.59
+</td>
+<td align="right">
+0.47
+</td>
+<td align="right">
+-0.27
+</td>
+</tr>
+<tr>
+<td align="right">
+10
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+ES
+</td>
+<td align="right">
+106.40
+</td>
+<td align="right">
+70.90
+</td>
+<td align="right">
+0.68
+</td>
+<td align="right">
+0.34
+</td>
+<td align="right">
+0.27
+</td>
+</tr>
+<tr>
+<td align="right">
+11
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+FI
+</td>
+<td align="right">
+119.60
+</td>
+<td align="right">
+54.93
+</td>
+<td align="right">
+0.47
+</td>
+<td align="right">
+0.38
+</td>
+<td align="right">
+0.08
+</td>
+</tr>
+<tr>
+<td align="right">
+12
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+FR
+</td>
+<td align="right">
+95.81
+</td>
+<td align="right">
+75.52
+</td>
+<td align="right">
+0.64
+</td>
+<td align="right">
+0.42
+</td>
+<td align="right">
+-0.01
+</td>
+</tr>
+<tr>
+<td align="right">
+13
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+HR
+</td>
+<td align="right">
+111.50
+</td>
+<td align="right">
+50.84
+</td>
+<td align="right">
+0.50
+</td>
+<td align="right">
+0.33
+</td>
+<td align="right">
+0.21
+</td>
+</tr>
+<tr>
+<td align="right">
+14
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+HU
+</td>
+<td align="right">
+129.00
+</td>
+<td align="right">
+65.99
+</td>
+<td align="right">
+0.63
+</td>
+<td align="right">
+0.35
+</td>
+<td align="right">
+0.22
+</td>
+</tr>
+<tr>
+<td align="right">
+15
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+IT
+</td>
+<td align="right">
+105.10
+</td>
+<td align="right">
+78.52
+</td>
+<td align="right">
+0.77
+</td>
+<td align="right">
+0.41
+</td>
+<td align="right">
+0.16
+</td>
+</tr>
+<tr>
+<td align="right">
+16
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+LT
+</td>
+<td align="right">
+160.07
+</td>
+<td align="right">
+35.58
+</td>
+<td align="right">
+0.35
+</td>
+<td align="right">
+0.25
+</td>
+<td align="right">
+0.13
+</td>
+</tr>
+<tr>
+<td align="right">
+17
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+LV
+</td>
+<td align="right">
+120.80
+</td>
+<td align="right">
+64.77
+</td>
+<td align="right">
+0.62
+</td>
+<td align="right">
+0.45
+</td>
+<td align="right">
+-0.17
+</td>
+</tr>
+<tr>
+<td align="right">
+18
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+MT
+</td>
+<td align="right">
+107.79
+</td>
+<td align="right">
+82.28
+</td>
+<td align="right">
+0.75
+</td>
+<td align="right">
+0.58
+</td>
+<td align="right">
+0.12
+</td>
+</tr>
+<tr>
+<td align="right">
+19
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+PL
+</td>
+<td align="right">
+152.00
+</td>
+<td align="right">
+33.36
+</td>
+<td align="right">
+0.38
+</td>
+<td align="right">
+0.21
+</td>
+<td align="right">
+0.15
+</td>
+</tr>
+<tr>
+<td align="right">
+20
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+PT
+</td>
+<td align="right">
+97.25
+</td>
+<td align="right">
+72.59
+</td>
+<td align="right">
+0.61
+</td>
+<td align="right">
+0.42
+</td>
+<td align="right">
+-0.12
+</td>
+</tr>
+<tr>
+<td align="right">
+21
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+RO
+</td>
+<td align="right">
+108.23
+</td>
+<td align="right">
+76.03
+</td>
+<td align="right">
+0.64
+</td>
+<td align="right">
+0.38
+</td>
+<td align="right">
+0.03
+</td>
+</tr>
+<tr>
+<td align="right">
+22
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+SE
+</td>
+<td align="right">
+118.60
+</td>
+<td align="right">
+68.69
+</td>
+<td align="right">
+0.66
+</td>
+<td align="right">
+0.36
+</td>
+<td align="right">
+-0.01
+</td>
+</tr>
+<tr>
+<td align="right">
+23
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+SI
+</td>
+<td align="right">
+129.60
+</td>
+<td align="right">
+65.73
+</td>
+<td align="right">
+0.63
+</td>
+<td align="right">
+0.40
+</td>
+<td align="right">
+0.06
+</td>
+</tr>
+<tr>
+<td align="right">
+24
+</td>
+<td align="right">
+19297.00
+</td>
+<td>
+SK
+</td>
+<td align="right">
+109.03
+</td>
+<td align="right">
+64.98
+</td>
+<td align="right">
+0.53
+</td>
+<td align="right">
+0.37
+</td>
+<td align="right">
+-0.02
 </td>
 </tr>
 </table>

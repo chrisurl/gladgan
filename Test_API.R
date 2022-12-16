@@ -134,7 +134,7 @@ volume_long_list = foreach(j=1:nrow(selector),
         out[[i]] = df_wide %>%
           mutate(timestamp = start + hours(period),.before=4)
       }else{
-        stop("No suitable time interval found.")
+        warning(paste0("PVI: No suitable time interval found for i=", i))
       }
     }
     out_long = do.call(bind_rows, out)
@@ -233,7 +233,7 @@ price_long_list = foreach(j=1:nrow(selector),
       out[[i]] = df_wide %>%
         mutate(timestamp = start + hours(period),.before=4)
     }else{
-      stop("No suitable time interval found.")
+      warning(paste0("PPI: No suitable time interval found for i=", i))
     }
   }
   out_long = do.call(bind_rows, out)
