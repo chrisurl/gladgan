@@ -6,6 +6,7 @@ library(rai)
 library(forecast)
 library(parallel)
 library(doParallel)
+library(doRNG)
 library(tidyverse)
 
 
@@ -154,13 +155,13 @@ write_csv(ind_wide, paste0(datapath,"indicator_wide.csv"))
 
 
 model_google_trends <- function(trends, out_name, cl = detectCores()-1, country_code_list, country_list){
-  registerDoParallel(cl)
+  #registerDoRNG(cl)
   
   out_list = list()
   
   out_list = foreach(i = 1:length(country_code_list), .packages=c("tidyverse","forecast", "rai", "caret"),
-                     .verbose = F) %dopar% {
-    
+                     .verbose = F) %do% {
+    registerDoParallel(cores = 7)
     print(paste0("Country ", i,"/24"))
     
     c_code = country_code_list[i]
@@ -183,7 +184,7 @@ model_google_trends <- function(trends, out_name, cl = detectCores()-1, country_
     
     sig_sq = (rai_sum$sigma)^2
     
-    stats_list[[1]] = data.frame(country = country_list[i],
+    stats_list[[1]] = data.frame(country = unlist(ctry),
                                  TrainRMSE = RMSE(predict(mod_rai, theData),theResponse),
                                  TrainRsquared  = rai_sum$r.squared,
                                  TrainMAE = MAE(predict(mod_rai, theData),theResponse),
@@ -259,21 +260,21 @@ model_google_trends <- function(trends, out_name, cl = detectCores()-1, country_
     stats_list[[8]] = getTrainPerf(mod_svn3) %>% 
       add_column(country = country_list[i], .before = 1)
     
-    
+    stopImplicitCluster()
     res_df = do.call(rbind, stats_list)
   }
   
-  stopImplicitCluster()
+  #stopImplicitCluster()
   stats = do.call(bind_rows, out_list)
   
   write_csv(stats, paste0("stats_all",out_name,".csv"))
 }
 
-model_google_trends(trends = trends100, out_name="trends_100", 
-                    country_code_list=country_code_list, country_list=country_list)
-model_google_trends(trends = trendsnorm, out_name="trends_norm",
+model_google_trends(trends = trends100, out_name="trends_100", cl = 4, 
                     country_code_list=country_code_list,  country_list=country_list)
-model_google_trends(trends = trends100_lag, out_name="trends_100_lag", 
+model_google_trends(trends = trendsnorm, out_name="trends_norm", cl = 4,
                     country_code_list=country_code_list,  country_list=country_list)
-model_google_trends(trends = trendsnorm_lag, out_name="trends_norm_lag",
+model_google_trends(trends = trends100_lag, out_name="trends_100_lag",cl = 4,
+                    country_code_list=country_code_list,  country_list=country_list)
+model_google_trends(trends = trendsnorm_lag, out_name="trends_norm_lag", cl = 4,
                     country_code_list=country_code_list, country_list=country_list)
