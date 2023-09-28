@@ -4,6 +4,9 @@ library(tidyverse)
 library(stringr)
 library(countrycode)
 
+# Careful with the following option, it takes forever to download the data.
+#rnoaa::ghcnd_cache$delete_all()
+
 # Define the vector of FIPS codes you've provided for European countries
 fips_europe <- c('AL', 'EN', 'AU', 'AJ', 'BO', 'BE', 'BK', 'BU', 'HR', 'CY', 
                  'EZ', 'DA', 'FI', 'FR', 'GG', 'GM', 'GR', 'HU', 'IC', 'EI', 
@@ -84,6 +87,7 @@ german_tavg_stations <- stations %>%
 
 # Fetch the TAVG data for the selected stations
 tavg_data <- ghcnd(german_tavg_stations$id, var = "TAVG", date_min = as.Date("2008-01-01"), date_max = Sys.Date())
+# need to stop the above code every 12 minutes and re-start (it caches the results)
 
 # test1 = tavg_data %>%
 #   mutate(value_sum = rowSums(pick(contains("VALUE"))))
