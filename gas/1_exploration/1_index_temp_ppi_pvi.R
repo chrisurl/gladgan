@@ -113,19 +113,16 @@ germany_monthly_avg <- tavg_data |>
             t_max = max(TMAX, na.rm = T)/10)
 
 # Assuming you've fetched and cleaned the gas consumption data as `df1` and weather data as `monthly_temp_germany`
+new_data = expand_grid(
+  date = as_date("2023-09-01"), 
+  geo = unique(df1$geo))
+
 merged_data <- df1 %>%
   rename(date = time) |>
+  full_join(new_data, by = c("geo","date")) %>%
   left_join(ind_prod_germany, by = c("geo","date")) %>%
   left_join(ind_ppi_germany, by = c("geo","date")) %>%
   left_join(germany_monthly_avg, by = c("geo","date")) |> # ensure the join works correctly
   arrange(geo, date)
 
-df2 = merged_data |>
-  group_by(geo) %>%
-  mutate(pvi_lag1 = lag(pvi),
-         ppi_lag1 = lag(ppi),
-         pvi_lag12 = lag(pvi, 12),
-         ppi_lag12 = lag(ppi, 12)) %>%
-  ungroup()
-
-write_rds(df2, file = "/Users/christianurl/projects/data/gas/df2.rds")
+write_rds(merged_data, file = "/Users/christianurl/projects/data/gas/df2.rds")

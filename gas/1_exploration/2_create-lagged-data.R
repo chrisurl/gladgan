@@ -75,8 +75,7 @@ lag_trends_ts = function(lags, input_ts, col_pos){
 
 # extend data set ----
 
-df2 = read_rds("../data/gas/df2.rds")
-dfIn = df2[,-c(13:16)]
+dfIn = read_rds("../data/gas/df2.rds")
 
 df1 = dfIn %>%
   mutate(month = as.character(lubridate::month(date))) %>%

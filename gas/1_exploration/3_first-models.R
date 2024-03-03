@@ -43,6 +43,18 @@ cleaned_df2 <- theData2 |>
 theResponse2 = cleaned_df2$theResponse2
 theData2 = cleaned_df2 |> select(-theResponse2)
 
+
+cleaned_df0 <- theData |>
+  mutate_if(is.character, as.numeric) |>
+  bind_cols(theResponse = theResponse) |>
+  clean_data()
+
+theResponse = cleaned_df0$theResponse
+theData = cleaned_df0 |> select(-theResponse)
+
+mod0 = rai(theData, theResponse)
+summary(mod0$model)
+
 mod1 = rai(theData2, theResponse2)
 summary(mod1$model)
 
