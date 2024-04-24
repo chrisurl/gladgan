@@ -1,3 +1,10 @@
+base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
 data.table
 lubridate
 rai
@@ -5,6 +12,7 @@ ggplot2
 lattice
 caret
 forecast
+parallel
 foreach
 iterators
 doParallel

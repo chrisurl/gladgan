@@ -137,10 +137,13 @@ plot_breaks <- function(df, cn_code, country, measure, flow, metric, transformat
 }
 
 plot_breaks(df, "854110", "TR", "value",  2, "BIC", transformation = "log", confInt = T)
+plot_breaks(df, "854110", "TR", "value",  2, "RSS", transformation = "log", confInt = F)
+plot_breaks(df, "854110", "TR", "quantity",  2, "BIC", transformation = "log", confInt = T)
+plot_breaks(df, "854110", "TR", "quantity",  2, "RSS", transformation = "log", confInt = F)
 
 # to do: 
 ## seasonality estimation
-## implement estimation function
+## implement estimation function (i.e. also other estimators from the package)
 ## time selector
 ## na handling (e.g. ARIMA fill, or others)
 ## changepoint package

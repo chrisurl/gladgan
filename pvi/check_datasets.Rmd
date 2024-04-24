@@ -1,0 +1,135 @@
+---
+title: "test1"
+output: html_document
+date: "2023-05-14"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Paths
+```{r}
+datapath = "data/"
+ind_path = paste0(datapath, "indicators/")
+```
+
+
+## load Packages
+```{r, cache=FALSE}
+library(data.table)
+library(lubridate)
+library(tidyverse)
+library(kableExtra)
+
+#library(fable) #also  has a forecast and accuracy method!!
+```
+
+## Functions
+```{r}
+scale2 <- function(x, na.rm = TRUE) (x - mean(x, na.rm = na.rm)) / sd(x, na.rm)
+
+lag_trends = function(lags, input_ds, col_pos){
+  
+  out = list()
+  for(i in seq_along(col_pos)){
+    col_sel = col_pos[i]
+    t_out = list()
+    for(j in seq_along(lags)){
+      t_out[[j]] = dplyr::lag(input_ds[,col_sel],lags[j])
+    }
+    out[[i]] = do.call(cbind,t_out)
+    if(ncol(out[[i]]) > 1){
+      colnames(out[[i]]) = paste0(colnames(input_ds)[col_sel], "_lag", lags) 
+    }
+  }
+  res = do.call(cbind,out)
+  return(res)
+}
+
+lag_trends_ts = function(lags, input_ts, col_pos){
+  stopifnot(is.ts(input_ts))
+  
+  out = list()
+  lags_neg = -1*lags
+  
+  for(i in seq_along(col_pos)){
+    col_sel = col_pos[i]
+    t_out = list()
+    for(j in seq_along(lags)){
+      t_out[[j]] = stats::lag(input_ts[,col_sel],lags_neg[j])
+    }
+    out[[i]] = do.call(cbind,t_out)
+    if(ncol(out[[i]]) > 1){
+      colnames(out[[i]]) = paste0(colnames(input_ts)[col_sel], "_lag", lags) 
+    }
+    out[[i]] = fable::as_tsibble(out[[i]]) #need this for binding the data accurately
+  }
+  res = as.ts(do.call(bind_rows,out))
+  return(res)
+}
+```
+
+
+## Volatility Index {-}
+```{r}
+vol_ind = read_delim(paste0(datapath,"country_volatility_index.csv")) %>%
+  mutate(geo = str_split(Countries, " ", simplify = T)[,1], .before = 1)
+```
+
+## Indicator
+```{r}
+ind_path = paste0(datapath,"indicators/")
+
+fl = list.files(ind_path)
+ind_df = list()
+
+for(i in 1:length(fl)){
+  ind_in = fread(paste0(ind_path, fl[i]))
+  monat = lubridate::my(substr(fl[i], 5,11))
+  
+  ind_df[[i]] = ind_in %>%
+  filter(nace_r2 == "B-D") %>%
+  .[,-c(1:7)] %>% 
+  as_tibble() %>%
+  mutate(date = as_date(paste0(TIME_PERIOD,"-01")),.before=1) %>%
+  filter(geo %in% vol_ind$geo) %>%
+  .[,c(1,2,4)] %>%
+  group_by(geo) %>%
+  mutate(obs_value_std = scale2(OBS_VALUE), 
+         mean=mean(OBS_VALUE), 
+         sd = sd(OBS_VALUE),
+         year = year(date),
+         month = month(date)) %>%
+  ungroup() %>%
+  add_column(monat)
+}
+
+df1 = ind_df %>%
+  reduce(bind_rows)
+
+df1 %>%
+  group_by(geo, monat) %>%
+  summarise(obs = n()) %>%
+  kable() %>%
+  kable_styling()
+
+```
+
+
+## Summary
+```{r}
+df1 %>%
+  group_by(geo, monat) %>%
+  summarise(obs = n()) %>%
+  ungroup() %>%
+  group_by(monat, obs) %>%
+  mutate(cl = paste(geo, collapse = ", ")) %>%
+  ungroup() %>%
+  select(!geo) %>%
+  distinct() %>%
+  arrange(cl, monat) %>%
+  kable() %>%
+  kable_styling()
+```
+

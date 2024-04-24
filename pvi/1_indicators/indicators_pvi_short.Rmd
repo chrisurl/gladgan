@@ -122,7 +122,7 @@ cl = detectCores()-1
 registerDoParallel(cl)
 
 geo_filter = geo_minmax %>%
-  filter(max_year == 2022) %>% 
+  filter(max_year == 2023) %>% 
   .$geo 
 
 res_list = foreach(i = 1:length(geo_filter), .packages=c("tidyverse","forecast"), .multicombine = T, .combine = rbind) %dopar% {
@@ -193,18 +193,19 @@ print(xtable::xtable(coefs_df), type="html")
 ```
 
 
-*October forecasts:* 
+*FEB forecasts:* 
 ```{r, results='asis'}
 sept = res_df %>%
-  filter(date == as_date("2022-10-01"))
+  filter(date == as_date("2023-02-01"))
 
 print(xtable::xtable(sept), type="html")
 ```
 
-*November forecasts:* 
+
+*MAR forecasts:* 
 ```{r, results='asis'}
 sept = res_df %>%
-  filter(date == as_date("2022-11-01"))
+  filter(date == as_date("2023-03-01"))
 
 print(xtable::xtable(sept), type="html")
 ```
