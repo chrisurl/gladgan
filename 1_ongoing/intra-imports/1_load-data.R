@@ -1,0 +1,14 @@
+library(tidyverse)
+library(eurostat)
+
+df = eurostat::get_eurostat("ei_eteu27_2020_m", 
+  filters = list(
+    partner = "EU27_2020",
+    geo = c("EU27_2020", "BE", "BG", "CZ", "DK", "DE", "EE", "IE",
+            "EL", "ES", "FR", "HR", "IT", "CY", "LV", "LT", "LU",
+            "HU", "MT", "NL", "AT", "PL", "PT", "RO", "SI", "SK", 
+            "FI", "SE"),
+    indic = "ET-T",
+    stk_flow = "EXP",
+    unit = "MIO-EUR-NSA"),
+  cache = FALSE)
