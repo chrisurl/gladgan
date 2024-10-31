@@ -1,0 +1,523 @@
+---
+title: "Ideas"
+author: "Christian Url"
+date: "2024-10-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Packages
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+set.seed(505)
+library(tidyverse)
+library(eurostat)
+library(forecast)
+library(parallel)
+
+df = read_rds("../data_ignore/df_2024-10.rds")
+```
+
+# Ideas
+
+For October 2024, I am going to use two simple evaluation criteria for all time series and respective models: 
+
+  * Best predictive performance for the last two months with h=2
+  * Best BIC criterion
+
+The time-series will be both, standardised and logged. Therefore, we have three input series for all countries. Then, we need to find the best models. For now, let's stick to ARIMAs but I will also develop some LSTM approach.
+
+## BIC Criteriom
+
+The implementation here is relatively easy, as we can use "auto.arima". 
+
+## Predictive performance
+
+This is the same as last time; I would need to implement a grid search that is evaluated against the RMSE of the predicted values with h=2. 
+
+# Functions
+
+To estimate the above, we are going to use functions. This enables the project to optimise runtime and resources.
+
+## Data manipulation
+
+### Standardise 
+
+```{r}
+scale2 <- function(x, na.rm = TRUE) (x - mean(x, na.rm = na.rm)) / sd(x, na.rm)
+```
+
+### Create cleaned data set
+
+Since all data sets have the same structure, this is straightforward.
+
+```{r}
+clean_data <- function(df){
+ df |> 
+  select(geo, time, values) |> 
+  group_by(geo) |> 
+  mutate(values_scale = scale2(values),
+         values_log = log(values),
+         values_scale_mean = mean(values, na.rm = T),
+         values_scale_sd = sd(values, na.rm = T)) |> 
+  ungroup() 
+}
+df = df |> 
+  clean_data()
+```
+
+## Modelling
+
+Now, we need a couple of functions. First, the auto.arima call. Then, another function to search for the best length of the time series.
+
+### auto.arima
+
+```{r}
+df2 = df |> 
+  filter(geo == "BE") |> 
+  select(time, values) |> 
+  drop_na()
+
+minDate = min(df2$time)
+df_ts = ts(df2[["values"]], start = c(year(minDate), month(minDate)), frequency = 12)
+auto.arima(df_ts)
+
+# Define the length of subsets you want to test
+#sub_lengths <- c(12*(1:floor(length(df_ts)/12)), length(df_ts))  # e.g., last 12, 24, 36 months for monthly data
+sub_lengths <- c(12, 24, 120, 180, 240)
+results <- data.frame(Sub_Length = integer(), RMSE = numeric(), RMSE_12 = numeric(), RMSE_8 = numeric(), RMSE_6 = numeric(), AIC = numeric(), BIC = numeric())
+
+for (sub_length in sub_lengths) {
+  cat("Running: ", sub_length, "\n")
+  # Subset the data for the current length
+  data_subset <- tail(df_ts, sub_length)
+  
+  # Fit ARIMA model
+  cat(" ..auto.arima \n")
+  fit <- auto.arima(data_subset)
+  
+  # Calculate in-sample AIC
+  model_aic <- AIC(fit)
+  model_bic <- BIC(fit)
+  
+  # Cross-validation for out-of-sample RMSE
+  cat(" ..cv \n")
+  cv_errors <- tsCV(data_subset, forecastfunction = function(x, h) forecast(auto.arima(x), h = h), h = 2)
+  rmse <- sqrt(mean(cv_errors[,2]^2, na.rm = TRUE))
+  rmse_12 <- sqrt(mean(cv_errors[nrow(cv_errors)-12:nrow(cv_errors),2]^2, na.rm = TRUE))
+  rmse_8 <- sqrt(mean(cv_errors[nrow(cv_errors)-8:nrow(cv_errors),2]^2, na.rm = TRUE))
+  rmse_6 <- sqrt(mean(cv_errors[nrow(cv_errors)-6:nrow(cv_errors),2]^2, na.rm = TRUE))
+  # Store results
+  results <- rbind(results, data.frame(Sub_Length = sub_length, RMSE = rmse, RMSE_12 = rmse_12, RMSE_8 = rmse_8, RMSE_6 = rmse_6, AIC = model_aic, BIC = model_bic))
+}
+
+# View the results
+print(results)
+
+ggplot(results, aes(x = Sub_Length)) +
+  geom_line(aes(y = AIC), color = "blue") +
+  geom_point(aes(y = AIC), color = "blue") +
+  geom_line(aes(y = BIC), color = "red") +
+  geom_point(aes(y = BIC), color = "red") +
+  labs(y = "AIC", title = "AIC, BIC across Different Time Periods")
+
+results %>%
+  pivot_longer(contains("RMSE"), names_to = "type", values_to = "value") %>%
+  ggplot(aes(x = Sub_Length, y = value, color = type)) +
+  geom_line() +
+  geom_point() +
+  labs(y = "RMSE", title = "Forecast RMSE across Different Time Periods")
+```
+
+### Parallelised version (Outer)
+This version runs static models, build on a specific length of the time series and the cv does not estimate further models.
+
+```{r}
+df2 = df |> 
+  filter(geo == "BE") |> 
+  select(time, values) |> 
+  drop_na()
+
+minDate = min(df2$time)
+df_ts = ts(df2[["values"]], start = c(year(minDate), month(minDate)), frequency = 12)
+
+# Define the length of subsets you want to test
+sub_lengths <- c(6*(1:floor(length(df_ts)/6)), length(df_ts))
+
+# Loop
+process_subset <- function(sub_length) {
+  cat("Running: ", sub_length, "\n")
+  # Subset the data for the current length
+  data_subset <- tail(df_ts, sub_length)
+  
+  # Fit ARIMA model
+  cat(" ..auto.arima \n")
+  fit <- auto.arima(data_subset)
+  pred <- forecast(fit, 2)
+  
+  forecasts = tibble(
+    date = as_date(zoo::as.yearmon(time(pred$mean))),
+    value = as.numeric(pred$mean)
+  )
+  
+  # Calculate in-sample AIC
+  model_aic <- AIC(fit)
+  model_bic <- BIC(fit)
+  
+  # Cross-validation for out-of-sample RMSE
+  cat(" ..cv \n")
+  cv_errors <- tsCV(data_subset, forecastfunction = function(x,h) forecast(fit, h = h), h = 2)
+  cv_errors <- na.omit(cv_errors)
+  rmse <- sqrt(mean(cv_errors[,2]^2, na.rm = TRUE))
+  rmse_model = forecast::accuracy(fit)[2]
+  rmse_12 <- if(nrow(cv_errors)>12){
+    sqrt(mean(cv_errors[(nrow(cv_errors)-12):nrow(cv_errors),2]^2, na.rm = TRUE))
+  }else{NA}
+  rmse_6 <- if(nrow(cv_errors)>6){
+    sqrt(mean(cv_errors[(nrow(cv_errors)-6):nrow(cv_errors),2]^2, na.rm = TRUE))
+  }else{NA}
+  rmse_2 <- sqrt(mean(cv_errors[(nrow(cv_errors)-2):nrow(cv_errors),2]^2, na.rm = TRUE))
+  # Store results
+  
+  results <- tibble(sub_length, rmse, rmse_12, rmse_6, rmse_2, rmse_model, AIC = model_aic, BIC = model_bic, yhat = nest(forecasts), arimaorder = nest(as_tibble_row(arimaorder(fit))))
+  
+  return(results)
+}
+
+# Determine the number of cores to use
+num_cores <- detectCores() - 1  # Reserve one core for other processes
+
+# Run the function in parallel over subset lengths
+results_list <- mclapply(sub_lengths, process_subset, mc.cores = num_cores)
+
+# Combine the list of results into a single data frame
+results <- do.call(bind_rows, results_list)
+
+ggplot(results, aes(x = Sub_Length)) +
+  geom_line(aes(y = AIC), color = "blue") +
+  geom_point(aes(y = AIC), color = "blue") +
+  geom_line(aes(y = BIC), color = "red") +
+  geom_point(aes(y = BIC), color = "red") +
+  labs(y = "AIC", title = "AIC, BIC across Different Time Periods")
+
+results %>%
+  pivot_longer(contains("rmse"), names_to = "type", values_to = "value") %>%
+  ggplot(aes(x = sub_length, y = value, color = type)) +
+  geom_line() +
+  geom_point() +
+  labs(y = "RMSE", title = "Forecast RMSE across Different Time Periods")
+```
+
+Now, filter for the best models 
+
+```{r}
+results %>% 
+  filter(rmse_2 == min(rmse_2, na.rm = T) |
+         rmse_6 == min(rmse_6, na.rm = T) |
+         rmse_12 == min(rmse_12, na.rm = T))
+```
+
+
+### Hybid approach to parallelisation
+Here, we estimate a new model for each step in the CV. This might be time consuming and we can skip it if needed. Also I am not sure if this is really needed, for ALL observations. I think the last 12,8,6,4,2 should be enough!
+
+NOT EVALUATED:
+```{r, eval=FALSE}
+#sub_lengths <- c(12*(1:floor(length(df_ts)/12)), length(df_ts))  # e.g., last 12, 24, 36 months for monthly data
+sub_lengths <- c(12, 24, 120, 180, 240)
+# Create the time series list by extracting subsets of each specified length
+time_series_list <- lapply(sub_lengths, function(len) {
+  if (len <= length(df_ts)) {
+    tail(df_ts, len)  # Extract the last 'len' observations
+  } else {
+    NULL  # If length exceeds original series, set to NULL
+  }
+})
+# Remove any NULL entries (in case some lengths exceed the original time series length)
+time_series_list <- Filter(Negate(is.null), time_series_list)
+
+# Define function to fit models with parallel cross-validation
+fit_and_cv <- function(time_series, h = 1, num_inner_cores = 2) {
+  # Define the forecast function
+  forecast_func <- function(x, h) {
+    fit <- auto.arima(x)
+    forecast(fit, h = h)
+  }
+  
+  # Define the parallel cross-validation function
+  parallel_tscv <- function(time_series, h, forecast_func, num_cores) {
+    n <- length(time_series)
+    compute_error <- function(i) {
+      train_data <- time_series[1:i]
+      test_data <- time_series[(i + 1):(i + h)]
+      fit <- forecast_func(train_data, h)
+      error <- test_data - fit$mean
+      return(error)
+    }
+    errors <- mclapply(1:(n - h), compute_error, mc.cores = num_cores)
+    
+    return(do.call(rbind, errors))
+  }
+  
+  # Run the cross-validation with limited cores
+  cv_errors <- parallel_tscv(time_series, h = h, forecast_func = forecast_func, num_cores = num_inner_cores)
+  
+  rmse <- sqrt(mean(cv_errors[,2]^2, na.rm = TRUE))
+  rmse_12 <- sqrt(mean(cv_errors[nrow(cv_errors)-12:nrow(cv_errors),2]^2, na.rm = TRUE))
+  rmse_8 <- sqrt(mean(cv_errors[nrow(cv_errors)-8:nrow(cv_errors),2]^2, na.rm = TRUE))
+  rmse_6 <- sqrt(mean(cv_errors[nrow(cv_errors)-6:nrow(cv_errors),2]^2, na.rm = TRUE))
+  # Store results
+  
+  results <- data.frame(RMSE = rmse, RMSE_12 = rmse_12, RMSE_8 = rmse_8, RMSE_6 = rmse_6)
+  
+  return(results)
+}
+
+# Run outer parallelization over different time series
+num_outer_cores <- floor((detectCores()-1)/2)  # Adjust to leave cores free
+results_list2 <- mclapply(time_series_list, fit_and_cv, h = 2, num_inner_cores = 2, mc.cores = num_outer_cores)
+
+results2 <- cbind(sub_lengths, do.call(rbind, results_list2))
+results2 %>%
+  pivot_longer(contains("RMSE"), names_to = "type", values_to = "value") %>%
+  ggplot(aes(x = sub_lengths, y = value, color = type)) +
+  geom_line() +
+  geom_point() +
+  labs(y = "RMSE", title = "Forecast RMSE across Different Time Periods")
+```
+
+# Estimation 
+
+## Functions
+This will be one .R file
+
+```{r}
+process_subset <- function(sub_length, df) {
+  cat("Running: ", sub_length, "\n")
+  # Subset the data for the current length
+  data_subset <- tail(df, sub_length)
+  
+  # Fit ARIMA model
+  cat(" ..auto.arima \n")
+  fit <- auto.arima(data_subset)
+  pred <- forecast(fit, 2)
+  
+  forecasts = tibble(
+    date = as_date(zoo::as.yearmon(time(pred$mean))),
+    value = as.numeric(pred$mean)
+  )
+  
+  # Calculate in-sample AIC
+  model_aic <- AIC(fit)
+  model_bic <- BIC(fit)
+  
+  # Cross-validation for out-of-sample RMSE
+  cat(" ..cv \n")
+  cv_errors <- tsCV(data_subset, forecastfunction = function(x,h) forecast(fit, h = h), h = 2)
+  cv_errors <- na.omit(cv_errors)
+  rmse <- sqrt(mean(cv_errors[,2]^2, na.rm = TRUE))
+  rmse_model = forecast::accuracy(fit)[2]
+  rmse_12 <- if(nrow(cv_errors)>12){
+    sqrt(mean(cv_errors[(nrow(cv_errors)-12):nrow(cv_errors),2]^2, na.rm = TRUE))
+  }else{NA}
+  rmse_6 <- if(nrow(cv_errors)>6){
+    sqrt(mean(cv_errors[(nrow(cv_errors)-6):nrow(cv_errors),2]^2, na.rm = TRUE))
+  }else{NA}
+  rmse_2 <- if(nrow(cv_errors)>2){
+    sqrt(mean(cv_errors[(nrow(cv_errors)-2):nrow(cv_errors),2]^2, na.rm = TRUE))
+  }else{NA}
+  # Store results
+  
+  results <- tibble(sub_length, rmse, rmse_12, rmse_6, rmse_2, rmse_model, AIC = model_aic, BIC = model_bic, as_tibble_row(arimaorder(fit))) %>%
+    bind_cols(forecasts)
+  
+  return(results)
+}
+```
+
+
+Combining all the previous results, we can use a grid for all countries and three time series per country. 
+
+```{r}
+estimation_grid = expand.grid(
+  series = c("values", "values_scale", "values_log"), 
+  geo = unique(df$geo), stringsAsFactors = F)
+num_cores <- detectCores() - 1  # Reserve one core for other processes
+
+estimate_arima_models = function(data, country, series, num_cores, sub = 6){
+  stopifnot(sub>0)
+  
+  df2 = data |> 
+  filter(geo == country) |> 
+  select(time, !!sym(series)) |> 
+  drop_na()
+
+  minDate = min(df2$time)
+  df_ts = ts(df2 %>% pull(!!sym(series)), start = c(year(minDate), month(minDate)), frequency = 12)
+  
+  # Define the length of subsets you want to test
+  sub_lengths <- c(6*(1:floor(length(df_ts)/6)), length(df_ts))
+  
+  # Run the function in parallel over subset lengths
+  results_list <- mclapply(sub_lengths, process_subset, mc.cores = num_cores, df = df_ts)
+  
+  # Combine the list of results into a single data frame
+  results <- do.call(bind_rows, results_list)
+  results = results %>%
+    add_column(geo = country, series)
+  return(results)
+}
+
+test1 = estimate_arima_models(df, 
+                              country = estimation_grid$geo[1], 
+                              series = estimation_grid$series[1], 
+                              num_cores = num_cores, 
+                              sub = 12)
+
+test1 %>%
+  select(-c(date, value)) %>%
+  distinct() %>%
+  pivot_longer(contains("rmse"), names_to = "type", values_to = "value") %>%
+  ggplot(aes(x = sub_length, y = value, color = type)) +
+  geom_line() +
+  geom_point() +
+  labs(y = "RMSE", title = "Forecast RMSE across Different Time Periods")
+```
+
+## Estimate the grid
+
+```{r}
+estimation_grid2 = estimation_grid[1:30,]
+test2 = map2(estimation_grid2$geo, estimation_grid2$series, \(x,y) estimate_arima_models(df, country = x, series = y, num_cores = 9, sub = 12))
+
+results2 = do.call(bind_rows, test2)
+
+results2 %>%
+  select(-c(date, value)) %>%
+  distinct() %>%
+  filter(series == "values") %>%
+  pivot_longer(contains("rmse"), names_to = "type", values_to = "value") %>%
+  filter(type != "rmse") %>%
+  ggplot(aes(x = sub_length, y = value, color = type)) +
+  geom_line() +
+  #geom_point() +
+  labs(y = "RMSE", title = "Forecast RMSE across Different Time Periods") + 
+  facet_wrap(vars(geo), scales = "free_y")
+
+results2 %>%
+  select(-c(date, value)) %>%
+  distinct() %>%
+  filter(series == "values_log") %>%
+  pivot_longer(contains("rmse"), names_to = "type", values_to = "value") %>%
+  filter(type != "rmse") %>%
+  ggplot(aes(x = sub_length, y = value, color = type)) +
+  geom_line() +
+  #geom_point() +
+  labs(y = "RMSE", title = "Forecast RMSE across Different Time Periods") + 
+  facet_wrap(vars(geo), scales = "free_y")
+```
+
+## Find best fit 
+
+```{r}
+results2 %>%
+  group_by(geo, series) %>%
+  filter(rmse_2 == min(rmse_2, na.rm = T) |
+         rmse_6 == min(rmse_6, na.rm = T) |
+         rmse_12 == min(rmse_12, na.rm = T)) %>%
+  distinct(sub_length)
+```
+
+# Estimation reduced
+
+From first tests we can assume that the scale transformation would not change the best fitting time span. Therefore, we reduce this level of complexity for now.
+
+```{r}
+estimation_grid3 = expand.grid(
+  series = c("values", "values_log"), 
+  geo = unique(df$geo), stringsAsFactors = F)
+num_cores <- detectCores()
+
+test3 = map2(estimation_grid3$geo, estimation_grid3$series, \(x,y) estimate_arima_models(df, country = x, series = y, num_cores = num_cores, sub = 6))
+
+results3 = do.call(bind_rows, test3)
+
+results3 %>%
+  select(-c(date, value)) %>%
+  distinct() %>%
+  filter(series == "values") %>%
+  pivot_longer(contains("rmse"), names_to = "type", values_to = "value") %>%
+  filter(type != "rmse") %>%
+  ggplot(aes(x = sub_length, y = value, color = type)) +
+  geom_line() +
+  labs(y = "RMSE", title = "Forecast RMSE across Different Time Periods") + 
+  facet_wrap(vars(geo), scales = "free_y", ncol = 4)
+
+results3 %>%
+  select(-c(date, value)) %>%
+  distinct() %>%
+  filter(series == "values_log") %>%
+  pivot_longer(contains("rmse"), names_to = "type", values_to = "value") %>%
+  filter(type != "rmse") %>%
+  ggplot(aes(x = sub_length, y = value, color = type)) +
+  geom_line() +
+  #geom_point() +
+  labs(y = "RMSE", title = "Forecast RMSE across Different Time Periods") + 
+  facet_wrap(vars(geo), scales = "free_y")
+
+results3 %>%
+  group_by(geo, series) %>%
+  filter(rmse_model == min(rmse_model, na.rm = T) |
+         rmse_2 == min(rmse_2, na.rm = T) |
+         rmse_6 == min(rmse_6, na.rm = T) |
+         rmse_12 == min(rmse_12, na.rm = T))
+```
+
+# What to report? 
+
+Following options, we choose: 
+
+  * rmse_2 (min interval of series and series_log)
+  * rmse_12 (min interval of series and series_log)
+  * mean(rmse_model, rmse_2, rmse_6, rmse_12)
+
+
+```{r}
+write_rds(results3, file = paste0(getwd(),"/data_ignore/results_",monYear,".rds"))
+
+entry1 = results3 %>%
+  filter(geo != "EU27_2020") %>%
+  mutate(yhat = if_else(series == "values", value, exp(value))) %>%
+  group_by(geo, series) %>%
+  filter(rmse_2 == min(rmse_2, na.rm = T)) %>%
+  filter(date == "2024-10-01") %>%
+  group_by(geo) %>%
+  summarise(result = mean(value, na.rm = T)) %>%
+  arrange(geo)
+
+entry2 = results3 %>%
+  filter(geo != "EU27_2020") %>%
+  mutate(yhat = if_else(series == "values", value, exp(value))) %>%
+  group_by(geo, series) %>%
+  filter(rmse_12 == min(rmse_12, na.rm = T)) %>%
+  filter(date == "2024-10-01") %>%
+  group_by(geo) %>%
+  summarise(result = mean(value, na.rm = T)) %>%
+  arrange(geo)
+
+entry3 = results3 %>%
+  filter(geo != "EU27_2020") %>%
+  mutate(yhat = if_else(series == "values", value, exp(value))) %>%
+  group_by(geo, series) %>%
+  filter(rmse_model == min(rmse_model, na.rm = T) |
+         rmse_2 == min(rmse_2, na.rm = T) |
+         rmse_6 == min(rmse_6, na.rm = T) |
+         rmse_12 == min(rmse_12, na.rm = T)) %>%
+  filter(date == "2024-10-01") %>%
+  group_by(geo) %>%
+  summarise(result = mean(value, na.rm = T)) %>%
+  arrange(geo)
+```
+
