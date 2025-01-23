@@ -1,9 +1,9 @@
 monYear = substr(Sys.Date(),1,7)
-entry1 = read_csv("data_ignore/results_2024-10_entry1.csv") %>%
+entry1 = read_csv(paste0("data_ignore/results_",monYear,"_entry1.csv")) %>%
   mutate(entry = "entry_1")
-entry2 = read_csv("data_ignore/results_2024-10_entry2.csv")%>%
+entry2 = read_csv(paste0("data_ignore/results_",monYear,"_entry2.csv"))%>%
   mutate(entry = "entry_2")
-entry3 = read_csv("data_ignore/results_2024-10_entry3.csv")%>%
+entry3 = read_csv(paste0("data_ignore/results_",monYear,"_entry3.csv"))%>%
   mutate(entry = "entry_3")
 
 df = bind_rows(entry1, entry2, entry3)

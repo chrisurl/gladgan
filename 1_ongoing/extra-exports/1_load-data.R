@@ -15,3 +15,5 @@ df = eurostat::get_eurostat("ei_eteu27_2020_m",
 
 monYear = substr(Sys.Date(),1,7)
 write_rds(df, paste0("data_ignore/df_",monYear,".rds"))
+
+write_csv(df, paste0("data_ignore/df_",monYear,".csv"))
