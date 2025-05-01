@@ -1,0 +1,22 @@
+[project]
+name = "company-data"
+version = "0.1.0"
+description = "Locate and download financial reports and company data from the web"
+authors = [
+    {name = "Christian Url"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "requests (>=2.32.3,<3.0.0)",
+    "bs4 (>=0.0.2,<0.0.3)",
+    "pandas (>=2.2.3,<3.0.0)"
+]
+
+[tool.poetry]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+package-mode = false
