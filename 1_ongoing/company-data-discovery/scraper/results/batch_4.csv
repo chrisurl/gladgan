@@ -1,0 +1,18 @@
+COMPANY,TYPE,SRC,REFYEAR
+ORANGE,FIN_REP,,
+ORACLE CORP,FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2022.pdf,2022
+ORACLE CORP,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2021.pdf,2021
+ORACLE CORP,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2020.pdf,2020
+ORACLE CORP,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2019.pdf,2019
+ORACLE CORP,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2018.pdf,2018
+ORACLE CORP,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2017.pdf,2017
+ACCOR,FIN_REP,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/annual-report-2025.pdf,2025
+ACCOR,OTHER,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/annual-report-2024.pdf,2025
+ACCOR,OTHER,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/annual_report_2025.pdf,2025
+ACCOR,OTHER,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/annual_report_2024.pdf,2025
+ACCOR,OTHER,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/financial-report-2025.pdf,2025
+ACCOR,OTHER,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/financial-report-2024.pdf,2025
+PROCTER & GAMBLE CO,FIN_REP,https://assets.ctfassets.net/oggad6svuzkv/1axqmYoGvExvpVj5ndTYld/dca130713c7612ea84bc4d425752f1cb/2024_annual_report.pdf,2024
+FCC,FIN_REP,https://www.fcc.es/documents/13935105/48747511/annual_report_2023.pdf,2023
+FCC,OTHER,https://www.fcc.es/documents/13935105/33109579/annual_report_2021.pdf,2021
+FCC,OTHER,https://www.fcc.es/documents/13935105/22947340/annual_report_2020.pdf,2020

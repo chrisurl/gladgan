@@ -1,5 +1,10 @@
 COMPANY,TYPE,SRC,REFYEAR
-ADECCO GROUP AG,FIN_REP,https://www.adeccogroup.com/-/media/project/adecco-group/adeccogroup/pdf-files/2025-march/the-adecco-group-annual-report-2024.pdf,2025
+ADECCO GROUP AG,FIN_REP,https://www.adecco-jobs.com/-/media/project/adeccogroup/pdf-files/2024-march/the-adecco-group-annual-report-2023.pdf/annual-report-2025.pdf,2024
+ADECCO GROUP AG,OTHER,https://www.adecco-jobs.com/-/media/project/adeccogroup/pdf-files/2024-march/the-adecco-group-annual-report-2023.pdf/annual-report-2024.pdf,2024
+ADECCO GROUP AG,OTHER,https://www.adecco-jobs.com/-/media/project/adeccogroup/pdf-files/2024-march/the-adecco-group-annual-report-2023.pdf/annual_report_2025.pdf,2024
+ADECCO GROUP AG,OTHER,https://www.adecco-jobs.com/-/media/project/adeccogroup/pdf-files/2024-march/the-adecco-group-annual-report-2023.pdf/annual_report_2024.pdf,2024
+ADECCO GROUP AG,OTHER,https://www.adecco-jobs.com/-/media/project/adeccogroup/pdf-files/2024-march/the-adecco-group-annual-report-2023.pdf/financial-report-2025.pdf,2024
+ADECCO GROUP AG,OTHER,https://www.adecco-jobs.com/-/media/project/adeccogroup/pdf-files/2024-march/the-adecco-group-annual-report-2023.pdf/financial-report-2024.pdf,2024
 JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY,FIN_REP,https://investors.johnsoncontrols.com/~/media/Files/J/Johnson-Controls-IR-V2/annual-meeting-materials/irish-statutory-reports-and-non-financial-report-for-fiscal-2024-v1.pdf,2024
 JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY,OTHER,https://investors.johnsoncontrols.com/~/media/Files/J/Johnson-Controls-IR-V2/annual-meeting-materials/jci-plc-2023-irish-annual-report.pdf,2023
 JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY,OTHER,https://investors.johnsoncontrols.com/~/media/Files/J/Johnson-Controls-IR-V2/annual-meeting-materials/irish-statutory-reports-for-fiscal-2022.pdf,2022
@@ -8,3 +13,171 @@ JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY,OTHER,https://investors.jo
 JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY,OTHER,https://investors.johnsoncontrols.com/~/media/Files/J/Johnson-Controls-IR-V2/annual-meeting-materials/annual-reports/2022-annual-report.pdf,2022
 MAGNA INTERNATIONAL INC,FIN_REP,https://www.magna.com/docs/default-source/financial-reports-public-filings/annual-reports/2024-annual-report---magna---aoda.pdf?sfvrsn=188e000d_11,2024
 MAGNA INTERNATIONAL INC,OTHER,https://get.adobe.com/reader/,Unknown
+PUBLICIS GROUPE S A,FIN_REP,,
+GEBR. KNAUF,FIN_REP,,
+BRIDGESTONE CORPORATION,FIN_REP,https://companiesmarketcap.com/annual-reports/11321.ar.en.2024.pdf,2024
+BRIDGESTONE CORPORATION,OTHER,https://companiesmarketcap.com/annual-reports/11321.ar.en.2023.pdf,2023
+BRIDGESTONE CORPORATION,OTHER,https://companiesmarketcap.com/annual-reports/11321.ar.en.2022.pdf,2022
+BRIDGESTONE CORPORATION,OTHER,https://sustainabilityreports.com/reports/bridgestone-corporation-2024-integrated-report-pdf/#unlock,2024
+BRIDGESTONE CORPORATION,OTHER,https://companiesmarketcap.com/annual-reports/11321.ar.en.2020.pdf,2020
+BRIDGESTONE CORPORATION,OTHER,https://content.presspage.com/uploads/3167/e8c8cafd-9961-4c84-bf42-a5f8c851db4b/annualreport2024.pdf?10000/annual-report-2025.pdf,2024
+FERRERO,FIN_REP,,
+SUMITOMO CORPORATION,FIN_REP,https://www.sumitomocorp.com/en/europe/sitecore/content/HQ/Home/ir/financial/investors-guide/2022#LNav02,2022
+COMPAGNIE DE SAINT GOBAIN,FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/s/saint-gobain_2022.pdf,2022
+COMPAGNIE DE SAINT GOBAIN,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/s/saint-gobain_2021.pdf,2021
+COMPAGNIE DE SAINT GOBAIN,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/s/saint-gobain_2020.pdf,2020
+COMPAGNIE DE SAINT GOBAIN,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/s/saint-gobain_2011.pdf,2011
+COMPAGNIE DE SAINT GOBAIN,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/s/saint-gobain_2010.pdf,2010
+COMPAGNIE DE SAINT GOBAIN,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/s/saint-gobain_2009.pdf,2009
+ABBOTT LABORATORIES,FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NYSE_ABT_2023.pdf,2023
+ABBOTT LABORATORIES,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NYSE_ABT_2022.pdf,2022
+ABBOTT LABORATORIES,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NYSE_ABT_2021.pdf,2021
+ABBOTT LABORATORIES,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NYSE_ABT_2020.pdf,2020
+ABBOTT LABORATORIES,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NYSE_ABT_2019.pdf,2019
+ABBOTT LABORATORIES,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NYSE_ABT_2018.pdf,2018
+BP P.L.C.,FIN_REP,https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/pdfs/investors/bp-annual-report-and-form-20f-financial-statements-2024.pdf,2024
+BP P.L.C.,OTHER,https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/pdfs/investors/bp-annual-report-and-form-20f-2024.pdf,2024
+ENGIE,FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/e/engie_2023.pdf,2023
+ENGIE,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/e/engie_2022.pdf,2022
+ENGIE,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/e/engie_2021.pdf,2021
+ENGIE,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/e/engie_2020.pdf,2020
+ENGIE,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/e/engie_2019.pdf,2019
+ENGIE,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/e/engie_2018.pdf,2018
+DENTSU GROUP INC.,FIN_REP,https://www.group.dentsu.com/en/sustainability/common/pdf/integrated-report2018_49.pdf,2018
+THYSSENKRUPP,FIN_REP,https://www.thyssenkrupp.com/_binary/UCPthyssenkruppAG/0beedfca-2fd9-449f-bc7d-7c04374d73de/thyssenkrupp-GB_2023-2024_EN_WEB.pdf,2023
+VOESTALPINE GROUP,FIN_REP,https://reports.voestalpine.com/2223/ar/_assets/downloads/entire-va-ar2223.pdf,2022
+ORANGE,FIN_REP,,
+ORACLE CORP,FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2022.pdf,2022
+ORACLE CORP,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2021.pdf,2021
+ORACLE CORP,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2020.pdf,2020
+ORACLE CORP,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2019.pdf,2019
+ORACLE CORP,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2018.pdf,2018
+ORACLE CORP,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2017.pdf,2017
+ACCOR,FIN_REP,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/annual-report-2025.pdf,2025
+ACCOR,OTHER,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/annual-report-2024.pdf,2025
+ACCOR,OTHER,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/annual_report_2025.pdf,2025
+ACCOR,OTHER,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/annual_report_2024.pdf,2025
+ACCOR,OTHER,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/financial-report-2025.pdf,2025
+ACCOR,OTHER,https://group.accor.com/-/media/Corporate/Investors/Documents-financiers/2025/02-20-FY/Accor-2024-Notes-to-Financial-Statements-vdef.pdf?rev=c4eb76b39d2b4f95b225158171e4777b/financial-report-2024.pdf,2025
+PROCTER & GAMBLE CO,FIN_REP,https://assets.ctfassets.net/oggad6svuzkv/1axqmYoGvExvpVj5ndTYld/dca130713c7612ea84bc4d425752f1cb/2024_annual_report.pdf,2024
+FCC,FIN_REP,https://www.fcc.es/documents/13935105/48747511/annual_report_2023.pdf,2023
+FCC,OTHER,https://www.fcc.es/documents/13935105/33109579/annual_report_2021.pdf,2021
+FCC,OTHER,https://www.fcc.es/documents/13935105/22947340/annual_report_2020.pdf,2020
+SOCIETE NATIONALE SNCF,FIN_REP,https://www.groupe-sncf.com/medias-publics/2024-03/sncf-group-annual-financial-report-2023.pdf,2024
+ATLAS COPCO AKTIEBOLAG,FIN_REP,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20250320-annual-report-2024-incl-sustainability-report-and-corporate-governance-report-copy-of-the-official-ESEF-format.pdf.coredownload.inline.pdf,2025
+ATLAS COPCO AKTIEBOLAG,OTHER,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20250320-annual-report-2024-incl-sustainability-report-and-corporate-governance-report-copy-of-the-official-ESEF-format.pdf.coredownload.pdf,2025
+ATLAS COPCO AKTIEBOLAG,OTHER,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20240321-copy-of-the-official-annual-report-in-ESEF-format-incl-sustainability-report-and-corporate-governance-report-2023.pdf.coredownload.pdf,2024
+ATLAS COPCO AKTIEBOLAG,OTHER,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20230322-annual-report-incl-sustainability-report-and-corporate-governance-report-2022.pdf.coredownload.pdf,2023
+ATLAS COPCO AKTIEBOLAG,OTHER,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20220321-annual-report-2021.pdf.coredownload.pdf,2022
+ATLAS COPCO AKTIEBOLAG,OTHER,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20210311-annual-report-2020.pdf.coredownload.pdf,2021
+AKTIEBOLAGET SKF,FIN_REP,https://investors.skf.com/sites/skf-ir/files/pr/202503077466-1.pdf,2025
+AKTIEBOLAGET SKF,OTHER,https://investors.skf.com/sites/skf-ir/files/pr/202503077466-3.pdf,2025
+AKTIEBOLAGET SKF,OTHER,https://investors.skf.com/sites/skf-ir/files/pr/202403039498-1.pdf,2024
+AKTIEBOLAGET SKF,OTHER,https://investors.skf.com/sites/skf-ir/files/pr/202403039498-3.pdf,2024
+AKTIEBOLAGET SKF,OTHER,https://investors.skf.com/sites/skf-ir/files/pr/202303013297-1.pdf,2023
+AKTIEBOLAGET SKF,OTHER,https://investors.skf.com/sites/skf-ir/files/pr/202303013297-3.pdf,2023
+JOHN WOOD GROUP PLC,FIN_REP,https://www.woodplc.com/__data/assets/pdf_file/0026/256751/John_Wood_Group_PLC_Annual_Report_and_Financial_Statements_2023.pdf,2023
+JOHN WOOD GROUP PLC,OTHER,https://www.woodplc.com/__data/assets/pdf_file/0030/236685/Wood-Annual-Report-2022.pdf,2022
+JOHN WOOD GROUP PLC,OTHER,https://www.woodplc.com/__data/assets/pdf_file/0025/29185/amec-foster-wheeler-annual-report-2016.pdf,2016
+JOHN WOOD GROUP PLC,OTHER,https://www.woodplc.com/__data/assets/pdf_file/0024/36267/John-Wood-Group-Plc-Annual-Report-and-Accounts-2015.pdf,2015
+JOHN WOOD GROUP PLC,OTHER,https://www.woodplc.com/__data/assets/pdf_file/0026/29186/annual-report-and-accounts-2015.pdf,2015
+JOHN WOOD GROUP PLC,OTHER,https://www.woodplc.com/__data/assets/pdf_file/0023/36266/John-Wood-Group-Plc-Annual-Report-and-Accounts-2014.pdf,2014
+FUJITSU LIMITED,FIN_REP,,
+CRH PLC,FIN_REP,,
+DEUTSCHE BAHN,FIN_REP,,
+CARGILL,FIN_REP,,
+WARNER BROS. DISCOVERY INC.,FIN_REP,,
+GENERAL ELECTRIC COMPANY,FIN_REP,,
+SAFRAN,FIN_REP,,
+BASF,FIN_REP,,
+APTIV PLC,FIN_REP,,
+WPP PLC,FIN_REP,,
+GI GROUP,FIN_REP,,
+ACCIONA,FIN_REP,,
+FLETCHER GROUP,FIN_REP,,
+SODEXO,FIN_REP,,
+ADVANCE PROPERTIES,FIN_REP,https://www.variaeuropeproperties.com/wp-content/uploads/2021/08/Varia-EU-Annual-Report-2020_Final.pdf,2021
+AKZO NOBEL NV,FIN_REP,https://www.akzonobel.com/content/dam/akzonobel-corporate/global/en/investor-relations-images/result-center/archive-annual-reports/2029-2020/AkzoNobel-annual-report-2024.pdf,2029
+DIOR,FIN_REP,https://companiesmarketcap.com/annual-reports/17850.ar.en.2023.pdf,2023
+DIOR,OTHER,https://companiesmarketcap.com/annual-reports/17850.ar.en.2022.pdf,2022
+DIOR,OTHER,https://companiesmarketcap.com/annual-reports/17850.ar.en.2021.pdf,2021
+DIOR,OTHER,https://companiesmarketcap.com/annual-reports/17850.ar.en.2020.pdf,2020
+DIOR,OTHER,https://companiesmarketcap.com/annual-reports/17850.ar.en.2019.pdf,2019
+DIOR,OTHER,https://companiesmarketcap.com/annual-reports/17850.ar.en.2018.pdf,2018
+AMAZON,FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NASDAQ_AMZN_2023.pdf,2023
+AMAZON,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NASDAQ_AMZN_2022.pdf,2022
+AMAZON,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NASDAQ_AMZN_2021.pdf,2021
+AMAZON,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NASDAQ_AMZN_2020.pdf,2020
+AMAZON,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NASDAQ_AMZN_2019.pdf,2019
+AMAZON,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/a/NASDAQ_AMZN_2018.pdf,2018
+SONY GROUP CORPORATION,FIN_REP,https://content.presspage.com/uploads/3167/e8c8cafd-9961-4c84-bf42-a5f8c851db4b/annualreport2024.pdf?10000/annual-report-2025.pdf,2024
+SONY GROUP CORPORATION,OTHER,https://content.presspage.com/uploads/3167/e8c8cafd-9961-4c84-bf42-a5f8c851db4b/annualreport2024.pdf?10000/annual-report-2024.pdf,2024
+SONY GROUP CORPORATION,OTHER,https://content.presspage.com/uploads/3167/e8c8cafd-9961-4c84-bf42-a5f8c851db4b/annualreport2024.pdf?10000/annual_report_2025.pdf,2024
+SONY GROUP CORPORATION,OTHER,https://content.presspage.com/uploads/3167/e8c8cafd-9961-4c84-bf42-a5f8c851db4b/annualreport2024.pdf?10000/annual_report_2024.pdf,2024
+SONY GROUP CORPORATION,OTHER,https://content.presspage.com/uploads/3167/e8c8cafd-9961-4c84-bf42-a5f8c851db4b/annualreport2024.pdf?10000/financial-report-2025.pdf,2024
+SONY GROUP CORPORATION,OTHER,https://content.presspage.com/uploads/3167/e8c8cafd-9961-4c84-bf42-a5f8c851db4b/annualreport2024.pdf?10000/financial-report-2024.pdf,2024
+SONOVA,FIN_REP,https://report.sonova.com/2025/en/annual-report-2025.pdf,2025
+SONOVA,OTHER,https://report.sonova.com/2025/en/annual-report-2024.pdf,2025
+SONOVA,OTHER,https://report.sonova.com/2025/en/annual_report_2025.pdf,2025
+SONOVA,OTHER,https://report.sonova.com/2025/en/annual_report_2024.pdf,2025
+SONOVA,OTHER,https://report.sonova.com/2025/en/financial-report-2025.pdf,2025
+SONOVA,OTHER,https://report.sonova.com/2025/en/financial-report-2024.pdf,2025
+IKEA,FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/i/ikea_2023.pdf,2023
+IKEA,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/i/ikea_2022.pdf,2022
+IKEA,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/i/ikea_2021.pdf,2021
+IKEA,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/i/ikea_2020.pdf,2020
+IKEA,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/i/ikea_2019.pdf,2019
+IKEA,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/i/ikea_2018.pdf,2018
+SECURITAS AB,FIN_REP,https://www.securitas.com/globalassets/com/files/annual-reports/eng/securitas_annual-and-sustainability-report_2024.pdf,2024
+SECURITAS AB,OTHER,https://www.securitas.com/globalassets/com/files/annual-reports/eng/securitas_ar2023_eng.pdf,2023
+SECURITAS AB,OTHER,https://www.securitas.com/globalassets/com/files/annual-reports/eng/securitas_asr_2022_eng.pdf,2022
+SECURITAS AB,OTHER,https://www.securitas.com/globalassets/com/files/annual-reports/eng/securitas_asr2021_eng.pdf,2021
+SECURITAS AB,OTHER,https://www.securitas.com/globalassets/com/files/annual-reports/eng/securitas_annual_sustainability_report_2020.pdf,2020
+SECURITAS AB,OTHER,https://www.securitas.com/globalassets/com/files/annual-reports/eng/securitas_annual_and_sustainability_report_2019.pdf,2019
+AIRBUS SE,FIN_REP,https://www.airbus.com/sites/g/files/jlcbta136/files/2024-03/Airbus-Annual-Report-2023-Overview.pdf,2024
+AIRBUS SE,OTHER,https://www.airbus.com/sites/g/files/jlcbta136/files/2024-03/Airbus-Annual-Report-2023.pdf,2024
+AIRBUS SE,OTHER,https://www.airbus.com/sites/g/files/jlcbta136/files/2022-04/Airbus-SE-Full-Annual-Report-2021_0.pdf,2022
+AIRBUS SE,OTHER,https://www.airbus.com/sites/g/files/jlcbta136/files/2021-07/annual-report08-financial-statements-2008-en_0.pdf,2021
+AIRBUS SE,OTHER,https://www.airbus.com/sites/g/files/jlcbta136/files/2021-07/Full%20-Report-Airbus-SE-Annual-Report-2020.pdf,2021
+AIRBUS SE,OTHER,https://www.airbus.com/sites/g/files/jlcbta136/files/2021-06/Airbus-Annual-Report-2018.pdf,2021
+ETEX,FIN_REP,https://www.etexgroup.com/siteassets/etex-group-website-2024/investors/annual-report-2024/etex-2024-annual-report.pdf?v=496e95/annual-report-2025.pdf,2024
+ETEX,OTHER,https://www.etexgroup.com/siteassets/etex-group-website-2024/investors/annual-report-2024/etex-2024-annual-report.pdf?v=496e95/annual-report-2024.pdf,2024
+ETEX,OTHER,https://www.etexgroup.com/siteassets/etex-group-website-2024/investors/annual-report-2024/etex-2024-annual-report.pdf?v=496e95/annual_report_2025.pdf,2024
+ETEX,OTHER,https://www.etexgroup.com/siteassets/etex-group-website-2024/investors/annual-report-2024/etex-2024-annual-report.pdf?v=496e95/annual_report_2024.pdf,2024
+ETEX,OTHER,https://www.etexgroup.com/siteassets/etex-group-website-2024/investors/annual-report-2024/etex-2024-annual-report.pdf?v=496e95/financial-report-2025.pdf,2024
+ETEX,OTHER,https://www.etexgroup.com/siteassets/etex-group-website-2024/investors/annual-report-2024/etex-2024-annual-report.pdf?v=496e95/financial-report-2024.pdf,2024
+SIEMENS,FIN_REP,https://assets.new.siemens.com/siemens/assets/api/uuid:ae46683e-14dd-4455-a882-09d4184457c7/Annual-Financial-Report-FY2025.pdf,2025
+SIEMENS,OTHER,https://www.siemens.com/applications/b09c49eb-3a14-73b3-9f71-e30e3c2dfdbd/assets/pdfs/en/Siemens_Report_FY2024.pdf,2024
+SIEMENS,OTHER,https://assets.new.siemens.com/siemens/assets/api/uuid:ae46683e-14dd-4455-a882-09d4184457c7/Annual-Financial-Report-FY2024.pdf,2024
+VODAFONE GROUP PLC,FIN_REP,https://investors.vodafone.com/~/media/Files/V/Vodafone-IR/documents/performance/financial-results/2023/vodafone-fy23-annual-report.pdf,2023
+VODAFONE GROUP PLC,OTHER,https://investors.vodafone.com/~/media/Files/V/Vodafone-IR/documents/performance/financial-results/2023/vodafone-fy23-annual-report-accessible.pdf,2023
+VODAFONE GROUP PLC,OTHER,https://investors.vodafone.com/~/media/Files/V/Vodafone-IR/documents/performance/financial-results/2022/vodafone-2022-annual-report.pdf,2022
+VODAFONE GROUP PLC,OTHER,https://investors.vodafone.com/~/media/Files/V/Vodafone-IR/documents/performance/financial-results/2021/vodafone-annual-report-2021.pdf,2021
+VODAFONE GROUP PLC,OTHER,https://investors.vodafone.com/~/media/Files/V/Vodafone-IR/documents/performance/financial-results/2020/vodafone-annual-report-2020.pdf,2020
+VODAFONE GROUP PLC,OTHER,https://investors.vodafone.com/~/media/Files/V/Vodafone-IR/documents/performance/financial-results/2019/vodafone-full-annual-report-2019.pdf,2019
+HBIS GROUP CO. LTD.,FIN_REP,https://sustainabilityreports.com/reports/hbis-co-ltd-2023-sustainability-report-pdf/#unlock,2023
+MOL HUNGARIAN OIL AND GAS,FIN_REP,https://sustainabilityreports.com/reports/mol-hungarian-oil-and-gas-plc-2023-integrated-annual-report-pdf/#unlock,2023
+DSV A/S,FIN_REP,,
+KRONES,FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/k/krones_2023.pdf,2023
+KRONES,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/k/krones_2022.pdf,2022
+KRONES,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/k/krones_2021.pdf,2021
+KRONES,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/k/krones_2020.pdf,2020
+KRONES,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/k/krones_2019.pdf,2019
+KRONES,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/k/krones_2018.pdf,2018
+KONECRANES,FIN_REP,https://investors.konecranes.com/sites/konecranes/files/Results/2024-Q2/Konecranes-2024-half-year-financial-report.pdf,2024
+KONECRANES,OTHER,https://investors.konecranes.com/sites/konecranes/files/Results/2024-Q2/Q2-2024-Half-year-financial-report-Presentation.pdf,2024
+SANDVIK AKTIEBOLAG,FIN_REP,https://www.annualreport.sandvik/en/2024/_assets/downloads/entire-en-svk-ar24.pdf,2024
+SKANSKA AB,FIN_REP,https://group.skanska.com/49490b/siteassets/investors/reports-publications/annual-reports/2024/annual-and-sustainability-report-2024.pdf,2024
+SKANSKA AB,OTHER,https://group.skanska.com/493370/siteassets/investors/reports-publications/annual-reports/2023/annual-and-sustainability-report-2023.pdf,2023
+SKANSKA AB,OTHER,https://group.skanska.com/493785/siteassets/investors/reports-publications/annual-reports/2022/annual-and-sustainability-report-2022.pdf,2022
+SKANSKA AB,OTHER,https://group.skanska.com/49b28a/siteassets/investors/reports-publications/annual-reports/2021/annual-and-sustainability-report-2021.pdf,2021
+SKANSKA AB,OTHER,https://group.skanska.com/4a1971/siteassets/investors/reports-publications/annual-reports/2020/annual-and-sustainability-report-2020.pdf,2020
+SKANSKA AB,OTHER,https://group.skanska.com/4a194f/siteassets/investors/reports-publications/annual-reports/2019/annual-and-sustainability-report-2019.pdf,2019
+SANOFI,FIN_REP,,
+WURTH,FIN_REP,,
+AKTIEBOLAGET VOLVO,FIN_REP,,
+TOTALENERGIES SE,FIN_REP,,
+BRITISH AMERICAN TOBACCO PLC,FIN_REP,https://www.bat.com/ar/2024,2024
+NIPPON STEEL CORPORATION,FIN_REP,,
+KONINKLIJKE AHOLD DELHAIZE NV,FIN_REP,,
+PFIZER INC,FIN_REP,,

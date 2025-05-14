@@ -23,36 +23,36 @@ ID,NAME,TYPE,SRC,REFYEAR
 ,SIEMENS,OTHER,,
 ,SIEMENS,OTHER,,
 ,SIEMENS,OTHER,,
-,COCA-COLA COMPANY (THE),FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/c/NYSE_KO_2023.pdf,2023.0
-,COCA-COLA COMPANY (THE),OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/c/NYSE_KO_2022.pdf,2022.0
-,COCA-COLA COMPANY (THE),OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/c/NYSE_KO_2021.pdf,2021.0
-,COCA-COLA COMPANY (THE),OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/c/NYSE_KO_2020.pdf,2020.0
-,COCA-COLA COMPANY (THE),OTHER,https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k/annual-report-2025.pdf,2025.0
-,COCA-COLA COMPANY (THE),OTHER,https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k/annual_report_2025.pdf,2025.0
-,MANPOWERGROUP INC.,FIN_REP,nan,nan
-,MANPOWERGROUP INC.,OTHER,,
-,MANPOWERGROUP INC.,OTHER,,
-,MANPOWERGROUP INC.,OTHER,,
-,MANPOWERGROUP INC.,OTHER,,
-,MANPOWERGROUP INC.,OTHER,,
-,ENI S P A,FIN_REP,https://report.eni.com/annual-report-2023/en/_assets/downloads/financial-review-other-information-eni-ar23.pdf,2023.0
-,ENI S P A,OTHER,https://report.eni.com/annual-report-2023/en/_assets/downloads/financial-review-eni-ar23.pdf,2023.0
-,ENI S P A,OTHER,https://report.eni.com/annual-report-2023/en/_assets/downloads/nf-information-eni-ar23.pdf,2023.0
-,ENI S P A,OTHER,https://report.eni.com/annual-report-2023/en/_assets/downloads/consolidated-financial-statements-eni-ar23.pdf,2023.0
-,ENI S P A,OTHER,https://report.eni.com/annual-report-2023/en/_assets/downloads/entire-eni-ar23.pdf,2023.0
-,ENI S P A,OTHER,https://report.eni.com/annual-report-2023/en/_assets/downloads/letter-to-shareholders-eni-ar23.pdf,2023.0
+,COCA-COLA COMPANY (THE),FIN_REP,https://investors.coca-colacompany.com/_assets/_633a0d1f4596400b1212988f17af667c/cocacolacompany/db/892/10421/annual_report/coca-cola-business-and-sustainability-report-2022.pdf,2022.0
+,COCA-COLA COMPANY (THE),OTHER,https://investors.coca-colacompany.com/_assets/_633a0d1f4596400b1212988f17af667c/cocacolacompany/db/892/10420/annual_report/2021_Business_ESG_Report.pdf,2021.0
+,COCA-COLA COMPANY (THE),OTHER,https://investors.coca-colacompany.com/_assets/_633a0d1f4596400b1212988f17af667c/cocacolacompany/db/892/10419/annual_report/coca-cola-business-environmental-social-governance-report-2020%2B%25282%2529.pdf,2020.0
+,COCA-COLA COMPANY (THE),OTHER,https://investors.coca-colacompany.com/filings-reports/all-sec-filings/content/0000021344-25-000011/ko-20241231.htm/annual-report-2025.pdf,2024.0
+,COCA-COLA COMPANY (THE),OTHER,https://investors.coca-colacompany.com/filings-reports/all-sec-filings/content/0000021344-25-000011/ko-20241231.htm/annual-report-2024.pdf,2024.0
+,COCA-COLA COMPANY (THE),OTHER,https://investors.coca-colacompany.com/filings-reports/all-sec-filings/content/0000021344-25-000011/ko-20241231.htm/annual_report_2025.pdf,2024.0
+,MANPOWERGROUP INC.,FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/m/NYSE_MAN_2022.pdf,2022.0
+,MANPOWERGROUP INC.,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/m/NYSE_MAN_2021.pdf,2021.0
+,MANPOWERGROUP INC.,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/m/NYSE_MAN_2020.pdf,2020.0
+,MANPOWERGROUP INC.,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/m/NYSE_MAN_2019.pdf,2019.0
+,MANPOWERGROUP INC.,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/m/NYSE_MAN_2018.pdf,2018.0
+,MANPOWERGROUP INC.,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/m/NYSE_MAN_2017.pdf,2017.0
+,ENI S P A,FIN_REP,https://www.eni.com/content/dam/enicom/documents/eng/reports/2024/ar-2024/Annual-Report-2024.pdf,2024.0
+,ENI S P A,OTHER,,
+,ENI S P A,OTHER,,
+,ENI S P A,OTHER,,
+,ENI S P A,OTHER,,
+,ENI S P A,OTHER,,
 ,EDP,FIN_REP,https://www.edp.com/sites/default/files/document/2025-05/Integrated_Annual_Report_2024.pdf,2025.0
 ,EDP,OTHER,,
 ,EDP,OTHER,,
 ,EDP,OTHER,,
 ,EDP,OTHER,,
 ,EDP,OTHER,,
-,STANLEY BLACK & DECKER INC.,FIN_REP,https://ir.stanleyblackanddecker.com/financials/sec-filings/sec-filings-details/default.aspx?FilingId=18198609/annual-report-2025.pdf,2025.0
-,STANLEY BLACK & DECKER INC.,OTHER,https://ir.stanleyblackanddecker.com/financials/sec-filings/sec-filings-details/default.aspx?FilingId=18198609/annual_report_2025.pdf,2025.0
-,STANLEY BLACK & DECKER INC.,OTHER,https://ir.stanleyblackanddecker.com/financials/sec-filings/sec-filings-details/default.aspx?FilingId=18198609/financial-report-2025.pdf,2025.0
-,STANLEY BLACK & DECKER INC.,OTHER,https://ir.stanleyblackanddecker.com/financials/sec-filings/sec-filings-details/default.aspx?FilingId=18198609/annual-report-2024.pdf,2024.0
-,STANLEY BLACK & DECKER INC.,OTHER,https://ir.stanleyblackanddecker.com/financials/sec-filings/sec-filings-details/default.aspx?FilingId=18198609/annual_report_2024.pdf,2024.0
-,STANLEY BLACK & DECKER INC.,OTHER,https://ir.stanleyblackanddecker.com/financials/sec-filings/sec-filings-details/default.aspx?FilingId=18198609/financial-report-2024.pdf,2024.0
+,STANLEY BLACK & DECKER INC.,FIN_REP,https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_SWK_2022.pdf,2022.0
+,STANLEY BLACK & DECKER INC.,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_SWK_2021.pdf,2021.0
+,STANLEY BLACK & DECKER INC.,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_SWK_2020.pdf,2020.0
+,STANLEY BLACK & DECKER INC.,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_SWK_2019.pdf,2019.0
+,STANLEY BLACK & DECKER INC.,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_SWK_2018.pdf,2018.0
+,STANLEY BLACK & DECKER INC.,OTHER,https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_SWK_2017.pdf,2017.0
 ,PROSEGUR,FIN_REP,https://www.prosegur.com/dam/jcr:7658dfd7-fb49-4747-bbc1-666d6c437129/PCS%20-%20IAGC%20(VF)%20(27.02.2023)%20ENG.pdf,2023.0
 ,PROSEGUR,OTHER,https://www.prosegur.com/dam/jcr:1be513d9-98c0-47b9-bf48-b8ef306f220d/PCS%20-%20IAGC%20(ENG).pdf,2021.0
 ,PROSEGUR,OTHER,https://www.prosegur.com/dam/jcr:2e8d132a-f609-4743-b12d-0bfc16dc5864/PCS%20-%20IAGC%202024%20(VF)%20(ENG)%20(con%20SCIIF).pdf,2020.0
