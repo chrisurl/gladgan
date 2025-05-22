@@ -13,7 +13,7 @@ def create_default_config():
             "google_search_engine_id": "YOUR_SEARCH_ENGINE_ID_HERE"
         },
         "settings": {
-            "daily_api_limit": 100,
+            "daily_api_limit": 1000,
             "max_results_per_query": 10,
             "default_output_file": "results.json"
         }

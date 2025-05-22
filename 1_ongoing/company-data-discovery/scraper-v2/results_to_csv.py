@@ -27,7 +27,7 @@ def convert_to_csv(json_file, csv_file=None):
             if results:
                 first_result = results[0]
                 csv_rows.append({
-                    'COMPANY': company,
+                    'NAME': company,
                     'TYPE': 'FIN_REP',
                     'SRC': first_result['url'],
                     'REFYEAR': first_result.get('year', '')
@@ -36,7 +36,7 @@ def convert_to_csv(json_file, csv_file=None):
                 # Add remaining results as OTHER
                 for i, result in enumerate(results[1:6], 1):  # Limit to 5 additional links
                     csv_rows.append({
-                        'COMPANY': company,
+                        'NAME': company,
                         'TYPE': 'OTHER',
                         'SRC': result['url'],
                         'REFYEAR': result.get('year', '')
@@ -44,7 +44,7 @@ def convert_to_csv(json_file, csv_file=None):
             else:
                 # Add empty row if no results
                 csv_rows.append({
-                    'COMPANY': company,
+                    'NAME': company,
                     'TYPE': 'FIN_REP',
                     'SRC': '',
                     'REFYEAR': ''
@@ -52,7 +52,7 @@ def convert_to_csv(json_file, csv_file=None):
         
         # Write to CSV
         with open(csv_file, 'w', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=['COMPANY', 'TYPE', 'SRC', 'REFYEAR'])
+            writer = csv.DictWriter(f, fieldnames=['NAME', 'TYPE', 'SRC', 'REFYEAR'], delimiter=";")
             writer.writeheader()
             writer.writerows(csv_rows)
         
@@ -65,7 +65,7 @@ def convert_to_csv(json_file, csv_file=None):
 
 def main():
     parser = argparse.ArgumentParser(description='Convert JSON results to CSV format')
-    parser.add_argument('json_file', help='Input JSON results file')
+    parser.add_argument('--json_file', help='Input JSON results file')
     parser.add_argument('--output', help='Output CSV file')
     
     args = parser.parse_args()

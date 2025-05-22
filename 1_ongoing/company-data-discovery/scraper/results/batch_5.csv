@@ -1,21 +1,8 @@
 COMPANY,TYPE,SRC,REFYEAR
 SOCIETE NATIONALE SNCF,FIN_REP,https://www.groupe-sncf.com/medias-publics/2024-03/sncf-group-annual-financial-report-2023.pdf,2024
-ATLAS COPCO AKTIEBOLAG,FIN_REP,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20250320-annual-report-2024-incl-sustainability-report-and-corporate-governance-report-copy-of-the-official-ESEF-format.pdf.coredownload.inline.pdf,2025
-ATLAS COPCO AKTIEBOLAG,OTHER,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20250320-annual-report-2024-incl-sustainability-report-and-corporate-governance-report-copy-of-the-official-ESEF-format.pdf.coredownload.pdf,2025
-ATLAS COPCO AKTIEBOLAG,OTHER,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20240321-copy-of-the-official-annual-report-in-ESEF-format-incl-sustainability-report-and-corporate-governance-report-2023.pdf.coredownload.pdf,2024
-ATLAS COPCO AKTIEBOLAG,OTHER,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20230322-annual-report-incl-sustainability-report-and-corporate-governance-report-2022.pdf.coredownload.pdf,2023
-ATLAS COPCO AKTIEBOLAG,OTHER,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20220321-annual-report-2021.pdf.coredownload.pdf,2022
-ATLAS COPCO AKTIEBOLAG,OTHER,https://www.atlascopcogroup.com/content/dam/atlas-copco/group/documents/investors/financial-publications/english/20210311-annual-report-2020.pdf.coredownload.pdf,2021
-AKTIEBOLAGET SKF,FIN_REP,https://investors.skf.com/sites/skf-ir/files/pr/202503077466-1.pdf,2025
-AKTIEBOLAGET SKF,OTHER,https://investors.skf.com/sites/skf-ir/files/pr/202503077466-3.pdf,2025
-AKTIEBOLAGET SKF,OTHER,https://investors.skf.com/sites/skf-ir/files/pr/202403039498-1.pdf,2024
-AKTIEBOLAGET SKF,OTHER,https://investors.skf.com/sites/skf-ir/files/pr/202403039498-3.pdf,2024
-AKTIEBOLAGET SKF,OTHER,https://investors.skf.com/sites/skf-ir/files/pr/202303013297-1.pdf,2023
-AKTIEBOLAGET SKF,OTHER,https://investors.skf.com/sites/skf-ir/files/pr/202303013297-3.pdf,2023
-JOHN WOOD GROUP PLC,FIN_REP,https://www.woodplc.com/__data/assets/pdf_file/0026/256751/John_Wood_Group_PLC_Annual_Report_and_Financial_Statements_2023.pdf,2023
-JOHN WOOD GROUP PLC,OTHER,https://www.woodplc.com/__data/assets/pdf_file/0030/236685/Wood-Annual-Report-2022.pdf,2022
-JOHN WOOD GROUP PLC,OTHER,https://www.woodplc.com/__data/assets/pdf_file/0025/29185/amec-foster-wheeler-annual-report-2016.pdf,2016
-JOHN WOOD GROUP PLC,OTHER,https://www.woodplc.com/__data/assets/pdf_file/0024/36267/John-Wood-Group-Plc-Annual-Report-and-Accounts-2015.pdf,2015
-JOHN WOOD GROUP PLC,OTHER,https://www.woodplc.com/__data/assets/pdf_file/0026/29186/annual-report-and-accounts-2015.pdf,2015
-JOHN WOOD GROUP PLC,OTHER,https://www.woodplc.com/__data/assets/pdf_file/0023/36266/John-Wood-Group-Plc-Annual-Report-and-Accounts-2014.pdf,2014
+SOCIETE NATIONALE SNCF,OTHER,https://medias.sncf.com/sncfcom/finances/Publications_financieres/SNCF_RAA_31122022_EN.pdf,2022
+SOCIETE NATIONALE SNCF,OTHER,https://medias.sncf.com/sncfcom/finances/Publications_financieres/SNCF_RAA_31122021_EN.pdf,2021
+ATLAS COPCO AKTIEBOLAG,FIN_REP,,
+AKTIEBOLAGET SKF,FIN_REP,,
+JOHN WOOD GROUP PLC,FIN_REP,,
 FUJITSU LIMITED,FIN_REP,,

@@ -7,3 +7,16 @@
 Long story short: we will need to re-fine the webscraper in order to retrieve the correct links to the reports.
 
 *   another way would be to start off the exercise manually for the first 20 reports and then see if we could replicate this approach using duckduckgo and claude. 
+
+## scraper-v2
+
+```bash
+scraper-v2/
+├── google_search.py
+├── link_processor.py
+├── result_ranker.py
+├── api_tracker.py
+├── config_handler.py
+├── results_to_csv.py
+└── annual_report_finder.py (main element)
+```

@@ -3144,3 +3144,202 @@ Completed processing NIPPON STEEL CORPORATION, found 0 reports
 Results saved to results/financial_reports.csv
 ================================================================================
 COMPLETED COMPANY: NIPPON STEEL CORPORATION
+Current time: 2025-05-14 14:59:21
+================================================================================
+================================================================================
+STARTING COMPANY: KONINKLIJKE AHOLD DELHAIZE NV
+Current time: 2025-05-14 14:59:21
+================================================================================
+Processing company 1/1: KONINKLIJKE AHOLD DELHAIZE NV
+Attempt 1/3 for KONINKLIJKE AHOLD DELHAIZE NV
+
+Processing: KONINKLIJKE AHOLD DELHAIZE NV
+Searching for: KONINKLIJKE AHOLD DELHAIZE NV annual report pdf
+Sending search request to DuckDuckGo for: KONINKLIJKE AHOLD DELHAIZE NV annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: KONINKLIJKE AHOLD DELHAIZE NV annual report pdf European Union
+Sending search request to DuckDuckGo for: KONINKLIJKE AHOLD DELHAIZE NV annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: koninklijke ahold delhaize european financial report
+Sending search request to DuckDuckGo for: koninklijke ahold delhaize european financial report
+[ERROR] Search failed with status code: 403
+Searching for: koninklijke ahold delhaize europe investor relations annual report
+Sending search request to DuckDuckGo for: koninklijke ahold delhaize europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: KONINKLIJKE AHOLD DELHAIZE NV financial statements EU
+Sending search request to DuckDuckGo for: KONINKLIJKE AHOLD DELHAIZE NV financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: KONINKLIJKE AHOLD DELHAIZE NV European Union annual report
+Sending search request to DuckDuckGo for: KONINKLIJKE AHOLD DELHAIZE NV European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: koninklijke ahold delhaize EU headquarters financial report
+Sending search request to DuckDuckGo for: koninklijke ahold delhaize EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: KONINKLIJKE AHOLD DELHAIZE NV consolidated annual report Europe
+Sending search request to DuckDuckGo for: KONINKLIJKE AHOLD DELHAIZE NV consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for KONINKLIJKE AHOLD DELHAIZE NV
+No results found. Waiting 4.9 seconds before next attempt...
+Attempt 2/3 for KONINKLIJKE AHOLD DELHAIZE NV
+Retry with more specific European search terms
+Searching for: koninklijke ahold delhaize europe annual financial report pdf
+Sending search request to DuckDuckGo for: koninklijke ahold delhaize europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.7 seconds before next attempt...
+Attempt 3/3 for KONINKLIJKE AHOLD DELHAIZE NV
+Trying direct known patterns for KONINKLIJKE AHOLD DELHAIZE NV
+Trying known patterns for KONINKLIJKE AHOLD DELHAIZE NV
+No reports found for KONINKLIJKE AHOLD DELHAIZE NV after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing KONINKLIJKE AHOLD DELHAIZE NV, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: KONINKLIJKE AHOLD DELHAIZE NV
+Current time: 2025-05-14 15:00:11
+================================================================================
+================================================================================
+STARTING COMPANY: PFIZER INC
+Current time: 2025-05-14 15:00:11
+================================================================================
+Processing company 1/1: PFIZER INC
+Attempt 1/3 for PFIZER INC
+
+Processing: PFIZER INC
+Searching for: PFIZER INC annual report pdf
+Sending search request to DuckDuckGo for: PFIZER INC annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: PFIZER INC annual report pdf European Union
+Sending search request to DuckDuckGo for: PFIZER INC annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: pfizer european financial report
+Sending search request to DuckDuckGo for: pfizer european financial report
+[ERROR] Search failed with status code: 403
+Searching for: pfizer europe investor relations annual report
+Sending search request to DuckDuckGo for: pfizer europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: PFIZER INC financial statements EU
+Sending search request to DuckDuckGo for: PFIZER INC financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: PFIZER INC European Union annual report
+Sending search request to DuckDuckGo for: PFIZER INC European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: pfizer EU headquarters financial report
+Sending search request to DuckDuckGo for: pfizer EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: PFIZER INC consolidated annual report Europe
+Sending search request to DuckDuckGo for: PFIZER INC consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for PFIZER INC
+No results found. Waiting 4.0 seconds before next attempt...
+Attempt 2/3 for PFIZER INC
+Retry with more specific European search terms
+Searching for: pfizer europe annual financial report pdf
+Sending search request to DuckDuckGo for: pfizer europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.2 seconds before next attempt...
+Attempt 3/3 for PFIZER INC
+Trying direct known patterns for PFIZER INC
+Trying known patterns for PFIZER INC
+No reports found for PFIZER INC after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing PFIZER INC, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: PFIZER INC
+Current time: 2025-05-14 15:01:04
+================================================================================
+Results saved to results/batch_13.csv
+
+Pausing for 3 minutes before next batch...
+  3 minutes 0 seconds remaining...
+  2 minutes 30 seconds remaining...
+  2 minutes 0 seconds remaining...
+  1 minutes 30 seconds remaining...
+  1 minutes 0 seconds remaining...
+  0 minutes 30 seconds remaining...
+
+Processing batch 14 of 40
+Companies in this batch: COCA-COLA COMPANY (THE), CATERPILLAR INC, HARTMANN, IWG PLC, SAP
+================================================================================
+STARTING COMPANY: COCA-COLA COMPANY (THE)
+Current time: 2025-05-14 15:04:04
+================================================================================
+Processing company 1/1: COCA-COLA COMPANY (THE)
+Attempt 1/3 for COCA-COLA COMPANY (THE)
+
+Processing: COCA-COLA COMPANY (THE)
+Searching for: COCA-COLA COMPANY (THE) annual report pdf
+Sending search request to DuckDuckGo for: COCA-COLA COMPANY (THE) annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: COCA-COLA COMPANY (THE) annual report pdf European Union
+Sending search request to DuckDuckGo for: COCA-COLA COMPANY (THE) annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: cocacola company the european financial report
+Sending search request to DuckDuckGo for: cocacola company the european financial report
+[ERROR] Search failed with status code: 403
+Searching for: cocacola company the europe investor relations annual report
+Sending search request to DuckDuckGo for: cocacola company the europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: COCA-COLA COMPANY (THE) financial statements EU
+Sending search request to DuckDuckGo for: COCA-COLA COMPANY (THE) financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: COCA-COLA COMPANY (THE) European Union annual report
+Sending search request to DuckDuckGo for: COCA-COLA COMPANY (THE) European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: cocacola company the EU headquarters financial report
+Sending search request to DuckDuckGo for: cocacola company the EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: COCA-COLA COMPANY (THE) consolidated annual report Europe
+Sending search request to DuckDuckGo for: COCA-COLA COMPANY (THE) consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for COCA-COLA COMPANY (THE)
+No results found. Waiting 3.6 seconds before next attempt...
+Attempt 2/3 for COCA-COLA COMPANY (THE)
+Retry with more specific European search terms
+Searching for: cocacola company the europe annual financial report pdf
+Sending search request to DuckDuckGo for: cocacola company the europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.4 seconds before next attempt...
+Attempt 3/3 for COCA-COLA COMPANY (THE)
+Trying direct known patterns for COCA-COLA COMPANY (THE)
+Trying known patterns for COCA-COLA COMPANY (THE)
+No reports found for COCA-COLA COMPANY (THE) after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing COCA-COLA COMPANY (THE), found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: COCA-COLA COMPANY (THE)
+Current time: 2025-05-14 15:04:56
+================================================================================
+================================================================================
+STARTING COMPANY: CATERPILLAR INC
+Current time: 2025-05-14 15:04:56
+================================================================================
+Processing company 1/1: CATERPILLAR INC
+Attempt 1/3 for CATERPILLAR INC
+
+Processing: CATERPILLAR INC
+Searching for: CATERPILLAR INC annual report pdf
+Sending search request to DuckDuckGo for: CATERPILLAR INC annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: CATERPILLAR INC annual report pdf European Union
+Sending search request to DuckDuckGo for: CATERPILLAR INC annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: caterpillar european financial report
+Sending search request to DuckDuckGo for: caterpillar european financial report
+[ERROR] Search failed with status code: 403
+Searching for: caterpillar europe investor relations annual report
+Sending search request to DuckDuckGo for: caterpillar europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: CATERPILLAR INC financial statements EU
+Sending search request to DuckDuckGo for: CATERPILLAR INC financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: CATERPILLAR INC European Union annual report
+Sending search request to DuckDuckGo for: CATERPILLAR INC European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: caterpillar EU headquarters financial report
+Sending search request to DuckDuckGo for: caterpillar EU headquarters financial report
+[ERROR] Search failed with status code: 403
+
+Process interrupted by user
+Saving partial results...

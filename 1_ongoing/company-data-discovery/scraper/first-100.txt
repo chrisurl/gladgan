@@ -1,0 +1,1851 @@
+================================================================================
+Financial Reports Discovery
+================================================================================
+Started at: 2025-05-16 07:39:29
+Input file: ../challenge/discovery-clean-h1.csv
+Output file: first-100.csv
+Batch size: 5
+================================================================================
+Processing 100 companies...
+Companies to process: ADECCO GROUP AG, JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY, MAGNA INTERNATIONAL INC, PUBLICIS GROUPE S A, GEBR. KNAUF, BRIDGESTONE CORPORATION, FERRERO, SUMITOMO CORPORATION, COMPAGNIE DE SAINT GOBAIN, ABBOTT LABORATORIES, BP P.L.C., ENGIE, DENTSU GROUP INC., THYSSENKRUPP, VOESTALPINE GROUP, ORANGE, ORACLE CORP, ACCOR, PROCTER & GAMBLE CO, FCC, SOCIETE NATIONALE SNCF, ATLAS COPCO AKTIEBOLAG, AKTIEBOLAGET SKF, JOHN WOOD GROUP PLC, FUJITSU LIMITED, CRH PLC, DEUTSCHE BAHN, CARGILL, WARNER BROS. DISCOVERY INC., GENERAL ELECTRIC COMPANY, SAFRAN, BASF, APTIV PLC, WPP PLC, GI GROUP, ACCIONA, FLETCHER GROUP, SODEXO, ADVANCE PROPERTIES, AKZO NOBEL NV, DIOR, AMAZON, SONY GROUP CORPORATION, SONOVA, IKEA, SECURITAS AB, AIRBUS SE, ETEX, SIEMENS, VODAFONE GROUP PLC, HBIS GROUP CO. LTD., MOL HUNGARIAN OIL AND GAS, DSV A/S, KRONES, KONECRANES, SANDVIK AKTIEBOLAG, SKANSKA AB, SANOFI, WURTH, AKTIEBOLAGET VOLVO, TOTALENERGIES SE, BRITISH AMERICAN TOBACCO PLC, NIPPON STEEL CORPORATION, KONINKLIJKE AHOLD DELHAIZE NV, PFIZER INC, COCA-COLA COMPANY (THE), CATERPILLAR INC, HARTMANN, IWG PLC, SAP, ORKLA ASA, ENEL SPA, SHV HOLDINGS NV, BMW, THALES, SIGNIFY NV, 3I GROUP PLC, BAYER, AKTIEBOLAGET ELECTROLUX, VEOLIA ENVIRONNEMENT, TUI, ASSA ABLOY AB, RANDSTAD NV, NV BEKAERT SA, MANPOWERGROUP INC., PARAMOUNT GLOBAL, GLENCORE PLC, DEUTSCHE LUFTHANSA, TELEFONAKTIEBOLAGET LM ERICSSON, ABB LTD, HP INC., CAPGEMINI, MERCK GROUP, BPOST, SYNLAB, L AIR LIQUIDE, MOEVE, GOODYEAR TIRE & RUBBER CO, BROOKFIELD CORPORATION, UMICORE
+
+Processing batch 1 of 20
+Companies in this batch: ADECCO GROUP AG, JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY, MAGNA INTERNATIONAL INC, PUBLICIS GROUPE S A, GEBR. KNAUF
+================================================================================
+STARTING COMPANY: ADECCO GROUP AG
+Current time: 2025-05-16 07:39:29
+================================================================================
+Processing company 1/1: ADECCO GROUP AG
+Attempt 1/3 for ADECCO GROUP AG
+
+Processing: ADECCO GROUP AG
+Searching for: ADECCO GROUP AG annual report pdf
+Sending search request to DuckDuckGo for: ADECCO GROUP AG annual report pdf
+[SUCCESS] Search request successful. Processing results...
+[SUCCESS] Found 10 results after filtering
+Checking page: https://www.adeccogroup.com/-/media/project/adecco-group/adeccogroup/pdf-files/2025-march/the-adecco-group-annual-report-2024.pdf
+Sending HEAD request to: https://www.adeccogroup.com/-/media/project/adecco-group/adeccogroup/pdf-files/2025-march/the-adecco-group-annual-report-2024.pdf/annual-report-2025.pdf
+[STRATEGY] HEAD request failed with status 302, trying GET request...
+Sending HEAD request to: https://www.adeccogroup.com/-/media/project/adecco-group/adeccogroup/pdf-files/2025-march/the-adecco-group-annual-report-2024.pdf/annual-report-2024.pdf
+[STRATEGY] HEAD request failed with status 302, trying GET request...
+Sending HEAD request to: https://www.adeccogroup.com/-/media/project/adecco-group/adeccogroup/pdf-files/2025-march/the-adecco-group-annual-report-2024.pdf/annual_report_2025.pdf
+[STRATEGY] HEAD request failed with status 302, trying GET request...
+Sending HEAD request to: https://www.adeccogroup.com/-/media/project/adecco-group/adeccogroup/pdf-files/2025-march/the-adecco-group-annual-report-2024.pdf/annual_report_2024.pdf
+[STRATEGY] HEAD request failed with status 302, trying GET request...
+Sending HEAD request to: https://www.adeccogroup.com/-/media/project/adecco-group/adeccogroup/pdf-files/2025-march/the-adecco-group-annual-report-2024.pdf/financial-report-2025.pdf
+[STRATEGY] HEAD request failed with status 302, trying GET request...
+Sending HEAD request to: https://www.adeccogroup.com/-/media/project/adecco-group/adeccogroup/pdf-files/2025-march/the-adecco-group-annual-report-2024.pdf/financial-report-2024.pdf
+[STRATEGY] HEAD request failed with status 302, trying GET request...
+Checking page: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf
+Sending HEAD request to: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/annual-report-2025.pdf
+[SUCCESS] Found common pattern match: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/annual-report-2025.pdf
+Sending HEAD request to: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/annual-report-2024.pdf
+[SUCCESS] Found common pattern match: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/annual-report-2024.pdf
+Sending HEAD request to: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/annual_report_2025.pdf
+[SUCCESS] Found common pattern match: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/annual_report_2025.pdf
+Sending HEAD request to: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/annual_report_2024.pdf
+[SUCCESS] Found common pattern match: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/annual_report_2024.pdf
+Sending HEAD request to: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/financial-report-2025.pdf
+[SUCCESS] Found common pattern match: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/financial-report-2025.pdf
+Sending HEAD request to: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/financial-report-2024.pdf
+[SUCCESS] Found common pattern match: https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/financial-report-2024.pdf
+Checking page: https://www.annualreports.com/Company/adecco-group
+Found 25 reports for ADECCO GROUP AG:
+  1. https://www.annualreports.com/HostedData/AnnualReportArchive/a/adecco-group_2022.pdf (Year: 2022, Score: 8)
+  2. https://www.annualreports.com/HostedData/AnnualReportArchive/a/adecco-group_2021.pdf (Year: 2021, Score: 6)
+  3. https://www.annualreports.com/HostedData/AnnualReportArchive/a/adecco-group_2020.pdf (Year: 2020, Score: 6)
+  4. https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/annual-report-2025.pdf (Year: 2020, Score: 4)
+  5. https://en.fescoadecco.com/index.php/public/pdf?file=/mkt/pdf/The%20Adecco%20Group%202024%20Annual%20Report.pdf/annual-report-2024.pdf (Year: 2020, Score: 4)
+Results saved to results/financial_reports.csv
+Completed processing ADECCO GROUP AG, found 6 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: ADECCO GROUP AG
+Current time: 2025-05-16 07:39:50
+================================================================================
+================================================================================
+STARTING COMPANY: JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY
+Current time: 2025-05-16 07:39:50
+================================================================================
+Processing company 1/1: JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY
+Attempt 1/3 for JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY
+
+Processing: JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY
+Searching for: JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY annual report pdf
+Sending search request to DuckDuckGo for: JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY annual report pdf
+[SUCCESS] Search request successful. Processing results...
+[SUCCESS] Found 10 results after filtering
+Checking page: https://investors.johnsoncontrols.com/financial-information/quarterly-and-annual-reports
+Found 16 reports for JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY:
+  1. https://investors.johnsoncontrols.com/~/media/Files/J/Johnson-Controls-IR-V2/annual-meeting-materials/irish-statutory-reports-and-non-financial-report-for-fiscal-2024-v1.pdf (Year: 2024, Score: 10)
+  2. https://investors.johnsoncontrols.com/~/media/Files/J/Johnson-Controls-IR-V2/annual-meeting-materials/jci-plc-2023-irish-annual-report.pdf (Year: 2023, Score: 10)
+  3. https://investors.johnsoncontrols.com/~/media/Files/J/Johnson-Controls-IR-V2/annual-meeting-materials/irish-statutory-reports-for-fiscal-2022.pdf (Year: 2022, Score: 10)
+  4. https://investors.johnsoncontrols.com/~/media/Files/J/Johnson-Controls-IR-V2/annual-meeting-materials/annual-reports/2024-annual-report-proxy-statement.pdf (Year: 2024, Score: 8)
+  5. https://investors.johnsoncontrols.com/~/media/Files/J/Johnson-Controls-IR-V2/annual-meeting-materials/2024-proxy-statement.pdf (Year: 2024, Score: 8)
+Results saved to results/financial_reports.csv
+Completed processing JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY, found 6 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: JOHNSON CONTROLS INTERNATIONAL PUBLIC LIMITED COMPANY
+Current time: 2025-05-16 07:39:53
+================================================================================
+================================================================================
+STARTING COMPANY: MAGNA INTERNATIONAL INC
+Current time: 2025-05-16 07:39:53
+================================================================================
+Processing company 1/1: MAGNA INTERNATIONAL INC
+Attempt 1/3 for MAGNA INTERNATIONAL INC
+
+Processing: MAGNA INTERNATIONAL INC
+Searching for: MAGNA INTERNATIONAL INC annual report pdf
+Sending search request to DuckDuckGo for: MAGNA INTERNATIONAL INC annual report pdf
+[SUCCESS] Search request successful. Processing results...
+[FILTER] Skipping non-European domain: https://www.sec.gov/Archives/edgar/data/749098/000110465924040524/tm241263d3_ex99-1.pdf
+[SUCCESS] Found 9 results after filtering
+Checking page: https://www.magna.com/company/investors/financial-reports-public-filings/annual-reports
+Found 2 reports for MAGNA INTERNATIONAL INC:
+  1. https://www.magna.com/docs/default-source/financial-reports-public-filings/annual-reports/2024-annual-report---magna---aoda.pdf?sfvrsn=188e000d_11 (Year: 2024, Score: 8)
+  2. https://get.adobe.com/reader/ (Year: Unknown, Score: 2)
+Results saved to results/financial_reports.csv
+Completed processing MAGNA INTERNATIONAL INC, found 2 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: MAGNA INTERNATIONAL INC
+Current time: 2025-05-16 07:39:55
+================================================================================
+================================================================================
+STARTING COMPANY: PUBLICIS GROUPE S A
+Current time: 2025-05-16 07:39:55
+================================================================================
+Processing company 1/1: PUBLICIS GROUPE S A
+Attempt 1/3 for PUBLICIS GROUPE S A
+
+Processing: PUBLICIS GROUPE S A
+Searching for: PUBLICIS GROUPE S A annual report pdf
+Sending search request to DuckDuckGo for: PUBLICIS GROUPE S A annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: PUBLICIS GROUPE S A annual report pdf European Union
+Sending search request to DuckDuckGo for: PUBLICIS GROUPE S A annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: publicise s a european financial report
+Sending search request to DuckDuckGo for: publicise s a european financial report
+[ERROR] Search failed with status code: 403
+Searching for: publicise s a europe investor relations annual report
+Sending search request to DuckDuckGo for: publicise s a europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: PUBLICIS GROUPE S A financial statements EU
+Sending search request to DuckDuckGo for: PUBLICIS GROUPE S A financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: PUBLICIS GROUPE S A European Union annual report
+Sending search request to DuckDuckGo for: PUBLICIS GROUPE S A European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: publicise s a EU headquarters financial report
+Sending search request to DuckDuckGo for: publicise s a EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: PUBLICIS GROUPE S A consolidated annual report Europe
+Sending search request to DuckDuckGo for: PUBLICIS GROUPE S A consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for PUBLICIS GROUPE S A
+No results found. Waiting 3.9 seconds before next attempt...
+Attempt 2/3 for PUBLICIS GROUPE S A
+Retry with more specific European search terms
+Searching for: publicise s a europe annual financial report pdf
+Sending search request to DuckDuckGo for: publicise s a europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.9 seconds before next attempt...
+Attempt 3/3 for PUBLICIS GROUPE S A
+Trying direct known patterns for PUBLICIS GROUPE S A
+Trying known patterns for PUBLICIS GROUPE S A
+No reports found for PUBLICIS GROUPE S A after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing PUBLICIS GROUPE S A, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: PUBLICIS GROUPE S A
+Current time: 2025-05-16 07:40:42
+================================================================================
+================================================================================
+STARTING COMPANY: GEBR. KNAUF
+Current time: 2025-05-16 07:40:42
+================================================================================
+Processing company 1/1: GEBR. KNAUF
+Attempt 1/3 for GEBR. KNAUF
+
+Processing: GEBR. KNAUF
+Searching for: GEBR. KNAUF annual report pdf
+Sending search request to DuckDuckGo for: GEBR. KNAUF annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: GEBR. KNAUF annual report pdf European Union
+Sending search request to DuckDuckGo for: GEBR. KNAUF annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: gebr knauf european financial report
+Sending search request to DuckDuckGo for: gebr knauf european financial report
+[ERROR] Search failed with status code: 403
+Searching for: gebr knauf europe investor relations annual report
+Sending search request to DuckDuckGo for: gebr knauf europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: GEBR. KNAUF financial statements EU
+Sending search request to DuckDuckGo for: GEBR. KNAUF financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: GEBR. KNAUF European Union annual report
+Sending search request to DuckDuckGo for: GEBR. KNAUF European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: gebr knauf EU headquarters financial report
+Sending search request to DuckDuckGo for: gebr knauf EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: GEBR. KNAUF consolidated annual report Europe
+Sending search request to DuckDuckGo for: GEBR. KNAUF consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for GEBR. KNAUF
+No results found. Waiting 4.1 seconds before next attempt...
+Attempt 2/3 for GEBR. KNAUF
+Retry with more specific European search terms
+Searching for: gebr knauf europe annual financial report pdf
+Sending search request to DuckDuckGo for: gebr knauf europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.2 seconds before next attempt...
+Attempt 3/3 for GEBR. KNAUF
+Trying direct known patterns for GEBR. KNAUF
+Trying known patterns for GEBR. KNAUF
+No reports found for GEBR. KNAUF after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing GEBR. KNAUF, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: GEBR. KNAUF
+Current time: 2025-05-16 07:41:31
+================================================================================
+Results saved to results/batch_1.csv
+
+Pausing for 3 minutes before next batch...
+  3 minutes 0 seconds remaining...
+  2 minutes 30 seconds remaining...
+  2 minutes 0 seconds remaining...
+  1 minutes 30 seconds remaining...
+  1 minutes 0 seconds remaining...
+  0 minutes 30 seconds remaining...
+
+Processing batch 2 of 20
+Companies in this batch: BRIDGESTONE CORPORATION, FERRERO, SUMITOMO CORPORATION, COMPAGNIE DE SAINT GOBAIN, ABBOTT LABORATORIES
+================================================================================
+STARTING COMPANY: BRIDGESTONE CORPORATION
+Current time: 2025-05-16 07:44:31
+================================================================================
+Processing company 1/1: BRIDGESTONE CORPORATION
+Attempt 1/3 for BRIDGESTONE CORPORATION
+
+Processing: BRIDGESTONE CORPORATION
+Searching for: BRIDGESTONE CORPORATION annual report pdf
+Sending search request to DuckDuckGo for: BRIDGESTONE CORPORATION annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: BRIDGESTONE CORPORATION annual report pdf European Union
+Sending search request to DuckDuckGo for: BRIDGESTONE CORPORATION annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: bridgestone corporation european financial report
+Sending search request to DuckDuckGo for: bridgestone corporation european financial report
+[ERROR] Search failed with status code: 403
+Searching for: bridgestone corporation europe investor relations annual report
+Sending search request to DuckDuckGo for: bridgestone corporation europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: BRIDGESTONE CORPORATION financial statements EU
+Sending search request to DuckDuckGo for: BRIDGESTONE CORPORATION financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: BRIDGESTONE CORPORATION European Union annual report
+Sending search request to DuckDuckGo for: BRIDGESTONE CORPORATION European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: bridgestone corporation EU headquarters financial report
+Sending search request to DuckDuckGo for: bridgestone corporation EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: BRIDGESTONE CORPORATION consolidated annual report Europe
+Sending search request to DuckDuckGo for: BRIDGESTONE CORPORATION consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for BRIDGESTONE CORPORATION
+No results found. Waiting 4.7 seconds before next attempt...
+Attempt 2/3 for BRIDGESTONE CORPORATION
+Retry with more specific European search terms
+Searching for: bridgestone corporation europe annual financial report pdf
+Sending search request to DuckDuckGo for: bridgestone corporation europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.4 seconds before next attempt...
+Attempt 3/3 for BRIDGESTONE CORPORATION
+Trying direct known patterns for BRIDGESTONE CORPORATION
+Trying known patterns for BRIDGESTONE CORPORATION
+No reports found for BRIDGESTONE CORPORATION after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing BRIDGESTONE CORPORATION, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: BRIDGESTONE CORPORATION
+Current time: 2025-05-16 07:45:19
+================================================================================
+================================================================================
+STARTING COMPANY: FERRERO
+Current time: 2025-05-16 07:45:19
+================================================================================
+Processing company 1/1: FERRERO
+Attempt 1/3 for FERRERO
+
+Processing: FERRERO
+Searching for: FERRERO annual report pdf
+Sending search request to DuckDuckGo for: FERRERO annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: FERRERO annual report pdf European Union
+Sending search request to DuckDuckGo for: FERRERO annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: ferrero european financial report
+Sending search request to DuckDuckGo for: ferrero european financial report
+[ERROR] Search failed with status code: 403
+Searching for: ferrero europe investor relations annual report
+Sending search request to DuckDuckGo for: ferrero europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: FERRERO financial statements EU
+Sending search request to DuckDuckGo for: FERRERO financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: FERRERO European Union annual report
+Sending search request to DuckDuckGo for: FERRERO European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: ferrero EU headquarters financial report
+Sending search request to DuckDuckGo for: ferrero EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: FERRERO consolidated annual report Europe
+Sending search request to DuckDuckGo for: FERRERO consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for FERRERO
+No results found. Waiting 3.5 seconds before next attempt...
+Attempt 2/3 for FERRERO
+Retry with more specific European search terms
+Searching for: ferrero europe annual financial report pdf
+Sending search request to DuckDuckGo for: ferrero europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.3 seconds before next attempt...
+Attempt 3/3 for FERRERO
+Trying direct known patterns for FERRERO
+Trying known patterns for FERRERO
+No reports found for FERRERO after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing FERRERO, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: FERRERO
+Current time: 2025-05-16 07:46:05
+================================================================================
+================================================================================
+STARTING COMPANY: SUMITOMO CORPORATION
+Current time: 2025-05-16 07:46:05
+================================================================================
+Processing company 1/1: SUMITOMO CORPORATION
+Attempt 1/3 for SUMITOMO CORPORATION
+
+Processing: SUMITOMO CORPORATION
+Searching for: SUMITOMO CORPORATION annual report pdf
+Sending search request to DuckDuckGo for: SUMITOMO CORPORATION annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: SUMITOMO CORPORATION annual report pdf European Union
+Sending search request to DuckDuckGo for: SUMITOMO CORPORATION annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: sumitomo corporation european financial report
+Sending search request to DuckDuckGo for: sumitomo corporation european financial report
+[ERROR] Search failed with status code: 403
+Searching for: sumitomo corporation europe investor relations annual report
+Sending search request to DuckDuckGo for: sumitomo corporation europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: SUMITOMO CORPORATION financial statements EU
+Sending search request to DuckDuckGo for: SUMITOMO CORPORATION financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: SUMITOMO CORPORATION European Union annual report
+Sending search request to DuckDuckGo for: SUMITOMO CORPORATION European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: sumitomo corporation EU headquarters financial report
+Sending search request to DuckDuckGo for: sumitomo corporation EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: SUMITOMO CORPORATION consolidated annual report Europe
+Sending search request to DuckDuckGo for: SUMITOMO CORPORATION consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for SUMITOMO CORPORATION
+No results found. Waiting 4.3 seconds before next attempt...
+Attempt 2/3 for SUMITOMO CORPORATION
+Retry with more specific European search terms
+Searching for: sumitomo corporation europe annual financial report pdf
+Sending search request to DuckDuckGo for: sumitomo corporation europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.2 seconds before next attempt...
+Attempt 3/3 for SUMITOMO CORPORATION
+Trying direct known patterns for SUMITOMO CORPORATION
+Trying known patterns for SUMITOMO CORPORATION
+No reports found for SUMITOMO CORPORATION after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing SUMITOMO CORPORATION, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: SUMITOMO CORPORATION
+Current time: 2025-05-16 07:46:51
+================================================================================
+================================================================================
+STARTING COMPANY: COMPAGNIE DE SAINT GOBAIN
+Current time: 2025-05-16 07:46:51
+================================================================================
+Processing company 1/1: COMPAGNIE DE SAINT GOBAIN
+Attempt 1/3 for COMPAGNIE DE SAINT GOBAIN
+
+Processing: COMPAGNIE DE SAINT GOBAIN
+Searching for: COMPAGNIE DE SAINT GOBAIN annual report pdf
+Sending search request to DuckDuckGo for: COMPAGNIE DE SAINT GOBAIN annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: COMPAGNIE DE SAINT GOBAIN annual report pdf European Union
+Sending search request to DuckDuckGo for: COMPAGNIE DE SAINT GOBAIN annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: compagnie de saint gobain european financial report
+Sending search request to DuckDuckGo for: compagnie de saint gobain european financial report
+[ERROR] Search failed with status code: 403
+Searching for: compagnie de saint gobain europe investor relations annual report
+Sending search request to DuckDuckGo for: compagnie de saint gobain europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: COMPAGNIE DE SAINT GOBAIN financial statements EU
+Sending search request to DuckDuckGo for: COMPAGNIE DE SAINT GOBAIN financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: COMPAGNIE DE SAINT GOBAIN European Union annual report
+Sending search request to DuckDuckGo for: COMPAGNIE DE SAINT GOBAIN European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: compagnie de saint gobain EU headquarters financial report
+Sending search request to DuckDuckGo for: compagnie de saint gobain EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: COMPAGNIE DE SAINT GOBAIN consolidated annual report Europe
+Sending search request to DuckDuckGo for: COMPAGNIE DE SAINT GOBAIN consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for COMPAGNIE DE SAINT GOBAIN
+No results found. Waiting 3.6 seconds before next attempt...
+Attempt 2/3 for COMPAGNIE DE SAINT GOBAIN
+Retry with more specific European search terms
+Searching for: compagnie de saint gobain europe annual financial report pdf
+Sending search request to DuckDuckGo for: compagnie de saint gobain europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.5 seconds before next attempt...
+Attempt 3/3 for COMPAGNIE DE SAINT GOBAIN
+Trying direct known patterns for COMPAGNIE DE SAINT GOBAIN
+Trying known patterns for COMPAGNIE DE SAINT GOBAIN
+No reports found for COMPAGNIE DE SAINT GOBAIN after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing COMPAGNIE DE SAINT GOBAIN, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: COMPAGNIE DE SAINT GOBAIN
+Current time: 2025-05-16 07:47:39
+================================================================================
+================================================================================
+STARTING COMPANY: ABBOTT LABORATORIES
+Current time: 2025-05-16 07:47:39
+================================================================================
+Processing company 1/1: ABBOTT LABORATORIES
+Attempt 1/3 for ABBOTT LABORATORIES
+
+Processing: ABBOTT LABORATORIES
+Searching for: ABBOTT LABORATORIES annual report pdf
+Sending search request to DuckDuckGo for: ABBOTT LABORATORIES annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: ABBOTT LABORATORIES annual report pdf European Union
+Sending search request to DuckDuckGo for: ABBOTT LABORATORIES annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: abbott laboratories european financial report
+Sending search request to DuckDuckGo for: abbott laboratories european financial report
+[ERROR] Search failed with status code: 403
+Searching for: abbott laboratories europe investor relations annual report
+Sending search request to DuckDuckGo for: abbott laboratories europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: ABBOTT LABORATORIES financial statements EU
+Sending search request to DuckDuckGo for: ABBOTT LABORATORIES financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: ABBOTT LABORATORIES European Union annual report
+Sending search request to DuckDuckGo for: ABBOTT LABORATORIES European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: abbott laboratories EU headquarters financial report
+Sending search request to DuckDuckGo for: abbott laboratories EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: ABBOTT LABORATORIES consolidated annual report Europe
+Sending search request to DuckDuckGo for: ABBOTT LABORATORIES consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for ABBOTT LABORATORIES
+No results found. Waiting 3.2 seconds before next attempt...
+Attempt 2/3 for ABBOTT LABORATORIES
+Retry with more specific European search terms
+Searching for: abbott laboratories europe annual financial report pdf
+Sending search request to DuckDuckGo for: abbott laboratories europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.2 seconds before next attempt...
+Attempt 3/3 for ABBOTT LABORATORIES
+Trying direct known patterns for ABBOTT LABORATORIES
+Trying known patterns for ABBOTT LABORATORIES
+No reports found for ABBOTT LABORATORIES after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing ABBOTT LABORATORIES, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: ABBOTT LABORATORIES
+Current time: 2025-05-16 07:48:28
+================================================================================
+Results saved to results/batch_2.csv
+
+Pausing for 3 minutes before next batch...
+  3 minutes 0 seconds remaining...
+  2 minutes 30 seconds remaining...
+  2 minutes 0 seconds remaining...
+  1 minutes 30 seconds remaining...
+  1 minutes 0 seconds remaining...
+  0 minutes 30 seconds remaining...
+
+Processing batch 3 of 20
+Companies in this batch: BP P.L.C., ENGIE, DENTSU GROUP INC., THYSSENKRUPP, VOESTALPINE GROUP
+================================================================================
+STARTING COMPANY: BP P.L.C.
+Current time: 2025-05-16 07:51:28
+================================================================================
+Processing company 1/1: BP P.L.C.
+Attempt 1/3 for BP P.L.C.
+
+Processing: BP P.L.C.
+Searching for: BP P.L.C. annual report pdf
+Sending search request to DuckDuckGo for: BP P.L.C. annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: BP P.L.C. annual report pdf European Union
+Sending search request to DuckDuckGo for: BP P.L.C. annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: bp plc european financial report
+Sending search request to DuckDuckGo for: bp plc european financial report
+[ERROR] Search failed with status code: 403
+Searching for: bp plc europe investor relations annual report
+Sending search request to DuckDuckGo for: bp plc europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: BP P.L.C. financial statements EU
+Sending search request to DuckDuckGo for: BP P.L.C. financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: BP P.L.C. European Union annual report
+Sending search request to DuckDuckGo for: BP P.L.C. European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: bp plc EU headquarters financial report
+Sending search request to DuckDuckGo for: bp plc EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: BP P.L.C. consolidated annual report Europe
+Sending search request to DuckDuckGo for: BP P.L.C. consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for BP P.L.C.
+No results found. Waiting 4.1 seconds before next attempt...
+Attempt 2/3 for BP P.L.C.
+Retry with more specific European search terms
+Searching for: bp plc europe annual financial report pdf
+Sending search request to DuckDuckGo for: bp plc europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.5 seconds before next attempt...
+Attempt 3/3 for BP P.L.C.
+Trying direct known patterns for BP P.L.C.
+Trying known patterns for BP P.L.C.
+No reports found for BP P.L.C. after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing BP P.L.C., found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: BP P.L.C.
+Current time: 2025-05-16 07:52:17
+================================================================================
+================================================================================
+STARTING COMPANY: ENGIE
+Current time: 2025-05-16 07:52:17
+================================================================================
+Processing company 1/1: ENGIE
+Attempt 1/3 for ENGIE
+
+Processing: ENGIE
+Searching for: ENGIE annual report pdf
+Sending search request to DuckDuckGo for: ENGIE annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: ENGIE annual report pdf European Union
+Sending search request to DuckDuckGo for: ENGIE annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: engie european financial report
+Sending search request to DuckDuckGo for: engie european financial report
+[ERROR] Search failed with status code: 403
+Searching for: engie europe investor relations annual report
+Sending search request to DuckDuckGo for: engie europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: ENGIE financial statements EU
+Sending search request to DuckDuckGo for: ENGIE financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: ENGIE European Union annual report
+Sending search request to DuckDuckGo for: ENGIE European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: engie EU headquarters financial report
+Sending search request to DuckDuckGo for: engie EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: ENGIE consolidated annual report Europe
+Sending search request to DuckDuckGo for: ENGIE consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for ENGIE
+No results found. Waiting 4.2 seconds before next attempt...
+Attempt 2/3 for ENGIE
+Retry with more specific European search terms
+Searching for: engie europe annual financial report pdf
+Sending search request to DuckDuckGo for: engie europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.1 seconds before next attempt...
+Attempt 3/3 for ENGIE
+Trying direct known patterns for ENGIE
+Trying known patterns for ENGIE
+No reports found for ENGIE after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing ENGIE, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: ENGIE
+Current time: 2025-05-16 07:53:05
+================================================================================
+================================================================================
+STARTING COMPANY: DENTSU GROUP INC.
+Current time: 2025-05-16 07:53:05
+================================================================================
+Processing company 1/1: DENTSU GROUP INC.
+Attempt 1/3 for DENTSU GROUP INC.
+
+Processing: DENTSU GROUP INC.
+Searching for: DENTSU GROUP INC. annual report pdf
+Sending search request to DuckDuckGo for: DENTSU GROUP INC. annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: DENTSU GROUP INC. annual report pdf European Union
+Sending search request to DuckDuckGo for: DENTSU GROUP INC. annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: dentsu european financial report
+Sending search request to DuckDuckGo for: dentsu european financial report
+[ERROR] Search failed with status code: 403
+Searching for: dentsu europe investor relations annual report
+Sending search request to DuckDuckGo for: dentsu europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: DENTSU GROUP INC. financial statements EU
+Sending search request to DuckDuckGo for: DENTSU GROUP INC. financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: DENTSU GROUP INC. European Union annual report
+Sending search request to DuckDuckGo for: DENTSU GROUP INC. European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: dentsu EU headquarters financial report
+Sending search request to DuckDuckGo for: dentsu EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: DENTSU GROUP INC. consolidated annual report Europe
+Sending search request to DuckDuckGo for: DENTSU GROUP INC. consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for DENTSU GROUP INC.
+No results found. Waiting 3.3 seconds before next attempt...
+Attempt 2/3 for DENTSU GROUP INC.
+Retry with more specific European search terms
+Searching for: dentsu europe annual financial report pdf
+Sending search request to DuckDuckGo for: dentsu europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.2 seconds before next attempt...
+Attempt 3/3 for DENTSU GROUP INC.
+Trying direct known patterns for DENTSU GROUP INC.
+Trying known patterns for DENTSU GROUP INC.
+No reports found for DENTSU GROUP INC. after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing DENTSU GROUP INC., found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: DENTSU GROUP INC.
+Current time: 2025-05-16 07:53:54
+================================================================================
+================================================================================
+STARTING COMPANY: THYSSENKRUPP
+Current time: 2025-05-16 07:53:54
+================================================================================
+Processing company 1/1: THYSSENKRUPP
+Attempt 1/3 for THYSSENKRUPP
+
+Processing: THYSSENKRUPP
+Searching for: THYSSENKRUPP annual report pdf
+Sending search request to DuckDuckGo for: THYSSENKRUPP annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: THYSSENKRUPP annual report pdf European Union
+Sending search request to DuckDuckGo for: THYSSENKRUPP annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: thyssenkrupp european financial report
+Sending search request to DuckDuckGo for: thyssenkrupp european financial report
+[ERROR] Search failed with status code: 403
+Searching for: thyssenkrupp europe investor relations annual report
+Sending search request to DuckDuckGo for: thyssenkrupp europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: THYSSENKRUPP financial statements EU
+Sending search request to DuckDuckGo for: THYSSENKRUPP financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: THYSSENKRUPP European Union annual report
+Sending search request to DuckDuckGo for: THYSSENKRUPP European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: thyssenkrupp EU headquarters financial report
+Sending search request to DuckDuckGo for: thyssenkrupp EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: THYSSENKRUPP consolidated annual report Europe
+Sending search request to DuckDuckGo for: THYSSENKRUPP consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for THYSSENKRUPP
+No results found. Waiting 4.1 seconds before next attempt...
+Attempt 2/3 for THYSSENKRUPP
+Retry with more specific European search terms
+Searching for: thyssenkrupp europe annual financial report pdf
+Sending search request to DuckDuckGo for: thyssenkrupp europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.7 seconds before next attempt...
+Attempt 3/3 for THYSSENKRUPP
+Trying direct known patterns for THYSSENKRUPP
+Trying known patterns for THYSSENKRUPP
+No reports found for THYSSENKRUPP after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing THYSSENKRUPP, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: THYSSENKRUPP
+Current time: 2025-05-16 07:54:41
+================================================================================
+================================================================================
+STARTING COMPANY: VOESTALPINE GROUP
+Current time: 2025-05-16 07:54:41
+================================================================================
+Processing company 1/1: VOESTALPINE GROUP
+Attempt 1/3 for VOESTALPINE GROUP
+
+Processing: VOESTALPINE GROUP
+Searching for: VOESTALPINE GROUP annual report pdf
+Sending search request to DuckDuckGo for: VOESTALPINE GROUP annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: VOESTALPINE GROUP annual report pdf European Union
+Sending search request to DuckDuckGo for: VOESTALPINE GROUP annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: voestalpine european financial report
+Sending search request to DuckDuckGo for: voestalpine european financial report
+[ERROR] Search failed with status code: 403
+Searching for: voestalpine europe investor relations annual report
+Sending search request to DuckDuckGo for: voestalpine europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: VOESTALPINE GROUP financial statements EU
+Sending search request to DuckDuckGo for: VOESTALPINE GROUP financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: VOESTALPINE GROUP European Union annual report
+Sending search request to DuckDuckGo for: VOESTALPINE GROUP European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: voestalpine EU headquarters financial report
+Sending search request to DuckDuckGo for: voestalpine EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: VOESTALPINE GROUP consolidated annual report Europe
+Sending search request to DuckDuckGo for: VOESTALPINE GROUP consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for VOESTALPINE GROUP
+No results found. Waiting 4.1 seconds before next attempt...
+Attempt 2/3 for VOESTALPINE GROUP
+Retry with more specific European search terms
+Searching for: voestalpine europe annual financial report pdf
+Sending search request to DuckDuckGo for: voestalpine europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.5 seconds before next attempt...
+Attempt 3/3 for VOESTALPINE GROUP
+Trying direct known patterns for VOESTALPINE GROUP
+Trying known patterns for VOESTALPINE GROUP
+No reports found for VOESTALPINE GROUP after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing VOESTALPINE GROUP, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: VOESTALPINE GROUP
+Current time: 2025-05-16 07:55:29
+================================================================================
+Results saved to results/batch_3.csv
+
+Pausing for 3 minutes before next batch...
+  3 minutes 0 seconds remaining...
+  2 minutes 30 seconds remaining...
+  2 minutes 0 seconds remaining...
+  1 minutes 30 seconds remaining...
+  1 minutes 0 seconds remaining...
+  0 minutes 30 seconds remaining...
+
+Processing batch 4 of 20
+Companies in this batch: ORANGE, ORACLE CORP, ACCOR, PROCTER & GAMBLE CO, FCC
+================================================================================
+STARTING COMPANY: ORANGE
+Current time: 2025-05-16 07:58:29
+================================================================================
+Processing company 1/1: ORANGE
+Attempt 1/3 for ORANGE
+
+Processing: ORANGE
+Searching for: ORANGE annual report pdf
+Sending search request to DuckDuckGo for: ORANGE annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: ORANGE annual report pdf European Union
+Sending search request to DuckDuckGo for: ORANGE annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: orange european financial report
+Sending search request to DuckDuckGo for: orange european financial report
+[ERROR] Search failed with status code: 403
+Searching for: orange europe investor relations annual report
+Sending search request to DuckDuckGo for: orange europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: ORANGE financial statements EU
+Sending search request to DuckDuckGo for: ORANGE financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: ORANGE European Union annual report
+Sending search request to DuckDuckGo for: ORANGE European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: orange EU headquarters financial report
+Sending search request to DuckDuckGo for: orange EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: ORANGE consolidated annual report Europe
+Sending search request to DuckDuckGo for: ORANGE consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for ORANGE
+No results found. Waiting 3.8 seconds before next attempt...
+Attempt 2/3 for ORANGE
+Retry with more specific European search terms
+Searching for: orange europe annual financial report pdf
+Sending search request to DuckDuckGo for: orange europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.1 seconds before next attempt...
+Attempt 3/3 for ORANGE
+Trying direct known patterns for ORANGE
+Trying known patterns for ORANGE
+No reports found for ORANGE after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing ORANGE, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: ORANGE
+Current time: 2025-05-16 07:59:19
+================================================================================
+================================================================================
+STARTING COMPANY: ORACLE CORP
+Current time: 2025-05-16 07:59:19
+================================================================================
+Processing company 1/1: ORACLE CORP
+Attempt 1/3 for ORACLE CORP
+
+Processing: ORACLE CORP
+Searching for: ORACLE CORP annual report pdf
+Sending search request to DuckDuckGo for: ORACLE CORP annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: ORACLE CORP annual report pdf European Union
+Sending search request to DuckDuckGo for: ORACLE CORP annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: oracle corp european financial report
+Sending search request to DuckDuckGo for: oracle corp european financial report
+[ERROR] Search failed with status code: 403
+Searching for: oracle corp europe investor relations annual report
+Sending search request to DuckDuckGo for: oracle corp europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: ORACLE CORP financial statements EU
+Sending search request to DuckDuckGo for: ORACLE CORP financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: ORACLE CORP European Union annual report
+Sending search request to DuckDuckGo for: ORACLE CORP European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: oracle corp EU headquarters financial report
+Sending search request to DuckDuckGo for: oracle corp EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: ORACLE CORP consolidated annual report Europe
+Sending search request to DuckDuckGo for: ORACLE CORP consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for ORACLE CORP
+No results found. Waiting 4.5 seconds before next attempt...
+Attempt 2/3 for ORACLE CORP
+Retry with more specific European search terms
+Searching for: oracle corp europe annual financial report pdf
+Sending search request to DuckDuckGo for: oracle corp europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.5 seconds before next attempt...
+Attempt 3/3 for ORACLE CORP
+Trying direct known patterns for ORACLE CORP
+Trying known patterns for ORACLE CORP
+No reports found for ORACLE CORP after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing ORACLE CORP, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: ORACLE CORP
+Current time: 2025-05-16 08:00:09
+================================================================================
+================================================================================
+STARTING COMPANY: ACCOR
+Current time: 2025-05-16 08:00:09
+================================================================================
+Processing company 1/1: ACCOR
+Attempt 1/3 for ACCOR
+
+Processing: ACCOR
+Searching for: ACCOR annual report pdf
+Sending search request to DuckDuckGo for: ACCOR annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: ACCOR annual report pdf European Union
+Sending search request to DuckDuckGo for: ACCOR annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: accor european financial report
+Sending search request to DuckDuckGo for: accor european financial report
+[ERROR] Search failed with status code: 403
+Searching for: accor europe investor relations annual report
+Sending search request to DuckDuckGo for: accor europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: ACCOR financial statements EU
+Sending search request to DuckDuckGo for: ACCOR financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: ACCOR European Union annual report
+Sending search request to DuckDuckGo for: ACCOR European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: accor EU headquarters financial report
+Sending search request to DuckDuckGo for: accor EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: ACCOR consolidated annual report Europe
+Sending search request to DuckDuckGo for: ACCOR consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for ACCOR
+No results found. Waiting 3.3 seconds before next attempt...
+Attempt 2/3 for ACCOR
+Retry with more specific European search terms
+Searching for: accor europe annual financial report pdf
+Sending search request to DuckDuckGo for: accor europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.7 seconds before next attempt...
+Attempt 3/3 for ACCOR
+Trying direct known patterns for ACCOR
+Trying known patterns for ACCOR
+No reports found for ACCOR after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing ACCOR, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: ACCOR
+Current time: 2025-05-16 08:00:58
+================================================================================
+================================================================================
+STARTING COMPANY: PROCTER & GAMBLE CO
+Current time: 2025-05-16 08:00:58
+================================================================================
+Processing company 1/1: PROCTER & GAMBLE CO
+Attempt 1/3 for PROCTER & GAMBLE CO
+
+Processing: PROCTER & GAMBLE CO
+Searching for: PROCTER & GAMBLE CO annual report pdf
+Sending search request to DuckDuckGo for: PROCTER & GAMBLE CO annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: PROCTER & GAMBLE CO annual report pdf European Union
+Sending search request to DuckDuckGo for: PROCTER & GAMBLE CO annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: procter  gamble co european financial report
+Sending search request to DuckDuckGo for: procter  gamble co european financial report
+[ERROR] Search failed with status code: 403
+Searching for: procter  gamble co europe investor relations annual report
+Sending search request to DuckDuckGo for: procter  gamble co europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: PROCTER & GAMBLE CO financial statements EU
+Sending search request to DuckDuckGo for: PROCTER & GAMBLE CO financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: PROCTER & GAMBLE CO European Union annual report
+Sending search request to DuckDuckGo for: PROCTER & GAMBLE CO European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: procter  gamble co EU headquarters financial report
+Sending search request to DuckDuckGo for: procter  gamble co EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: PROCTER & GAMBLE CO consolidated annual report Europe
+Sending search request to DuckDuckGo for: PROCTER & GAMBLE CO consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for PROCTER & GAMBLE CO
+No results found. Waiting 4.7 seconds before next attempt...
+Attempt 2/3 for PROCTER & GAMBLE CO
+Retry with more specific European search terms
+Searching for: procter  gamble co europe annual financial report pdf
+Sending search request to DuckDuckGo for: procter  gamble co europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.2 seconds before next attempt...
+Attempt 3/3 for PROCTER & GAMBLE CO
+Trying direct known patterns for PROCTER & GAMBLE CO
+Trying known patterns for PROCTER & GAMBLE CO
+No reports found for PROCTER & GAMBLE CO after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing PROCTER & GAMBLE CO, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: PROCTER & GAMBLE CO
+Current time: 2025-05-16 08:01:48
+================================================================================
+================================================================================
+STARTING COMPANY: FCC
+Current time: 2025-05-16 08:01:48
+================================================================================
+Processing company 1/1: FCC
+Attempt 1/3 for FCC
+
+Processing: FCC
+Searching for: FCC Group Spain annual report pdf
+Sending search request to DuckDuckGo for: FCC Group Spain annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: FCC Group Spain annual report pdf European Union
+Sending search request to DuckDuckGo for: FCC Group Spain annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: Fomento de Construcciones y Contratas annual report
+Sending search request to DuckDuckGo for: Fomento de Construcciones y Contratas annual report
+[ERROR] Search failed with status code: 403
+Searching for: Fomento de Construcciones y Contratas annual report European Union
+Sending search request to DuckDuckGo for: Fomento de Construcciones y Contratas annual report European Union
+[ERROR] Search failed with status code: 403
+Searching for: FCC Spain financial report
+Sending search request to DuckDuckGo for: FCC Spain financial report
+[ERROR] Search failed with status code: 403
+Searching for: FCC Spain financial report European Union
+Sending search request to DuckDuckGo for: FCC Spain financial report European Union
+[ERROR] Search failed with status code: 403
+Searching for: FCC construction Spain investor relations
+Sending search request to DuckDuckGo for: FCC construction Spain investor relations
+[ERROR] Search failed with status code: 403
+Searching for: FCC construction Spain investor relations European Union
+Sending search request to DuckDuckGo for: FCC construction Spain investor relations European Union
+[ERROR] Search failed with status code: 403
+Searching for: FCC European Union annual report
+Sending search request to DuckDuckGo for: FCC European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: fcc EU headquarters financial report
+Sending search request to DuckDuckGo for: fcc EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: FCC consolidated annual report Europe
+Sending search request to DuckDuckGo for: FCC consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for FCC
+No results found. Waiting 4.1 seconds before next attempt...
+Attempt 2/3 for FCC
+Retry with more specific European search terms
+Searching for: fcc europe annual financial report pdf
+Sending search request to DuckDuckGo for: fcc europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.9 seconds before next attempt...
+Attempt 3/3 for FCC
+Trying direct known patterns for FCC
+Trying known patterns for FCC
+Matched company pattern: FCC
+No reports found for FCC after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing FCC, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: FCC
+Current time: 2025-05-16 08:02:45
+================================================================================
+Results saved to results/batch_4.csv
+
+Pausing for 3 minutes before next batch...
+  3 minutes 0 seconds remaining...
+  2 minutes 30 seconds remaining...
+  2 minutes 0 seconds remaining...
+  1 minutes 30 seconds remaining...
+  1 minutes 0 seconds remaining...
+  0 minutes 30 seconds remaining...
+
+Processing batch 5 of 20
+Companies in this batch: SOCIETE NATIONALE SNCF, ATLAS COPCO AKTIEBOLAG, AKTIEBOLAGET SKF, JOHN WOOD GROUP PLC, FUJITSU LIMITED
+================================================================================
+STARTING COMPANY: SOCIETE NATIONALE SNCF
+Current time: 2025-05-16 08:05:45
+================================================================================
+Processing company 1/1: SOCIETE NATIONALE SNCF
+Attempt 1/3 for SOCIETE NATIONALE SNCF
+
+Processing: SOCIETE NATIONALE SNCF
+Searching for: SNCF annual financial report pdf
+Sending search request to DuckDuckGo for: SNCF annual financial report pdf
+[ERROR] Search failed with status code: 403
+Searching for: SNCF annual financial report pdf European Union
+Sending search request to DuckDuckGo for: SNCF annual financial report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: SNCF groupe railway annual report
+Sending search request to DuckDuckGo for: SNCF groupe railway annual report
+[ERROR] Search failed with status code: 403
+Searching for: SNCF groupe railway annual report European Union
+Sending search request to DuckDuckGo for: SNCF groupe railway annual report European Union
+[ERROR] Search failed with status code: 403
+Searching for: Société Nationale des Chemins de fer Français financial report
+Sending search request to DuckDuckGo for: Société Nationale des Chemins de fer Français financial report
+[ERROR] Search failed with status code: 403
+Searching for: Société Nationale des Chemins de fer Français financial report European Union
+Sending search request to DuckDuckGo for: Société Nationale des Chemins de fer Français financial report European Union
+[ERROR] Search failed with status code: 403
+Searching for: SNCF financial statements french railways
+Sending search request to DuckDuckGo for: SNCF financial statements french railways
+[ERROR] Search failed with status code: 403
+Searching for: SNCF financial statements french railways European Union
+Sending search request to DuckDuckGo for: SNCF financial statements french railways European Union
+[ERROR] Search failed with status code: 403
+Searching for: SOCIETE NATIONALE SNCF European Union annual report
+Sending search request to DuckDuckGo for: SOCIETE NATIONALE SNCF European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: societe nationale sncf EU headquarters financial report
+Sending search request to DuckDuckGo for: societe nationale sncf EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: SOCIETE NATIONALE SNCF consolidated annual report Europe
+Sending search request to DuckDuckGo for: SOCIETE NATIONALE SNCF consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for SOCIETE NATIONALE SNCF
+No results found. Waiting 3.3 seconds before next attempt...
+Attempt 2/3 for SOCIETE NATIONALE SNCF
+Retry with more specific European search terms
+Searching for: societe nationale sncf europe annual financial report pdf
+Sending search request to DuckDuckGo for: societe nationale sncf europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.4 seconds before next attempt...
+Attempt 3/3 for SOCIETE NATIONALE SNCF
+Trying direct known patterns for SOCIETE NATIONALE SNCF
+Trying known patterns for SOCIETE NATIONALE SNCF
+Matched company pattern: SNCF
+Found direct match: https://www.groupe-sncf.com/medias-publics/2024-03/sncf-group-annual-financial-report-2023.pdf
+Found direct match: https://medias.sncf.com/sncfcom/finances/Publications_financieres/SNCF_RAA_31122022_EN.pdf
+Found direct match: https://medias.sncf.com/sncfcom/finances/Publications_financieres/SNCF_RAA_31122021_EN.pdf
+Found 3 reports for SOCIETE NATIONALE SNCF:
+  1. https://www.groupe-sncf.com/medias-publics/2024-03/sncf-group-annual-financial-report-2023.pdf (Year: 2024, Score: 10)
+  2. https://medias.sncf.com/sncfcom/finances/Publications_financieres/SNCF_RAA_31122022_EN.pdf (Year: 2022, Score: 10)
+  3. https://medias.sncf.com/sncfcom/finances/Publications_financieres/SNCF_RAA_31122021_EN.pdf (Year: 2021, Score: 10)
+Results saved to results/financial_reports.csv
+Completed processing SOCIETE NATIONALE SNCF, found 3 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: SOCIETE NATIONALE SNCF
+Current time: 2025-05-16 08:06:44
+================================================================================
+================================================================================
+STARTING COMPANY: ATLAS COPCO AKTIEBOLAG
+Current time: 2025-05-16 08:06:44
+================================================================================
+Processing company 1/1: ATLAS COPCO AKTIEBOLAG
+Attempt 1/3 for ATLAS COPCO AKTIEBOLAG
+
+Processing: ATLAS COPCO AKTIEBOLAG
+Searching for: ATLAS COPCO AKTIEBOLAG annual report pdf
+Sending search request to DuckDuckGo for: ATLAS COPCO AKTIEBOLAG annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: ATLAS COPCO AKTIEBOLAG annual report pdf European Union
+Sending search request to DuckDuckGo for: ATLAS COPCO AKTIEBOLAG annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: atlas copco aktiebolag european financial report
+Sending search request to DuckDuckGo for: atlas copco aktiebolag european financial report
+[ERROR] Search failed with status code: 403
+Searching for: atlas copco aktiebolag europe investor relations annual report
+Sending search request to DuckDuckGo for: atlas copco aktiebolag europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: ATLAS COPCO AKTIEBOLAG financial statements EU
+Sending search request to DuckDuckGo for: ATLAS COPCO AKTIEBOLAG financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: ATLAS COPCO AKTIEBOLAG European Union annual report
+Sending search request to DuckDuckGo for: ATLAS COPCO AKTIEBOLAG European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: atlas copco aktiebolag EU headquarters financial report
+Sending search request to DuckDuckGo for: atlas copco aktiebolag EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: ATLAS COPCO AKTIEBOLAG consolidated annual report Europe
+Sending search request to DuckDuckGo for: ATLAS COPCO AKTIEBOLAG consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for ATLAS COPCO AKTIEBOLAG
+No results found. Waiting 3.2 seconds before next attempt...
+Attempt 2/3 for ATLAS COPCO AKTIEBOLAG
+Retry with more specific European search terms
+Searching for: atlas copco aktiebolag europe annual financial report pdf
+Sending search request to DuckDuckGo for: atlas copco aktiebolag europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.0 seconds before next attempt...
+Attempt 3/3 for ATLAS COPCO AKTIEBOLAG
+Trying direct known patterns for ATLAS COPCO AKTIEBOLAG
+Trying known patterns for ATLAS COPCO AKTIEBOLAG
+No reports found for ATLAS COPCO AKTIEBOLAG after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing ATLAS COPCO AKTIEBOLAG, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: ATLAS COPCO AKTIEBOLAG
+Current time: 2025-05-16 08:07:28
+================================================================================
+================================================================================
+STARTING COMPANY: AKTIEBOLAGET SKF
+Current time: 2025-05-16 08:07:28
+================================================================================
+Processing company 1/1: AKTIEBOLAGET SKF
+Attempt 1/3 for AKTIEBOLAGET SKF
+
+Processing: AKTIEBOLAGET SKF
+Searching for: AKTIEBOLAGET SKF annual report pdf
+Sending search request to DuckDuckGo for: AKTIEBOLAGET SKF annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: AKTIEBOLAGET SKF annual report pdf European Union
+Sending search request to DuckDuckGo for: AKTIEBOLAGET SKF annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: aktiebolaget skf european financial report
+Sending search request to DuckDuckGo for: aktiebolaget skf european financial report
+[ERROR] Search failed with status code: 403
+Searching for: aktiebolaget skf europe investor relations annual report
+Sending search request to DuckDuckGo for: aktiebolaget skf europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: AKTIEBOLAGET SKF financial statements EU
+Sending search request to DuckDuckGo for: AKTIEBOLAGET SKF financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: AKTIEBOLAGET SKF European Union annual report
+Sending search request to DuckDuckGo for: AKTIEBOLAGET SKF European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: aktiebolaget skf EU headquarters financial report
+Sending search request to DuckDuckGo for: aktiebolaget skf EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: AKTIEBOLAGET SKF consolidated annual report Europe
+Sending search request to DuckDuckGo for: AKTIEBOLAGET SKF consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for AKTIEBOLAGET SKF
+No results found. Waiting 3.4 seconds before next attempt...
+Attempt 2/3 for AKTIEBOLAGET SKF
+Retry with more specific European search terms
+Searching for: aktiebolaget skf europe annual financial report pdf
+Sending search request to DuckDuckGo for: aktiebolaget skf europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.1 seconds before next attempt...
+Attempt 3/3 for AKTIEBOLAGET SKF
+Trying direct known patterns for AKTIEBOLAGET SKF
+Trying known patterns for AKTIEBOLAGET SKF
+No reports found for AKTIEBOLAGET SKF after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing AKTIEBOLAGET SKF, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: AKTIEBOLAGET SKF
+Current time: 2025-05-16 08:08:14
+================================================================================
+================================================================================
+STARTING COMPANY: JOHN WOOD GROUP PLC
+Current time: 2025-05-16 08:08:14
+================================================================================
+Processing company 1/1: JOHN WOOD GROUP PLC
+Attempt 1/3 for JOHN WOOD GROUP PLC
+
+Processing: JOHN WOOD GROUP PLC
+Searching for: JOHN WOOD GROUP PLC annual report pdf
+Sending search request to DuckDuckGo for: JOHN WOOD GROUP PLC annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: JOHN WOOD GROUP PLC annual report pdf European Union
+Sending search request to DuckDuckGo for: JOHN WOOD GROUP PLC annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: john wood european financial report
+Sending search request to DuckDuckGo for: john wood european financial report
+[ERROR] Search failed with status code: 403
+Searching for: john wood europe investor relations annual report
+Sending search request to DuckDuckGo for: john wood europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: JOHN WOOD GROUP PLC financial statements EU
+Sending search request to DuckDuckGo for: JOHN WOOD GROUP PLC financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: JOHN WOOD GROUP PLC European Union annual report
+Sending search request to DuckDuckGo for: JOHN WOOD GROUP PLC European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: john wood EU headquarters financial report
+Sending search request to DuckDuckGo for: john wood EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: JOHN WOOD GROUP PLC consolidated annual report Europe
+Sending search request to DuckDuckGo for: JOHN WOOD GROUP PLC consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for JOHN WOOD GROUP PLC
+No results found. Waiting 4.4 seconds before next attempt...
+Attempt 2/3 for JOHN WOOD GROUP PLC
+Retry with more specific European search terms
+Searching for: john wood europe annual financial report pdf
+Sending search request to DuckDuckGo for: john wood europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.1 seconds before next attempt...
+Attempt 3/3 for JOHN WOOD GROUP PLC
+Trying direct known patterns for JOHN WOOD GROUP PLC
+Trying known patterns for JOHN WOOD GROUP PLC
+No reports found for JOHN WOOD GROUP PLC after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing JOHN WOOD GROUP PLC, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: JOHN WOOD GROUP PLC
+Current time: 2025-05-16 08:09:05
+================================================================================
+================================================================================
+STARTING COMPANY: FUJITSU LIMITED
+Current time: 2025-05-16 08:09:05
+================================================================================
+Processing company 1/1: FUJITSU LIMITED
+Attempt 1/3 for FUJITSU LIMITED
+
+Processing: FUJITSU LIMITED
+Searching for: FUJITSU LIMITED annual report pdf
+Sending search request to DuckDuckGo for: FUJITSU LIMITED annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: FUJITSU LIMITED annual report pdf European Union
+Sending search request to DuckDuckGo for: FUJITSU LIMITED annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: fujitsu limited european financial report
+Sending search request to DuckDuckGo for: fujitsu limited european financial report
+[ERROR] Search failed with status code: 403
+Searching for: fujitsu limited europe investor relations annual report
+Sending search request to DuckDuckGo for: fujitsu limited europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: FUJITSU LIMITED financial statements EU
+Sending search request to DuckDuckGo for: FUJITSU LIMITED financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: FUJITSU LIMITED European Union annual report
+Sending search request to DuckDuckGo for: FUJITSU LIMITED European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: fujitsu limited EU headquarters financial report
+Sending search request to DuckDuckGo for: fujitsu limited EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: FUJITSU LIMITED consolidated annual report Europe
+Sending search request to DuckDuckGo for: FUJITSU LIMITED consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for FUJITSU LIMITED
+No results found. Waiting 3.7 seconds before next attempt...
+Attempt 2/3 for FUJITSU LIMITED
+Retry with more specific European search terms
+Searching for: fujitsu limited europe annual financial report pdf
+Sending search request to DuckDuckGo for: fujitsu limited europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 4.6 seconds before next attempt...
+Attempt 3/3 for FUJITSU LIMITED
+Trying direct known patterns for FUJITSU LIMITED
+Trying known patterns for FUJITSU LIMITED
+No reports found for FUJITSU LIMITED after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing FUJITSU LIMITED, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: FUJITSU LIMITED
+Current time: 2025-05-16 08:09:54
+================================================================================
+Results saved to results/batch_5.csv
+
+Pausing for 3 minutes before next batch...
+  3 minutes 0 seconds remaining...
+  2 minutes 30 seconds remaining...
+  2 minutes 0 seconds remaining...
+  1 minutes 30 seconds remaining...
+  1 minutes 0 seconds remaining...
+  0 minutes 30 seconds remaining...
+
+Processing batch 6 of 20
+Companies in this batch: CRH PLC, DEUTSCHE BAHN, CARGILL, WARNER BROS. DISCOVERY INC., GENERAL ELECTRIC COMPANY
+================================================================================
+STARTING COMPANY: CRH PLC
+Current time: 2025-05-16 08:12:54
+================================================================================
+Processing company 1/1: CRH PLC
+Attempt 1/3 for CRH PLC
+
+Processing: CRH PLC
+Searching for: CRH PLC annual report pdf
+Sending search request to DuckDuckGo for: CRH PLC annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: CRH PLC annual report pdf European Union
+Sending search request to DuckDuckGo for: CRH PLC annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: crh european financial report
+Sending search request to DuckDuckGo for: crh european financial report
+[ERROR] Search failed with status code: 403
+Searching for: crh europe investor relations annual report
+Sending search request to DuckDuckGo for: crh europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: CRH PLC financial statements EU
+Sending search request to DuckDuckGo for: CRH PLC financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: CRH PLC European Union annual report
+Sending search request to DuckDuckGo for: CRH PLC European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: crh EU headquarters financial report
+Sending search request to DuckDuckGo for: crh EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: CRH PLC consolidated annual report Europe
+Sending search request to DuckDuckGo for: CRH PLC consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for CRH PLC
+No results found. Waiting 3.4 seconds before next attempt...
+Attempt 2/3 for CRH PLC
+Retry with more specific European search terms
+Searching for: crh europe annual financial report pdf
+Sending search request to DuckDuckGo for: crh europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.3 seconds before next attempt...
+Attempt 3/3 for CRH PLC
+Trying direct known patterns for CRH PLC
+Trying known patterns for CRH PLC
+No reports found for CRH PLC after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing CRH PLC, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: CRH PLC
+Current time: 2025-05-16 08:13:41
+================================================================================
+================================================================================
+STARTING COMPANY: DEUTSCHE BAHN
+Current time: 2025-05-16 08:13:41
+================================================================================
+Processing company 1/1: DEUTSCHE BAHN
+Attempt 1/3 for DEUTSCHE BAHN
+
+Processing: DEUTSCHE BAHN
+Searching for: DEUTSCHE BAHN annual report pdf
+Sending search request to DuckDuckGo for: DEUTSCHE BAHN annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: deutsche bahn european financial report
+Sending search request to DuckDuckGo for: deutsche bahn european financial report
+[ERROR] Search failed with status code: 403
+Searching for: deutsche bahn europe investor relations annual report
+Sending search request to DuckDuckGo for: deutsche bahn europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: DEUTSCHE BAHN financial statements EU
+Sending search request to DuckDuckGo for: DEUTSCHE BAHN financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: DEUTSCHE BAHN European Union annual report
+Sending search request to DuckDuckGo for: DEUTSCHE BAHN European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: deutsche bahn EU headquarters financial report
+Sending search request to DuckDuckGo for: deutsche bahn EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: DEUTSCHE BAHN consolidated annual report Europe
+Sending search request to DuckDuckGo for: DEUTSCHE BAHN consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for DEUTSCHE BAHN
+No results found. Waiting 3.8 seconds before next attempt...
+Attempt 2/3 for DEUTSCHE BAHN
+Retry with more specific European search terms
+Searching for: deutsche bahn europe annual financial report pdf
+Sending search request to DuckDuckGo for: deutsche bahn europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.8 seconds before next attempt...
+Attempt 3/3 for DEUTSCHE BAHN
+Trying direct known patterns for DEUTSCHE BAHN
+Trying known patterns for DEUTSCHE BAHN
+No reports found for DEUTSCHE BAHN after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing DEUTSCHE BAHN, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: DEUTSCHE BAHN
+Current time: 2025-05-16 08:14:26
+================================================================================
+================================================================================
+STARTING COMPANY: CARGILL
+Current time: 2025-05-16 08:14:26
+================================================================================
+Processing company 1/1: CARGILL
+Attempt 1/3 for CARGILL
+
+Processing: CARGILL
+Searching for: CARGILL annual report pdf
+Sending search request to DuckDuckGo for: CARGILL annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: CARGILL annual report pdf European Union
+Sending search request to DuckDuckGo for: CARGILL annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: cargill european financial report
+Sending search request to DuckDuckGo for: cargill european financial report
+[ERROR] Search failed with status code: 403
+Searching for: cargill europe investor relations annual report
+Sending search request to DuckDuckGo for: cargill europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: CARGILL financial statements EU
+Sending search request to DuckDuckGo for: CARGILL financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: CARGILL European Union annual report
+Sending search request to DuckDuckGo for: CARGILL European Union annual report
+[ERROR] Search failed with status code: 403
+Searching for: cargill EU headquarters financial report
+Sending search request to DuckDuckGo for: cargill EU headquarters financial report
+[ERROR] Search failed with status code: 403
+Searching for: CARGILL consolidated annual report Europe
+Sending search request to DuckDuckGo for: CARGILL consolidated annual report Europe
+[ERROR] Search failed with status code: 403
+Could not find investor relations pages for CARGILL
+No results found. Waiting 3.7 seconds before next attempt...
+Attempt 2/3 for CARGILL
+Retry with more specific European search terms
+Searching for: cargill europe annual financial report pdf
+Sending search request to DuckDuckGo for: cargill europe annual financial report pdf
+[ERROR] Search failed with status code: 403
+No results found. Waiting 3.8 seconds before next attempt...
+Attempt 3/3 for CARGILL
+Trying direct known patterns for CARGILL
+Trying known patterns for CARGILL
+No reports found for CARGILL after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing CARGILL, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: CARGILL
+Current time: 2025-05-16 08:15:12
+================================================================================
+================================================================================
+STARTING COMPANY: WARNER BROS. DISCOVERY INC.
+Current time: 2025-05-16 08:15:12
+================================================================================
+Processing company 1/1: WARNER BROS. DISCOVERY INC.
+Attempt 1/3 for WARNER BROS. DISCOVERY INC.
+
+Processing: WARNER BROS. DISCOVERY INC.
+Searching for: WARNER BROS. DISCOVERY INC. annual report pdf
+Sending search request to DuckDuckGo for: WARNER BROS. DISCOVERY INC. annual report pdf
+[ERROR] Search failed with status code: 403
+Searching for: WARNER BROS. DISCOVERY INC. annual report pdf European Union
+Sending search request to DuckDuckGo for: WARNER BROS. DISCOVERY INC. annual report pdf European Union
+[ERROR] Search failed with status code: 403
+Searching for: warner bros discovery european financial report
+Sending search request to DuckDuckGo for: warner bros discovery european financial report
+[ERROR] Search failed with status code: 403
+Searching for: warner bros discovery europe investor relations annual report
+Sending search request to DuckDuckGo for: warner bros discovery europe investor relations annual report
+[ERROR] Search failed with status code: 403
+Searching for: WARNER BROS. DISCOVERY INC. financial statements EU
+Sending search request to DuckDuckGo for: WARNER BROS. DISCOVERY INC. financial statements EU
+[ERROR] Search failed with status code: 403
+Searching for: WARNER BROS. DISCOVERY INC. European Union annual report
+Sending search request to DuckDuckGo for: WARNER BROS. DISCOVERY INC. European Union annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: warner bros discovery EU headquarters financial report
+Sending search request to DuckDuckGo for: warner bros discovery EU headquarters financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: WARNER BROS. DISCOVERY INC. consolidated annual report Europe
+Sending search request to DuckDuckGo for: WARNER BROS. DISCOVERY INC. consolidated annual report Europe
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Could not find investor relations pages for WARNER BROS. DISCOVERY INC.
+No results found. Waiting 4.0 seconds before next attempt...
+Attempt 2/3 for WARNER BROS. DISCOVERY INC.
+Retry with more specific European search terms
+Searching for: warner bros discovery europe annual financial report pdf
+Sending search request to DuckDuckGo for: warner bros discovery europe annual financial report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+No results found. Waiting 4.4 seconds before next attempt...
+Attempt 3/3 for WARNER BROS. DISCOVERY INC.
+Trying direct known patterns for WARNER BROS. DISCOVERY INC.
+Trying known patterns for WARNER BROS. DISCOVERY INC.
+No reports found for WARNER BROS. DISCOVERY INC. after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing WARNER BROS. DISCOVERY INC., found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: WARNER BROS. DISCOVERY INC.
+Current time: 2025-05-16 08:17:18
+================================================================================
+================================================================================
+STARTING COMPANY: GENERAL ELECTRIC COMPANY
+Current time: 2025-05-16 08:17:18
+================================================================================
+Processing company 1/1: GENERAL ELECTRIC COMPANY
+Attempt 1/3 for GENERAL ELECTRIC COMPANY
+
+Processing: GENERAL ELECTRIC COMPANY
+Searching for: GENERAL ELECTRIC COMPANY annual report pdf
+Sending search request to DuckDuckGo for: GENERAL ELECTRIC COMPANY annual report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: GENERAL ELECTRIC COMPANY annual report pdf European Union
+Sending search request to DuckDuckGo for: GENERAL ELECTRIC COMPANY annual report pdf European Union
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: general electric company european financial report
+Sending search request to DuckDuckGo for: general electric company european financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: general electric company europe investor relations annual report
+Sending search request to DuckDuckGo for: general electric company europe investor relations annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: GENERAL ELECTRIC COMPANY financial statements EU
+Sending search request to DuckDuckGo for: GENERAL ELECTRIC COMPANY financial statements EU
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: GENERAL ELECTRIC COMPANY European Union annual report
+Sending search request to DuckDuckGo for: GENERAL ELECTRIC COMPANY European Union annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: general electric company EU headquarters financial report
+Sending search request to DuckDuckGo for: general electric company EU headquarters financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: GENERAL ELECTRIC COMPANY consolidated annual report Europe
+Sending search request to DuckDuckGo for: GENERAL ELECTRIC COMPANY consolidated annual report Europe
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Could not find investor relations pages for GENERAL ELECTRIC COMPANY
+No results found. Waiting 4.9 seconds before next attempt...
+Attempt 2/3 for GENERAL ELECTRIC COMPANY
+Retry with more specific European search terms
+Searching for: general electric company europe annual financial report pdf
+Sending search request to DuckDuckGo for: general electric company europe annual financial report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+No results found. Waiting 3.5 seconds before next attempt...
+Attempt 3/3 for GENERAL ELECTRIC COMPANY
+Trying direct known patterns for GENERAL ELECTRIC COMPANY
+Trying known patterns for GENERAL ELECTRIC COMPANY
+No reports found for GENERAL ELECTRIC COMPANY after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing GENERAL ELECTRIC COMPANY, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: GENERAL ELECTRIC COMPANY
+Current time: 2025-05-16 08:20:59
+================================================================================
+Results saved to results/batch_6.csv
+
+Pausing for 3 minutes before next batch...
+  3 minutes 0 seconds remaining...
+  2 minutes 30 seconds remaining...
+  2 minutes 0 seconds remaining...
+  1 minutes 30 seconds remaining...
+  1 minutes 0 seconds remaining...
+  0 minutes 30 seconds remaining...
+
+Processing batch 7 of 20
+Companies in this batch: SAFRAN, BASF, APTIV PLC, WPP PLC, GI GROUP
+================================================================================
+STARTING COMPANY: SAFRAN
+Current time: 2025-05-16 08:23:59
+================================================================================
+Processing company 1/1: SAFRAN
+Attempt 1/3 for SAFRAN
+
+Processing: SAFRAN
+Searching for: SAFRAN annual report pdf
+Sending search request to DuckDuckGo for: SAFRAN annual report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: SAFRAN annual report pdf European Union
+Sending search request to DuckDuckGo for: SAFRAN annual report pdf European Union
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: safran european financial report
+Sending search request to DuckDuckGo for: safran european financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: safran europe investor relations annual report
+Sending search request to DuckDuckGo for: safran europe investor relations annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: SAFRAN financial statements EU
+Sending search request to DuckDuckGo for: SAFRAN financial statements EU
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: SAFRAN European Union annual report
+Sending search request to DuckDuckGo for: SAFRAN European Union annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: safran EU headquarters financial report
+Sending search request to DuckDuckGo for: safran EU headquarters financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: SAFRAN consolidated annual report Europe
+Sending search request to DuckDuckGo for: SAFRAN consolidated annual report Europe
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Could not find investor relations pages for SAFRAN
+No results found. Waiting 4.2 seconds before next attempt...
+Attempt 2/3 for SAFRAN
+Retry with more specific European search terms
+Searching for: safran europe annual financial report pdf
+Sending search request to DuckDuckGo for: safran europe annual financial report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+No results found. Waiting 4.1 seconds before next attempt...
+Attempt 3/3 for SAFRAN
+Trying direct known patterns for SAFRAN
+Trying known patterns for SAFRAN
+No reports found for SAFRAN after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing SAFRAN, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: SAFRAN
+Current time: 2025-05-16 08:27:38
+================================================================================
+================================================================================
+STARTING COMPANY: BASF
+Current time: 2025-05-16 08:27:38
+================================================================================
+Processing company 1/1: BASF
+Attempt 1/3 for BASF
+
+Processing: BASF
+Searching for: BASF annual report pdf
+Sending search request to DuckDuckGo for: BASF annual report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: BASF annual report pdf European Union
+Sending search request to DuckDuckGo for: BASF annual report pdf European Union
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: basf european financial report
+Sending search request to DuckDuckGo for: basf european financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: basf europe investor relations annual report
+Sending search request to DuckDuckGo for: basf europe investor relations annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: BASF financial statements EU
+Sending search request to DuckDuckGo for: BASF financial statements EU
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: BASF European Union annual report
+Sending search request to DuckDuckGo for: BASF European Union annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: basf EU headquarters financial report
+Sending search request to DuckDuckGo for: basf EU headquarters financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: BASF consolidated annual report Europe
+Sending search request to DuckDuckGo for: BASF consolidated annual report Europe
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Could not find investor relations pages for BASF
+No results found. Waiting 3.6 seconds before next attempt...
+Attempt 2/3 for BASF
+Retry with more specific European search terms
+Searching for: basf europe annual financial report pdf
+Sending search request to DuckDuckGo for: basf europe annual financial report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+No results found. Waiting 3.5 seconds before next attempt...
+Attempt 3/3 for BASF
+Trying direct known patterns for BASF
+Trying known patterns for BASF
+No reports found for BASF after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing BASF, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: BASF
+Current time: 2025-05-16 08:31:18
+================================================================================
+================================================================================
+STARTING COMPANY: APTIV PLC
+Current time: 2025-05-16 08:31:18
+================================================================================
+Processing company 1/1: APTIV PLC
+Attempt 1/3 for APTIV PLC
+
+Processing: APTIV PLC
+Searching for: APTIV PLC annual report pdf
+Sending search request to DuckDuckGo for: APTIV PLC annual report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: APTIV PLC annual report pdf European Union
+Sending search request to DuckDuckGo for: APTIV PLC annual report pdf European Union
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: aptiv european financial report
+Sending search request to DuckDuckGo for: aptiv european financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: aptiv europe investor relations annual report
+Sending search request to DuckDuckGo for: aptiv europe investor relations annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: APTIV PLC financial statements EU
+Sending search request to DuckDuckGo for: APTIV PLC financial statements EU
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: APTIV PLC European Union annual report
+Sending search request to DuckDuckGo for: APTIV PLC European Union annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: aptiv EU headquarters financial report
+Sending search request to DuckDuckGo for: aptiv EU headquarters financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: APTIV PLC consolidated annual report Europe
+Sending search request to DuckDuckGo for: APTIV PLC consolidated annual report Europe
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Could not find investor relations pages for APTIV PLC
+No results found. Waiting 4.0 seconds before next attempt...
+Attempt 2/3 for APTIV PLC
+Retry with more specific European search terms
+Searching for: aptiv europe annual financial report pdf
+Sending search request to DuckDuckGo for: aptiv europe annual financial report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+No results found. Waiting 4.9 seconds before next attempt...
+Attempt 3/3 for APTIV PLC
+Trying direct known patterns for APTIV PLC
+Trying known patterns for APTIV PLC
+No reports found for APTIV PLC after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing APTIV PLC, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: APTIV PLC
+Current time: 2025-05-16 08:35:01
+================================================================================
+================================================================================
+STARTING COMPANY: WPP PLC
+Current time: 2025-05-16 08:35:01
+================================================================================
+Processing company 1/1: WPP PLC
+Attempt 1/3 for WPP PLC
+
+Processing: WPP PLC
+Searching for: WPP PLC annual report pdf
+Sending search request to DuckDuckGo for: WPP PLC annual report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: WPP PLC annual report pdf European Union
+Sending search request to DuckDuckGo for: WPP PLC annual report pdf European Union
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: wpp european financial report
+Sending search request to DuckDuckGo for: wpp european financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: wpp europe investor relations annual report
+Sending search request to DuckDuckGo for: wpp europe investor relations annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: WPP PLC financial statements EU
+Sending search request to DuckDuckGo for: WPP PLC financial statements EU
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: WPP PLC European Union annual report
+Sending search request to DuckDuckGo for: WPP PLC European Union annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: wpp EU headquarters financial report
+Sending search request to DuckDuckGo for: wpp EU headquarters financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: WPP PLC consolidated annual report Europe
+Sending search request to DuckDuckGo for: WPP PLC consolidated annual report Europe
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Could not find investor relations pages for WPP PLC
+No results found. Waiting 4.0 seconds before next attempt...
+Attempt 2/3 for WPP PLC
+Retry with more specific European search terms
+Searching for: wpp europe annual financial report pdf
+Sending search request to DuckDuckGo for: wpp europe annual financial report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+No results found. Waiting 4.7 seconds before next attempt...
+Attempt 3/3 for WPP PLC
+Trying direct known patterns for WPP PLC
+Trying known patterns for WPP PLC
+No reports found for WPP PLC after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing WPP PLC, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: WPP PLC
+Current time: 2025-05-16 08:38:43
+================================================================================
+================================================================================
+STARTING COMPANY: GI GROUP
+Current time: 2025-05-16 08:38:43
+================================================================================
+Processing company 1/1: GI GROUP
+Attempt 1/3 for GI GROUP
+
+Processing: GI GROUP
+Searching for: GI GROUP annual report pdf
+Sending search request to DuckDuckGo for: GI GROUP annual report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: GI GROUP annual report pdf European Union
+Sending search request to DuckDuckGo for: GI GROUP annual report pdf European Union
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: gi european financial report
+Sending search request to DuckDuckGo for: gi european financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: gi europe investor relations annual report
+Sending search request to DuckDuckGo for: gi europe investor relations annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: GI GROUP financial statements EU
+Sending search request to DuckDuckGo for: GI GROUP financial statements EU
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: GI GROUP European Union annual report
+Sending search request to DuckDuckGo for: GI GROUP European Union annual report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: gi EU headquarters financial report
+Sending search request to DuckDuckGo for: gi EU headquarters financial report
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Searching for: GI GROUP consolidated annual report Europe
+Sending search request to DuckDuckGo for: GI GROUP consolidated annual report Europe
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+Could not find investor relations pages for GI GROUP
+No results found. Waiting 3.9 seconds before next attempt...
+Attempt 2/3 for GI GROUP
+Retry with more specific European search terms
+Searching for: gi europe annual financial report pdf
+Sending search request to DuckDuckGo for: gi europe annual financial report pdf
+[ERROR] Error in search: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+No results found. Waiting 4.8 seconds before next attempt...
+Attempt 3/3 for GI GROUP
+Trying direct known patterns for GI GROUP
+Trying known patterns for GI GROUP
+No reports found for GI GROUP after 3 attempts
+Results saved to results/financial_reports.csv
+Completed processing GI GROUP, found 0 reports
+Results saved to results/financial_reports.csv
+================================================================================
+COMPLETED COMPANY: GI GROUP
+Current time: 2025-05-16 08:42:26
+================================================================================
+Results saved to results/batch_7.csv
+
+Pausing for 3 minutes before next batch...
+  3 minutes 0 seconds remaining...
+  2 minutes 30 seconds remaining...
+  2 minutes 0 seconds remaining...
+
+Process interrupted by user
+Saving partial results...
